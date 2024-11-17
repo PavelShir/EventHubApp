@@ -4,14 +4,35 @@
 
 ## User settings
 xcuserdata/
+*.xcuserstate
+
+GoogleService-Info.plist
+Config.plist
 
 ## Obj-C/Swift specific
 *.hmap
+*.xcscmblueprint
+*.xccheckout
 
 ## App packaging
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.DS_Store
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+build/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcuserstate
 
 ## Playgrounds
 timeline.xctimeline
@@ -40,7 +61,15 @@ playground.xcworkspace
 # Pods/
 #
 # Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+*.xcworkspace
+.xcodeproj/
+!.xcodeproj/project.pbxproj
+!.xcodeproj/xcshareddata/
+!.xcodeproj/project.xcworkspace/
+!.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+.xcodeproj/xcshareddata/xcschemes/.xcscheme
 
 # Carthage
 #
@@ -48,6 +77,10 @@ playground.xcworkspace
 # Carthage/Checkouts
 
 Carthage/Build/
+
+# Accio dependency management
+Dependencies/
+.accio/
 
 # fastlane
 #
@@ -60,3 +93,5 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+iOSInjectionProject/

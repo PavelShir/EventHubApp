@@ -61,7 +61,9 @@
 				8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */,
 				8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */,
 				8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */,
-				8FEB8B802CEAE43C00576C77 /* ViewController */,
+				8FEB8B852CEAE62000576C77 /* Extensions */,
+				8FEB8B842CEAE5AA00576C77 /* Supporting Files */,
+				8FEB8B802CEAE43C00576C77 /* ViewControllers */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
@@ -70,12 +72,34 @@
 			path = EventHub;
 			sourceTree = "<group>";
 		};
-		8FEB8B802CEAE43C00576C77 /* ViewController */ = {
+		8FEB8B802CEAE43C00576C77 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				8FEB8B832CEAE58E00576C77 /* Profile */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8FEB8B832CEAE58E00576C77 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
 				8FEB8B812CEAE46700576C77 /* ProfileViewController.swift */,
 			);
-			name = ViewController;
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		8FEB8B842CEAE5AA00576C77 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8FEB8B852CEAE62000576C77 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

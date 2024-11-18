@@ -129,4 +129,4 @@ class EventsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 
 
-#Preview { EventsViewController() }
+//#Preview { EventsViewController() }

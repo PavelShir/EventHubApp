@@ -13,7 +13,7 @@
 		8F8EA6EA2CEA3FEE00FC1364 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
 		8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */; };
-		8FEB8B822CEAE46700576C77 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FEB8B812CEAE46700576C77 /* ProfileViewController.swift */; };
+		8FEB8B822CEAE46700576C77 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FEB8B812CEAE46700576C77 /* MyProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F12CEA3FF100FC1364 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8FEB8B812CEAE46700576C77 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		8FEB8B812CEAE46700576C77 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +39,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F67FFDC2CEAF0F00051E1D7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		8F8EA6D92CEA3FEE00FC1364 = {
 			isa = PBXGroup;
 			children = (
@@ -64,7 +71,6 @@
 				8FEB8B852CEAE62000576C77 /* Extensions */,
 				8FEB8B842CEAE5AA00576C77 /* Supporting Files */,
 				8FEB8B802CEAE43C00576C77 /* ViewControllers */,
-				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
 				31DEEC202CEA718C0098E212 /* LaunchScreenViewController.swift */,
@@ -83,7 +89,7 @@
 		8FEB8B832CEAE58E00576C77 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				8FEB8B812CEAE46700576C77 /* ProfileViewController.swift */,
+				8FEB8B812CEAE46700576C77 /* MyProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -91,6 +97,8 @@
 		8FEB8B842CEAE5AA00576C77 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8F67FFDC2CEAF0F00051E1D7 /* Fonts */,
+				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -174,7 +182,7 @@
 			files = (
 				8F8EA6EA2CEA3FEE00FC1364 /* ViewController.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
-				8FEB8B822CEAE46700576C77 /* ProfileViewController.swift in Sources */,
+				8FEB8B822CEAE46700576C77 /* MyProfileViewController.swift in Sources */,
 				31DEEC212CEA718C0098E212 /* LaunchScreenViewController.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 			);

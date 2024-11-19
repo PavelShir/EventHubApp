@@ -88,9 +88,25 @@ class EventCell: UITableViewCell {
     
     func configure(with event: EventModel) {
         eventImageView.image = UIImage(named: event.imageName)
-        dateLabel.text = event.date
+        dateLabel.text = convertDate(date: event.date)
         titleLabel.text = event.title
         placeLabel.text = event.place
     }
+    
+    private func convertDate(date: String) -> String {
+        
+            guard let timeInterval = Double(date) else {
+                return "error invalid Date"
+            }
+            
+            let date = Date(timeIntervalSince1970: timeInterval)
+           
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEE, MMM d • h:mm a"
+             
+            return formatter.string(from: date)
+        }
+    
+
 }
 

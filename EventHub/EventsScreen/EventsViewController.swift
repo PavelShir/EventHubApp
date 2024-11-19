@@ -123,7 +123,7 @@ class EventsViewController: UIViewController {
         
         switch index {
             
-        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate }
+        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
         case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
         default: print("no index")
         }

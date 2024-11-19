@@ -9,14 +9,14 @@ import UIKit
 
 class EditProfileViewController: UIViewController {
     
-    let titleEditProfile = "Profile"
+    let titleEditProfile = "Edit Profile"
 
     
     //     MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = .gray
         self.navigationItem.title = titleEditProfile
 //        configureUI()
         

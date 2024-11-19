@@ -32,7 +32,7 @@ class MyProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         self.navigationItem.title = titleNavigationBar
         configureUI()
     }

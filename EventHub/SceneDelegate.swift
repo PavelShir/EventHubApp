@@ -20,11 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                        let navigationController: UINavigationController
                        let onboardingController = EventsViewController()
                        navigationController = UINavigationController(rootViewController: onboardingController)
-                         
-
+                    
                        window.rootViewController = navigationController
                        navigationController.navigationBar.isHidden = true
                        window.makeKeyAndVisible()
+        
     }
 
     

@@ -16,15 +16,17 @@ class EventsViewController: UIViewController {
 
     
     private var events: [EventModel] = [
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Fri, Apr 23 6:00 PM", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "Wed, Apr 28 5:30 PM", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
     ]
+    
+    private var filteredEvents: [EventModel] = []
     
     // MARK: Lifecycle ViewDidLoad
     
@@ -38,7 +40,7 @@ class EventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
-        //        segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
     }
     
@@ -71,9 +73,11 @@ class EventsViewController: UIViewController {
         view.addSubview(segmentedControl)
         
 //        tableView.separatorColor = .white
+        tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+
         
         
         exploreButton.setTitle("EXPLORE EVENTS", for: .normal)
@@ -113,13 +117,26 @@ class EventsViewController: UIViewController {
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         print("Selected segment: \(sender.selectedSegmentIndex)")
+        
+        let currentDate = Date().timeIntervalSince1970
+        let index = sender.selectedSegmentIndex
+        
+        switch index {
+            
+        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate }
+        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
+        default: print("no index")
+        }
+        
         tableView.reloadData()
     }
     
     @objc func exploreButtonTapped() {
         print("Explore button tapped")
         
-        
+        let allEventsVC = AllEventsViewController()
+        allEventsVC.modalPresentationStyle = .fullScreen
+        present(allEventsVC, animated: true)
     }
 }
 
@@ -128,8 +145,8 @@ class EventsViewController: UIViewController {
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if events.count < 5 {
-            return events.count
+        if filteredEvents.count < 5 {
+            return filteredEvents.count
         } else {
             return 5
         }
@@ -137,7 +154,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = events[indexPath.row]
+        let event = filteredEvents[indexPath.row]
         cell.configure(with: event)
         return cell
     }

@@ -36,6 +36,9 @@ class AllEventsViewController: UIViewController {
 
     private func setupUI() {
         
+        view.backgroundColor = .white
+        
+        tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
 

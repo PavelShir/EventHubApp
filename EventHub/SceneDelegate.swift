@@ -19,11 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                        
                        let navigationController: UINavigationController
                         
-                        let onboardingController = MyProfileViewController()
-//                       let onboardingController = LaunchScreenViewController()                        
+//                        let myProfileController = MyProfileViewController()
+//                        navigationController = UINavigationController(rootViewController: myProfileController)
+        
+                       let onboardingController = LaunchScreenViewController()
                        navigationController = UINavigationController(rootViewController: onboardingController)
-                         
-
+                    
                        window.rootViewController = navigationController
                        navigationController.navigationBar.isHidden = true
                        window.makeKeyAndVisible()

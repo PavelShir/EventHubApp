@@ -22,7 +22,7 @@ class LaunchScreenViewController: UIViewController {
     private func switchToMainScreen() {
         guard let window = UIApplication.shared.windows.first else { return }
         
-        let mainViewController = ViewController()
+        let mainViewController = MyProfileViewController()
         let navigationController = UINavigationController(rootViewController: mainViewController)
         
         window.rootViewController = navigationController

@@ -10,6 +10,6 @@ import Foundation
 struct EventModel {
     let date: String
     let title: String
-    let location: String
+    let place: String
     let imageName: String
 }

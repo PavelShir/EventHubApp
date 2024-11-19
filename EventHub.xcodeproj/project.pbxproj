@@ -16,6 +16,8 @@
 		F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */; };
 		F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8A2CEB7E83008E4707 /* EventCell.swift */; };
 		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
+		F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */ = {isa = PBXBuildFile; fileRef = F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */; };
+		F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		F3C91D8A2CEB7E83008E4707 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
+		F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AirbnbCereal.otf; sourceTree = "<group>"; };
+		F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,7 @@
 				8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */,
 				F3C91D8D2CEB7F58008E4707 /* EventModel.swift */,
 				F3C91D8C2CEB7E93008E4707 /* EventsScreen */,
+				F3C91D8F2CEC1382008E4707 /* Font */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
@@ -80,8 +85,17 @@
 			children = (
 				F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */,
 				F3C91D8A2CEB7E83008E4707 /* EventCell.swift */,
+				F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */,
 			);
 			path = EventsScreen;
+			sourceTree = "<group>";
+		};
+		F3C91D8F2CEC1382008E4707 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +156,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */,
 				8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */,
 				8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */,
 			);
@@ -159,6 +174,7 @@
 				31DEEC212CEA718C0098E212 /* LaunchScreenViewController.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
+				F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */,
 				F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */,
 				F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */,
 			);

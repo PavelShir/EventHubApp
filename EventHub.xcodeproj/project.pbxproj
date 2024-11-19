@@ -11,7 +11,6 @@
 		8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */; };
 		8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */; };
 		8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */; };
-		8F8452E92CEC76F0000AE3BD /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E02CEC76F0000AE3BD /* EventsViewController.swift */; };
 		8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */; };
 		8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */; };
 		8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E32CEC76F0000AE3BD /* MyProfileViewController.swift */; };
@@ -20,6 +19,11 @@
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
 		8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */; };
+		F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */; };
+		F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8A2CEB7E83008E4707 /* EventCell.swift */; };
+		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
+		F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */ = {isa = PBXBuildFile; fileRef = F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */; };
+		F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +31,6 @@
 		8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		8F8452E02CEC76F0000AE3BD /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		8F8452E32CEC76F0000AE3BD /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +41,11 @@
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F12CEA3FF100FC1364 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		F3C91D8A2CEB7E83008E4707 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
+		F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AirbnbCereal.otf; sourceTree = "<group>"; };
+		F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,10 +65,10 @@
 				8F8452E42CEC76F0000AE3BD /* TabBarController.swift */,
 				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
 				8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */,
-				8F8452E02CEC76F0000AE3BD /* EventsViewController.swift */,
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
 				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
 				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
+				F3C91D8C2CEB7E93008E4707 /* EventsScreen */,
 				8F8452EE2CEC76F7000AE3BD /* Profile */,
 			);
 			path = Controllers;
@@ -97,11 +105,31 @@
 			children = (
 				8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */,
 				8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */,
+				F3C91D8D2CEB7F58008E4707 /* EventModel.swift */,
+				F3C91D8F2CEC1382008E4707 /* Font */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
 			);
 			path = EventHub;
+			sourceTree = "<group>";
+		};
+		F3C91D8C2CEB7E93008E4707 /* EventsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */,
+				F3C91D8A2CEB7E83008E4707 /* EventCell.swift */,
+				F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */,
+			);
+			path = EventsScreen;
+			sourceTree = "<group>";
+		};
+		F3C91D8F2CEC1382008E4707 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,6 +190,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */,
 				8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */,
 				8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */,
 			);
@@ -181,9 +210,12 @@
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
-				8F8452E92CEC76F0000AE3BD /* EventsViewController.swift in Sources */,
 				8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
+				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
+				F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */,
+				F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */,
+				F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */,
 				8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

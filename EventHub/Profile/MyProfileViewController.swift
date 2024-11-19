@@ -39,21 +39,22 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         element.image = UIImage(named: imageUser)
         element.contentMode = .scaleAspectFill
         element.layer.cornerRadius = 48
+        element.layer.cornerRadius = 36
         element.layer.masksToBounds = true
         element.isUserInteractionEnabled = true
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
 
-//    private lazy var mainLabel: UILabel = {
-//        let element = UILabel()
-//        element.text = Texts.ProfileViewController.title
-//        element.textColor = UIColor(red: 51/255, green: 54/255, blue: 71/255, alpha: 1)
-//        element.font = UIFont(name: "Inter-SemiBold", size: 24)
-//        element.textAlignment = .left
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
+    private lazy var mainLabel: UILabel = {
+        let element = UILabel()
+        element.text = Texts.ProfileViewController.title
+        element.textColor = UIColor(red: 51/255, green: 54/255, blue: 71/255, alpha: 1)
+        element.font = UIFont(name: "Inter-SemiBold", size: 24)
+        element.textAlignment = .left
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
     
     private lazy var nameLabel: UITextField = {

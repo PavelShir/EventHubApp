@@ -35,7 +35,10 @@ class EventsViewController: UIViewController {
         view.backgroundColor = .white
         
         setupUI()
+        loadItemsInSegment()
         
+        self.title = "Events"
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
@@ -43,6 +46,7 @@ class EventsViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
     }
+    
     
     func setupUI() {
         
@@ -115,11 +119,22 @@ class EventsViewController: UIViewController {
         ])
     }
     
-    @objc func segmentChanged(_ sender: UISegmentedControl) {
-        print("Selected segment: \(sender.selectedSegmentIndex)")
+    @objc private func segmentChanged(_ sender: UISegmentedControl) {
+        loadItemsInSegment()
+    
+    }
+    
+    @objc private func exploreButtonTapped() {
+        print("Explore button tapped")
         
+        let allEventsVC = AllEventsViewController()
+        allEventsVC.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(allEventsVC, animated: true)
+    }
+    
+    private func loadItemsInSegment() {
         let currentDate = Date().timeIntervalSince1970
-        let index = sender.selectedSegmentIndex
+        let index = segmentedControl.selectedSegmentIndex
         
         switch index {
             
@@ -129,14 +144,6 @@ class EventsViewController: UIViewController {
         }
         
         tableView.reloadData()
-    }
-    
-    @objc func exploreButtonTapped() {
-        print("Explore button tapped")
-        
-        let allEventsVC = AllEventsViewController()
-        allEventsVC.modalPresentationStyle = .fullScreen
-        present(allEventsVC, animated: true)
     }
 }
 
@@ -176,4 +183,4 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 
-#Preview { EventsViewController() }
+//#Preview { EventsViewController() }

@@ -21,12 +21,17 @@ class AllEventsViewController: UIViewController {
         EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
     ]
+    private var filteredEvents: [EventModel] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupUI()
 
+        filteredEvents = filterEvents()
+        tableView.reloadData()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
@@ -37,6 +42,9 @@ class AllEventsViewController: UIViewController {
     private func setupUI() {
         
         view.backgroundColor = .white
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
+
         
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -51,20 +59,33 @@ class AllEventsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-
+    
+    @objc private func didTapSearchButton() {
+        print("Search")
+    
+    }
+    
+    private func filterEvents() -> [EventModel] {
+        filteredEvents = events.sorted { Double($1.date)! < Double($0.date)! }
+        return filteredEvents
+    
+    }
 }
+
 
 // MARK: TableView DataSource & Delegate
 
 extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        return filteredEvents.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = events[indexPath.row]
+
+        
+        let event = filteredEvents[indexPath.row]
         cell.configure(with: event)
         return cell
     }
@@ -74,4 +95,4 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-#Preview { AllEventsViewController() }
+//#Preview { AllEventsViewController() }

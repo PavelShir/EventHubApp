@@ -65,6 +65,7 @@ final class OnboardingViewController: UIViewController {
         button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 15)
         button.setTitleColor(.white, for: .normal)
+        button.alpha = 0.7
         button.backgroundColor = UIColor(named: "primaryBlue")
         return button
     }()
@@ -89,6 +90,8 @@ final class OnboardingViewController: UIViewController {
         
         collectionView.delegate = self
         reloadData()
+
+
     }
     
     // MARK: - Layout
@@ -105,6 +108,8 @@ final class OnboardingViewController: UIViewController {
         view.addSubview(blueView)
         
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
+
         makeConstraints()
     }
     
@@ -214,6 +219,7 @@ final class OnboardingViewController: UIViewController {
             self.descriptionLabel.text = "In publishing and graphic design, Lorem is a placeholder text commonly"
 
         case 2:
+
             UIView.transition(with: titleLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
                 self.titleLabel.text = "Highlight most interesting events"
             }, completion: nil)
@@ -227,8 +233,8 @@ final class OnboardingViewController: UIViewController {
             }, completion: nil)
             
         default:
-            let mainViewController = TabBarViewController()
-            let navigationController = UINavigationController(rootViewController: mainViewController)
+          print("no data")
+            navigateToMainScreen()
         }
     }
     
@@ -236,19 +242,39 @@ final class OnboardingViewController: UIViewController {
         print("tapped")
         carouselSection.scrollToNextPage() { nextPage in
             updateElementsState(for: nextPage)
+            if nextPage == 3 {
+                       navigateToMainScreen()
+                   }
+        }
+    }
+    
+    @objc private func skipButtonTapped() {
+        navigateToMainScreen()
+
+    }
+    
+    // тут поставить регистрацию?
+    private func navigateToMainScreen() {
+        let mainTabBarController = TabBarViewController()
+        let navigationController = UINavigationController(rootViewController: mainTabBarController)
+      
+        if let window = view.window {
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
         }
     }
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension OnboardingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         carouselSection.applyTransform(to: cell, at: indexPath)
         
-        
     }
 }
 
-#Preview { OnboardingViewController() }
+//#Preview { OnboardingViewController() }
 
 
 

@@ -33,7 +33,7 @@ final class OnboardingItemCell: UICollectionViewCell {
     private func setupViews() {
         contentView.clipsToBounds = true
         contentView.addSubview(imageView)
-        contentView.layer.cornerRadius = 40
+        contentView.layer.cornerRadius = 35
         
         makeConstraints()
     }

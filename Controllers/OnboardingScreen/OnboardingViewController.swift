@@ -71,7 +71,7 @@ final class OnboardingViewController: UIViewController {
     
     private lazy var blueView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(named: "primaryBlue")
+        view.backgroundColor = UIColor(named: "primaryBlue") 
         view.layer.cornerRadius = 50
         return view
     }()
@@ -118,18 +118,26 @@ final class OnboardingViewController: UIViewController {
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -25),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            
-            
+            pageControl.heightAnchor.constraint(equalToConstant: 10)
         ])
         
         nextButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             nextButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+            nextButton.heightAnchor.constraint(equalToConstant: 10)
         ])
         
+        skipButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            
+            skipButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            skipButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
+            skipButton.heightAnchor.constraint(equalToConstant: 10)
+            ])
+            
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             descriptionLabel.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -40),
@@ -213,7 +221,7 @@ final class OnboardingViewController: UIViewController {
             }, completion: nil)
             
             UIView.transition(with: nextButton, duration: 0.2, options: [.transitionCrossDissolve, .curveEaseOut], animations: {
-                self.nextButton.setTitle("button_get_started", for: .normal)
+                self.nextButton.setTitle("Start", for: .normal)
             }, completion: nil)
             
         default:

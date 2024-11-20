@@ -7,23 +7,55 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */; };
+		8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */; };
+		8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */; };
+		8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */; };
+		8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */; };
+		8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */; };
+		8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E32CEC76F0000AE3BD /* MyProfileViewController.swift */; };
+		8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452E42CEC76F0000AE3BD /* TabBarController.swift */; };
 		8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */; };
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
-		8F8EA6EA2CEA3FEE00FC1364 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */; };
-		8F8EA6ED2CEA3FEE00FC1364 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EB2CEA3FEE00FC1364 /* Main.storyboard */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
 		8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */; };
+		F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */; };
+		F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8A2CEB7E83008E4707 /* EventCell.swift */; };
+		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
+		F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */ = {isa = PBXBuildFile; fileRef = F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */; };
+		F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */; };
+		F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */; };
+		F3C91D982CED00DD008E4707 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D972CED00DD008E4707 /* OnboardingData.swift */; };
+		F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D992CED1657008E4707 /* CarouselSection.swift */; };
+		F3C91D9C2CED168B008E4707 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */; };
+		F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		8F8452E32CEC76F0000AE3BD /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		8F8452E42CEC76F0000AE3BD /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		8F8EA6E22CEA3FEE00FC1364 /* EventHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		8F8EA6EC2CEA3FEE00FC1364 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F12CEA3FF100FC1364 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		F3C91D8A2CEB7E83008E4707 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
+		F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AirbnbCereal.otf; sourceTree = "<group>"; };
+		F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
+		F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		F3C91D972CED00DD008E4707 /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
+		F3C91D992CED1657008E4707 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
+		F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
+		F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,9 +69,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F8452DB2CEC76F0000AE3BD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8F8452E42CEC76F0000AE3BD /* TabBarController.swift */,
+				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
+				8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */,
+				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
+				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
+				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
+				F3C91D962CED00B0008E4707 /* OnboardingScreen */,
+				F3C91D8C2CEB7E93008E4707 /* EventsScreen */,
+				8F8452EE2CEC76F7000AE3BD /* Profile */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		8F8452EE2CEC76F7000AE3BD /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				8F8452E32CEC76F0000AE3BD /* MyProfileViewController.swift */,
+				8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
 		8F8EA6D92CEA3FEE00FC1364 = {
 			isa = PBXGroup;
 			children = (
+				8F8452DB2CEC76F0000AE3BD /* Controllers */,
 				8F8EA6E42CEA3FEE00FC1364 /* EventHub */,
 				8F8EA6E32CEA3FEE00FC1364 /* Products */,
 			);
@@ -58,13 +116,43 @@
 			children = (
 				8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */,
 				8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */,
-				8F8EA6E92CEA3FEE00FC1364 /* ViewController.swift */,
-				8F8EA6EB2CEA3FEE00FC1364 /* Main.storyboard */,
+				F3C91D8D2CEB7F58008E4707 /* EventModel.swift */,
+				F3C91D8F2CEC1382008E4707 /* Font */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
 			);
 			path = EventHub;
+			sourceTree = "<group>";
+		};
+		F3C91D8C2CEB7E93008E4707 /* EventsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */,
+				F3C91D8A2CEB7E83008E4707 /* EventCell.swift */,
+				F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */,
+			);
+			path = EventsScreen;
+			sourceTree = "<group>";
+		};
+		F3C91D8F2CEC1382008E4707 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		F3C91D962CED00B0008E4707 /* OnboardingScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */,
+				F3C91D992CED1657008E4707 /* CarouselSection.swift */,
+				F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */,
+				F3C91D972CED00DD008E4707 /* OnboardingData.swift */,
+				F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */,
+			);
+			path = OnboardingScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,9 +213,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */,
 				8F8EA6F22CEA3FF100FC1364 /* LaunchScreen.storyboard in Resources */,
 				8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */,
-				8F8EA6ED2CEA3FEE00FC1364 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +226,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F8EA6EA2CEA3FEE00FC1364 /* ViewController.swift in Sources */,
+				8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */,
+				8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */,
+				8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */,
+				8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
+				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
+				F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */,
+				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
+				F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */,
+				8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */,
+				F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
+				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
+				F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */,
+				F3C91D982CED00DD008E4707 /* OnboardingData.swift in Sources */,
+				F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */,
+				F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */,
+				8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */,
+				F3C91D9C2CED168B008E4707 /* CustomPageControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		8F8EA6EB2CEA3FEE00FC1364 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8F8EA6EC2CEA3FEE00FC1364 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		8F8EA6F02CEA3FF100FC1364 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -216,7 +312,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -270,7 +366,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -291,9 +387,9 @@
 				INFOPLIST_FILE = EventHub/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -301,9 +397,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myAppBuildAlGur.EventHub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -318,9 +418,9 @@
 				INFOPLIST_FILE = EventHub/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -328,9 +428,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myAppBuildAlGur.EventHub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

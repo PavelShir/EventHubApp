@@ -57,6 +57,11 @@
 		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
 		F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */ = {isa = PBXBuildFile; fileRef = F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */; };
 		F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */; };
+		F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */; };
+		F3C91D982CED00DD008E4707 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D972CED00DD008E4707 /* OnboardingData.swift */; };
+		F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D992CED1657008E4707 /* CarouselSection.swift */; };
+		F3C91D9C2CED168B008E4707 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */; };
+		F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +93,11 @@
 		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AirbnbCereal.otf; sourceTree = "<group>"; };
 		F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
+		F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		F3C91D972CED00DD008E4707 /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
+		F3C91D992CED1657008E4707 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
+		F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
+		F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +135,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31A6E9DE2CEEABE9006DB793 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */,
+				8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */,
+				F3C91D8D2CEB7F58008E4707 /* EventModel.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		31DEEC402CEE71D60098E212 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +191,7 @@
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
 				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
 				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
+				F3C91D962CED00B0008E4707 /* OnboardingScreen */,
 				F3C91D8C2CEB7E93008E4707 /* EventsScreen */,
 				8F8452EE2CEC76F7000AE3BD /* Profile */,
 				31DEEC402CEE71D60098E212 /* Auth */,
@@ -190,10 +211,6 @@
 		8F8EA6D92CEA3FEE00FC1364 = {
 			isa = PBXGroup;
 			children = (
-				31DEECBE2CEE7F470098E212 /* Models */,
-				31DEECBA2CEE779E0098E212 /* Managers */,
-				8F8452DB2CEC76F0000AE3BD /* Controllers */,
-				31DEECBB2CEE786F0098E212 /* Extensions */,
 				8F8EA6E42CEA3FEE00FC1364 /* EventHub */,
 				8F8EA6E32CEA3FEE00FC1364 /* Products */,
 			);
@@ -210,9 +227,11 @@
 		8F8EA6E42CEA3FEE00FC1364 /* EventHub */ = {
 			isa = PBXGroup;
 			children = (
-				8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */,
-				8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */,
-				F3C91D8D2CEB7F58008E4707 /* EventModel.swift */,
+				31DEECBE2CEE7F470098E212 /* Models */,
+				31DEECBA2CEE779E0098E212 /* Managers */,
+				8F8452DB2CEC76F0000AE3BD /* Controllers */,
+				31DEECBB2CEE786F0098E212 /* Extensions */,
+				31A6E9DE2CEEABE9006DB793 /* Service */,
 				F3C91D8F2CEC1382008E4707 /* Font */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
@@ -237,6 +256,18 @@
 				F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		F3C91D962CED00B0008E4707 /* OnboardingScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F3C91D942CECFF9F008E4707 /* OnboardingViewController.swift */,
+				F3C91D992CED1657008E4707 /* CarouselSection.swift */,
+				F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */,
+				F3C91D972CED00DD008E4707 /* OnboardingData.swift */,
+				F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */,
+			);
+			path = OnboardingScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,14 +378,18 @@
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
+				F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */,
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
 				31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */,
+				F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */,
 				8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */,
+				F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
 				31DEEC2E2CEE6B800098E212 /* SingInController.swift in Sources */,
 				31DEEC302CEE6B9B0098E212 /* SingUpController.swift in Sources */,
 				F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */,
+				F3C91D982CED00DD008E4707 /* OnboardingData.swift in Sources */,
 				F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */,
 				31DEECC42CEE8DAE0098E212 /* UIImageView + Ext.swift in Sources */,
 				F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */,
@@ -362,6 +397,7 @@
 				31DEECC22CEE824A0098E212 /* TextField + Ext.swift in Sources */,
 				31DEECBD2CEE78960098E212 /* Constants.swift in Sources */,
 				31DEECC02CEE7F560098E212 /* UserModel.swift in Sources */,
+				F3C91D9C2CED168B008E4707 /* CustomPageControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

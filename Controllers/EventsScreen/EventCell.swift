@@ -40,11 +40,13 @@ class EventCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .systemBackground
         contentView.layer.cornerRadius = 15
         contentView.layer.shadowColor = UIColor(named: "primaryBlue")?.cgColor
-        contentView.layer.shadowOpacity = 0.1
-        contentView.layer.shadowRadius = 4
+        contentView.layer.shadowOpacity = 0.4
+        contentView.layer.shadowRadius = 5
+        contentView.layer.borderWidth = 0.3
+        contentView.layer.borderColor = UIColor(named: "primaryBlue")?.cgColor
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
         contentView.clipsToBounds = false
         

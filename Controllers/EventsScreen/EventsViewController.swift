@@ -14,6 +14,9 @@ class EventsViewController: UIViewController {
     private var exploreButton = UIButton()
     private let date = Date()
 
+    private let imageEmpty = UIImageView()
+    private let labelEmpty = UILabel()
+    private let smallLabelEmpty = UILabel()
     
     private var events: [EventModel] = [
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
@@ -36,6 +39,8 @@ class EventsViewController: UIViewController {
         
         setupUI()
         loadItemsInSegment()
+        setupUIEmpty()
+        showEmptyScreen()
         
         self.title = "Events"
 
@@ -119,9 +124,58 @@ class EventsViewController: UIViewController {
         ])
     }
     
+    private func configureImageEmpty() {
+        imageEmpty.image = UIImage(named: "noEvent")
+        view.addSubview(imageEmpty)
+        imageEmpty.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+    
+    private func configureLabelEmpty() {
+        
+        labelEmpty.text = "No Upcoming Events"
+        labelEmpty.font = UIFont.boldSystemFont(ofSize: 18)
+        labelEmpty.textColor = .black
+        labelEmpty.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelEmpty)
+    }
+    
+    private func configureSmallLabelEmpty() {
+        smallLabelEmpty.text = "Check out new events and add them to your calendar"
+        smallLabelEmpty.font = UIFont(name: "AirbnbCerealApp", size: 14)
+        smallLabelEmpty.textColor = .gray
+        smallLabelEmpty.textAlignment = .center
+        smallLabelEmpty.numberOfLines = 0
+        view.addSubview(smallLabelEmpty)
+        smallLabelEmpty.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setupUIEmpty() {
+        
+        configureImageEmpty()
+        configureLabelEmpty()
+        configureSmallLabelEmpty()
+    
+    NSLayoutConstraint.activate([
+        
+        imageEmpty.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        imageEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        imageEmpty.widthAnchor.constraint(equalToConstant: 200),
+        imageEmpty.heightAnchor.constraint(equalToConstant: 200),
+    
+        labelEmpty.topAnchor.constraint(equalTo: imageEmpty.bottomAnchor, constant: 16),
+        labelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                
+        smallLabelEmpty.topAnchor.constraint(equalTo: labelEmpty.bottomAnchor, constant: 8),
+        smallLabelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        smallLabelEmpty.widthAnchor.constraint(equalToConstant: 300)
+        ])
+    }
+    
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         loadItemsInSegment()
-    
+        showEmptyScreen()
+
     }
     
     @objc private func exploreButtonTapped() {
@@ -144,6 +198,20 @@ class EventsViewController: UIViewController {
         }
         
         tableView.reloadData()
+    }
+    
+    private func showEmptyScreen() {
+        
+        if filteredEvents.isEmpty {
+            imageEmpty.isHidden = false
+            labelEmpty.isHidden = false
+            smallLabelEmpty.isHidden = false
+         
+        } else {
+            imageEmpty.isHidden = true
+            labelEmpty.isHidden = true
+            smallLabelEmpty.isHidden = true
+        }
     }
 }
 

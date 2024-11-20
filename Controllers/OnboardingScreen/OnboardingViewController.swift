@@ -25,7 +25,9 @@ final class OnboardingViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isScrollEnabled = false
-        view.delegate = self
+        view.isPagingEnabled = true
+//        view.delegate = self
+        
         return view
     }()
     
@@ -55,7 +57,6 @@ final class OnboardingViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 30)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(named: "primaryBlue")
-        button.layer.cornerRadius = 20
         return button
     }()
     
@@ -65,7 +66,6 @@ final class OnboardingViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 15)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(named: "primaryBlue")
-        button.layer.cornerRadius = 20
         return button
     }()
     
@@ -86,6 +86,8 @@ final class OnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.delegate = self
         reloadData()
     }
     
@@ -109,8 +111,8 @@ final class OnboardingViewController: UIViewController {
     private func makeConstraints() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.bottomAnchor.constraint(equalTo: blueView.bottomAnchor, constant: -370),
-            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
+            collectionView.bottomAnchor.constraint(equalTo: blueView.bottomAnchor, constant: -390),
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.70),
             collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
             collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -127,7 +129,9 @@ final class OnboardingViewController: UIViewController {
         NSLayoutConstraint.activate([
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             nextButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
-            nextButton.heightAnchor.constraint(equalToConstant: 10)
+            nextButton.heightAnchor.constraint(equalToConstant: 10),
+            nextButton.widthAnchor.constraint(equalToConstant: 50)
+
         ])
         
         skipButton.translatesAutoresizingMaskIntoConstraints = false
@@ -135,7 +139,9 @@ final class OnboardingViewController: UIViewController {
             
             skipButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             skipButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
-            skipButton.heightAnchor.constraint(equalToConstant: 10)
+            skipButton.heightAnchor.constraint(equalToConstant: 10),
+            skipButton.widthAnchor.constraint(equalToConstant: 50)
+
             ])
             
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -204,20 +210,16 @@ final class OnboardingViewController: UIViewController {
     private func updateElementsState(for page: Int) {
         switch page {
         case 1:
-            UIView.transition(with: titleLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
-                self.titleLabel.text = "To Look Up More Events or Activities Nearby By Map"
-            }, completion: nil)
-            
-            UIView.transition(with: descriptionLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
-                self.descriptionLabel.text = "In publishing and graphic design, Lorem is a placeholder text commonly"
-            }, completion: nil)
+            self.titleLabel.text = "To Look Up More Events or Activities Nearby By Map"
+            self.descriptionLabel.text = "In publishing and graphic design, Lorem is a placeholder text commonly"
+
         case 2:
             UIView.transition(with: titleLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
-                self.titleLabel.text = "get_started"
+                self.titleLabel.text = "Highlight most interesting events"
             }, completion: nil)
             
             UIView.transition(with: descriptionLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
-                self.descriptionLabel.text = "description_third"
+                self.descriptionLabel.text = "Search for your favourite events and add them to favourites"
             }, completion: nil)
             
             UIView.transition(with: nextButton, duration: 0.2, options: [.transitionCrossDissolve, .curveEaseOut], animations: {

@@ -10,7 +10,7 @@ import UIKit
 class EventsViewController: UIViewController {
     
     private var segmentedControl = UISegmentedControl()
-    private var tableView = UITableView()
+    private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var exploreButton = UIButton()
     private let date = Date()
 
@@ -47,7 +47,7 @@ class EventsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
-        
+
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
     }
@@ -81,7 +81,7 @@ class EventsViewController: UIViewController {
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(segmentedControl)
         
-//        tableView.separatorColor = .white
+        tableView.separatorColor = .white
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
@@ -112,8 +112,8 @@ class EventsViewController: UIViewController {
             segmentedControl.heightAnchor.constraint(equalToConstant: 40),
             
             tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo: exploreButton.topAnchor, constant: -5),
             
             exploreButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
@@ -219,13 +219,24 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        if filteredEvents.count < 5 {
+//            return filteredEvents.count
+//        } else {
+//            return 5
+//        }
+//    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if filteredEvents.count < 5 {
             return filteredEvents.count
         } else {
             return 5
         }
+        
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
@@ -235,17 +246,9 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 130
     }
-  
-    //разделитель
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//           let separatorView = UIView()
-//           separatorView.backgroundColor = .red
-//    
-//           separatorView.frame = CGRect(x: 6, y: cell.frame.size.height - 1, width: cell.frame.size.width, height: 24)
-//           cell.addSubview(separatorView)
-//       }
+ 
     
 }
 

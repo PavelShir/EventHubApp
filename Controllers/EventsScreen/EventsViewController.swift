@@ -116,7 +116,7 @@ class EventsViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo: exploreButton.topAnchor, constant: -5),
             
-            exploreButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            exploreButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
             exploreButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             exploreButton.widthAnchor.constraint(equalToConstant: 250),
             exploreButton.heightAnchor.constraint(equalToConstant: 50),

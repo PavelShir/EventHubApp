@@ -24,7 +24,6 @@
 		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
 		F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */ = {isa = PBXBuildFile; fileRef = F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */; };
 		F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */; };
-		F3C91DA02CEE5DB1008E4707 /* EventCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9F2CEE5DB1008E4707 /* EventCustomCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +46,6 @@
 		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		F3C91D902CEC145A008E4707 /* AirbnbCereal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AirbnbCereal.otf; sourceTree = "<group>"; };
 		F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
-		F3C91D9F2CEE5DB1008E4707 /* EventCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCustomCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +119,6 @@
 			children = (
 				F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */,
 				F3C91D8A2CEB7E83008E4707 /* EventCell.swift */,
-				F3C91D9F2CEE5DB1008E4707 /* EventCustomCell.swift */,
 				F3C91D922CEC193C008E4707 /* AllEventsViewController.swift */,
 			);
 			path = EventsScreen;
@@ -213,7 +210,6 @@
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
-				F3C91DA02CEE5DB1008E4707 /* EventCustomCell.swift in Sources */,
 				8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,

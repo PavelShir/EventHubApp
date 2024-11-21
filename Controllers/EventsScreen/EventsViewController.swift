@@ -35,7 +35,7 @@ class EventsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(_colorLiteralRed: 0.95, green: 0.95, blue: 0.95, alpha: 0.1)
+        view.backgroundColor = .white
         
         setupUI()
         loadItemsInSegment()
@@ -46,7 +46,7 @@ class EventsViewController: UIViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(EventCustomCell.self, forCellReuseIdentifier: "EventCustomCell")
+        tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
 
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
@@ -112,8 +112,8 @@ class EventsViewController: UIViewController {
             segmentedControl.heightAnchor.constraint(equalToConstant: 40),
             
             tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo: exploreButton.topAnchor, constant: -5),
             
             exploreButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
@@ -219,30 +219,34 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        if filteredEvents.count < 5 {
+//            return filteredEvents.count
+//        } else {
+//            return 5
+//        }
+//    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if filteredEvents.count < 5 {
             return filteredEvents.count
         } else {
             return 5
         }
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return 1
         
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCustomCell", for: indexPath) as! EventCustomCell
-        let event = filteredEvents[indexPath.section]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
+        let event = filteredEvents[indexPath.row]
         cell.configure(with: event)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 130
     }
  
     

@@ -30,11 +30,11 @@ class FavoritesViewController: UIViewController {
     var bookmarks: [EventModel] = [
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "AppIcon"),
+        EventModel(date: "1732017600", title: "Jo Malone London's banana's International Kids", place: "Santa Cruz, CA", imageName: "noEvent"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, banana", imageName: "girlimage"),
         EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Banana Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
     ]
     
@@ -149,23 +149,21 @@ class FavoritesViewController: UIViewController {
     }
     
     @objc private func didTapSearchButton() {
-        print("Search")
         
+        let searchVC = SearchViewController()
+        searchVC.hidesBottomBarWhenPushed = true
+//        searchVC.source = "Favorites"
+        searchVC.events = bookmarks
+        navigationController?.pushViewController(searchVC, animated: true)
     }
 }
+
 
 
 // MARK: TableView DataSource & Delegate
 
 extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    //    func numberOfSections(in tableView: UITableView) -> Int {
-    //        if filteredEvents.count < 5 {
-    //            return filteredEvents.count
-    //        } else {
-    //            return 5
-    //        }
-    //    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -210,4 +208,4 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 
-#Preview { FavoritesViewController() }
+//#Preview { FavoritesViewController() }

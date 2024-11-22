@@ -20,10 +20,10 @@ class EventsViewController: UIViewController {
     
     private var events: [EventModel] = [
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1732027600", title: "banana Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Bananas Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa banana, CA", imageName: "girlimage"),
         EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
         EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
@@ -266,4 +266,4 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 
-#Preview { EventsViewController() }
+//#Preview { EventsViewController() }

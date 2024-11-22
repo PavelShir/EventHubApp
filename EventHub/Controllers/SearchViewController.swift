@@ -8,23 +8,57 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-    
+        
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let date = Date()
     
-    private let labelEmpty = UILabel()
+    private let labelEmpty: UILabel = {
+        let labelEmpty = UILabel()
+        labelEmpty.text = "NO RESULTS"
+        labelEmpty.font = UIFont.boldSystemFont(ofSize: 30)
+        labelEmpty.textColor = .black
+        labelEmpty.translatesAutoresizingMaskIntoConstraints = false
+       return labelEmpty
+    }()
     
-    var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-    ]
+    private let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.placeholder = "Search..."
+        search.translatesAutoresizingMaskIntoConstraints = false
+        return search
+    }()
     
+    private let filterButton: UIButton = {
+        let filterButton = UIButton()
+        filterButton.setTitle("Filters", for: .normal)
+        filterButton.setTitleColor(.white, for: .normal)
+        
+        var config = UIButton.Configuration.filled()
+        config.image = UIImage(systemName: "line.horizontal.3.decrease.circle")
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.cornerStyle = .capsule
+
+        config.baseBackgroundColor = UIColor(named: "primaryBlue")        
+        filterButton.configuration = config
+
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        return filterButton
+    }()
+         
+    
+    var events: [EventModel] = []
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
+//    ]
+    var filteredEvents: [EventModel] = []
+    var isSearching: Bool = false
     
     
     // MARK: Lifecycle ViewDidLoad
@@ -32,30 +66,25 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-//        self.hidesBottomBarWhenPushed = false
         
-        setupUI()
-        updateUI(with: events)
-        setupUIEmpty()
-        
-        //в ТАббаре тоже появляется подпись,которой быть не должно
-        
+        configureSearchBar()
+        setupTable()
+                
         self.title = "Search"
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(FavCell.self, forCellReuseIdentifier: "FavCell")
-        
+        tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+        searchBar.delegate = self
+
+
     }
-    
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //        self.tabBarController?.tabBar.isHidden = false
-    //
-    //    }
+
     
     
-    private func setupUI() {
+    private func setupTable() {
+        
+        view.addSubview(labelEmpty)
         
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
@@ -64,41 +93,38 @@ class SearchViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
+            
+            labelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            labelEmpty.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            labelEmpty.heightAnchor.constraint(equalToConstant: 191)
+            
         ])
     }
     
     
     
-    private func configureLabelEmpty() {
-        let labelEmpty = UILabel()
-        labelEmpty.text = "NO FAVORITES"
-        labelEmpty.font = UIFont.boldSystemFont(ofSize: 30)
-        labelEmpty.textColor = .black
-        labelEmpty.translatesAutoresizingMaskIntoConstraints = false
-        view.addArrangedSubview(labelEmpty)
-    }
-    
-    private func setupUIEmpty() {
+    private func configureSearchBar() {
         
-        configureLabelEmpty()
-        
+        view.addSubview(filterButton)
+        view.addSubview(searchBar)
         NSLayoutConstraint.activate([
-            
-            emptyStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStack.widthAnchor.constraint(equalToConstant: 300),
-            emptyStack.heightAnchor.constraint(equalToConstant: 250)
-            
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchBar.heightAnchor.constraint(equalToConstant: 44),
+            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -15),
+
+
+            filterButton.heightAnchor.constraint(equalToConstant: 44),
+            filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
     private func updateUI(with events: [EventModel]) {
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
         
         
         if events.isEmpty {
@@ -108,7 +134,7 @@ class SearchViewController: UIViewController {
                 self.view.bringSubviewToFront(self.labelEmpty)
             }
         } else {
-            self.events = bookmarks
+            self.events = events
             DispatchQueue.main.async {
                 
                 self.labelEmpty.isHidden = true
@@ -124,6 +150,21 @@ class SearchViewController: UIViewController {
         print("Search")
         
     }
+    
+    fileprivate func convertDate(date: String) -> String {
+        
+        guard let timeInterval = Double(date) else {
+            return "error invalid Date"
+        }
+        
+        let date = Date(timeIntervalSince1970: timeInterval)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE, MMM d • h:mm a"
+        
+        return formatter.string(from: date)
+    }
+    
 }
 
 
@@ -134,14 +175,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return events.count
-        
+        return isSearching ? filteredEvents.count : events.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FavCell", for: indexPath) as! FavCell
-        let event = events[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
+        let event = isSearching ? filteredEvents[indexPath.row] : events[indexPath.row]
         cell.configure(with: event)
         return cell
     }
@@ -150,9 +190,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         return 130
     }
     
-    
-    
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // переход на Ивент + передать данные об ивенте
@@ -169,9 +207,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: SearchBar Delegate methods
 
-#Preview { SearchViewController() }
-
-
-
+extension SearchViewController: UISearchBarDelegate {
+    
+   
 }
+
+//#Preview { SearchViewController() }

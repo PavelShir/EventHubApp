@@ -25,7 +25,7 @@ class TabBarViewController: UITabBarController {
             
             generateVC(viewController: UINavigationController(rootViewController: MapViewController()), image: UIImage(named: "map"), title: String(localized: "Map")),
             
-            generateVC(viewController: UINavigationController(rootViewController: SingInController()), image: UIImage(named: "profile"), title: String(localized: "Profile"))
+            generateVC(viewController: UINavigationController(rootViewController: ProfileViewController()), image: UIImage(named: "profile"), title: String(localized: "Profile"))
         ]
     }
 

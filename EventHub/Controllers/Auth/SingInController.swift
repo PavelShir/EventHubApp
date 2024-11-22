@@ -14,16 +14,12 @@ final class SingInController: UIViewController {
 
     // MARK: - Outlets
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = Constants.Authorization.loginTitle
-        label.font = UIFont.systemFont(
-            ofSize: Constants.Authorization.fontSizeTitleLabel,
-            weight: .bold
-        )
-        label.textColor = .darkText
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let titleImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "titleImage")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     private let descriptionLabel: UILabel = {
@@ -32,9 +28,9 @@ final class SingInController: UIViewController {
         label.numberOfLines = 0
         label.font = UIFont.systemFont(
             ofSize: Constants.Authorization.fontSizeDescriptionLabel,
-            weight: .regular
+            weight: .bold
         )
-        label.textColor = .lightText
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -70,14 +66,14 @@ final class SingInController: UIViewController {
     private lazy var togglePasswordButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        button.tintColor = .lightText
+        button.tintColor = .gray
         button.addAction(
             UIAction { [weak self] _ in
                 self?.togglePasswordVisibility()
             },
             for: .touchUpInside
         )
-        button.isHidden = true
+        button.isHidden = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -85,6 +81,7 @@ final class SingInController: UIViewController {
     private lazy var signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Constants.Authorization.signInButtonTitle, for: .normal)
+        button.setRightIcon(UIImage(named: "arrowButton")!, padding: 8)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(
             ofSize: Constants.Authorization.fontSizeSign,
@@ -92,6 +89,7 @@ final class SingInController: UIViewController {
         )
         button.backgroundColor = UIColor(named: Constants.allColors.primaryButtonBlue)
         button.layer.cornerRadius = Constants.Authorization.cornerRadiusSignButton
+        
         button.addAction(
             UIAction { [weak self] _ in
                 self?.handleSignInButton()
@@ -101,7 +99,48 @@ final class SingInController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["", ""])
+        segmentedControl.backgroundColor = UIColor(named: Constants.allColors.primaryButtonBlue)
+        segmentedControl.layer.cornerRadius = 19/2
+        segmentedControl.layer.borderColor = UIColor(named: Constants.allColors.primaryButtonBlue)?.cgColor
+        segmentedControl.layer.borderWidth = 1
+        segmentedControl.layer.masksToBounds = true
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
+    }()
 
+    private let rememberMeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Remember me"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .darkText
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let forgotPasswordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Forgot Password?", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(SingInController.self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private let stackViewPass: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     private let stackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -118,14 +157,14 @@ final class SingInController: UIViewController {
             ofSize: Constants.Authorization.fontSizeSign,
             weight: .regular
         )
-        label.textColor = .lightText
+        label.textColor = UIColor(named: Constants.allColors.darkText)
         return label
     }()
 
     private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Constants.Authorization.signUpButtonTitle, for: .normal)
-        button.setTitleColor(.darkText, for: .normal)
+        button.setTitleColor(UIColor(named: Constants.allColors.primaryBlue), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(
             ofSize: Constants.Authorization.fontSizeSign,
             weight: .regular
@@ -167,21 +206,27 @@ final class SingInController: UIViewController {
 
     private func setupView() {
         navigationItem.hidesBackButton = true
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: Constants.allColors.whiteBackground)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
 
     private func setupHierarchy() {
         [
-            titleLabel,
+            titleImageView,
             descriptionLabel,
             emailTextField,
             passwordTextField,
             togglePasswordButton,
             signInButton,
-            stackView
+            stackView,
+            stackViewPass
         ].forEach { view.addSubview($0) }
+        [
+            segmentedControl,
+            rememberMeLabel,
+            forgotPasswordButton
+        ].forEach { stackViewPass.addArrangedSubview($0) }
         [
             signUpLabel,
             signUpButton
@@ -190,16 +235,20 @@ final class SingInController: UIViewController {
 
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(
+            titleImageView.topAnchor.constraint(
                 equalTo: view.topAnchor,
                 constant: Constants.Authorization.topMarginTitleLabel
             ),
-            titleLabel.leadingAnchor.constraint(
+            titleImageView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: Constants.Authorization.horizontalMarginTwenty
             ),
+            titleImageView.widthAnchor.constraint(equalToConstant: 140
+            ),
+            titleImageView.heightAnchor.constraint(equalToConstant: 140
+            ),
             descriptionLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
+                equalTo: titleImageView.bottomAnchor,
                 constant: Constants.Authorization.topMarginDescriptionLabel
             ),
             descriptionLabel.leadingAnchor.constraint(
@@ -240,6 +289,25 @@ final class SingInController: UIViewController {
             passwordTextField.heightAnchor.constraint(
                 equalToConstant: Constants.Authorization.heightTextField
             ),
+            stackViewPass.topAnchor.constraint(
+                equalTo: passwordTextField.bottomAnchor,
+                constant: Constants.Authorization.topMarginInteriorTextField
+            ),
+            stackViewPass.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: Constants.Authorization.horizontalMarginTwenty
+            ),
+            stackViewPass.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Constants.Authorization.horizontalMarginTwenty
+            ),
+            stackViewPass.heightAnchor.constraint(
+                equalToConstant: 30
+            ),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 19
+            ),
+            segmentedControl.widthAnchor.constraint(equalToConstant: 36
+            ),
             togglePasswordButton.centerYAnchor.constraint(
                 equalTo: passwordTextField.centerYAnchor
             ),
@@ -251,16 +319,16 @@ final class SingInController: UIViewController {
                 equalToConstant: Constants.Authorization.heightToggleButton
             ),
             signInButton.topAnchor.constraint(
-                equalTo: passwordTextField.bottomAnchor,
-                constant: Constants.Authorization.topMarginSignButton
+                equalTo: stackViewPass.bottomAnchor,
+                constant: Constants.Authorization.topMarginInteriorTextField
             ),
             signInButton.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
-                constant: Constants.Authorization.horizontalMarginTwenty
+                constant: Constants.Authorization.horizontalMarginSingInButton
             ),
             signInButton.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
-                constant: -Constants.Authorization.horizontalMarginTwenty
+                constant: -Constants.Authorization.horizontalMarginSingInButton
             ),
             signInButton.heightAnchor.constraint(
                 equalToConstant:  Constants.Authorization.heightSignButton
@@ -277,6 +345,10 @@ final class SingInController: UIViewController {
 
     private func setupPasswordObservers() {
         passwordTextField.addAction(UIAction { [weak self] _ in self?.passwordTextFieldDidChange() }, for: .editingChanged)
+    }
+    
+    @objc private func forgotPasswordTapped() {
+        print("Forgot Password tapped")
     }
 }
 

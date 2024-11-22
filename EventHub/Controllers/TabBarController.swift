@@ -89,7 +89,7 @@ class TabBarViewController: UITabBarController {
         tabBar.layer.shadowColor = UIColor.gray.cgColor
         tabBar.layer.shadowRadius = 20
         tabBar.layer.masksToBounds = false
-        tabBar.layer.shadowOpacity = 0.30
+        tabBar.layer.shadowOpacity = 0.10
         tabBar.layer.shadowOffset = CGSize(width: 0, height: -2)
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()

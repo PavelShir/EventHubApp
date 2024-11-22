@@ -73,7 +73,7 @@ class EventsViewController: UIViewController {
         segmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
         segmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
         
-        segmentedControl.layer.cornerRadius = 40
+        segmentedControl.layer.cornerRadius = 40/2
         segmentedControl.layer.borderWidth = 0
         segmentedControl.layer.masksToBounds = true
         segmentedControl.layer.borderColor = UIColor.white.cgColor
@@ -248,10 +248,22 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
+        // переход на Ивент + передать данные об ивенте
+        
+//        let selectedEvent = eventData[indexPath.row]
+//        let eventVC = Explore()
+//        eventVC.event = selectedEvent
+//             
+//            navigationController?.pushViewController(eventVC, animated: true)
+//            tableView.deselectRow(at: indexPath, animated: true)
+        }
  
     
 }
 
 
 
-//#Preview { EventsViewController() }
+#Preview { EventsViewController() }

@@ -13,7 +13,7 @@ class EventsViewController: UIViewController {
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var exploreButton = UIButton()
     private let date = Date()
-
+    
     private let imageEmpty = UIImageView()
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
@@ -37,17 +37,19 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+
         setupUI()
         loadItemsInSegment()
         setupUIEmpty()
         showEmptyScreen()
         
+        
         self.title = "Events"
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
-
+        
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
     }
@@ -55,38 +57,28 @@ class EventsViewController: UIViewController {
     
     func setupUI() {
         
+        setUpSegment()
+//        segmentedControl = CapsuleSegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
+//        segmentedControl.selectedSegmentIndex = 0
+//        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.3)
+//        segmentedControl.selectedSegmentTintColor = .white
         
-        segmentedControl = UISegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.3)
-        segmentedControl.selectedSegmentTintColor = .white
-        
-        let normalTextAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.gray,
-            .font: UIFont(name: "AirbnbCerealApp", size: 15) ?? .systemFont(ofSize: 15)
-        ]
-        let selectedTextAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor(named: "primaryBlue") ?? .blue,
-            .font: UIFont(name: "AirbnbCerealApp", size: 15) ?? .systemFont(ofSize: 15)
-        ]
-        
-        segmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
-        segmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
-        
-        segmentedControl.layer.cornerRadius = 40/2
-        segmentedControl.layer.borderWidth = 0
-        segmentedControl.layer.masksToBounds = true
-        segmentedControl.layer.borderColor = UIColor.white.cgColor
 
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(segmentedControl)
+//        
+//        segmentedControl.layer.cornerRadius = 40/2
+//        segmentedControl.layer.borderWidth = 0
+//        segmentedControl.layer.masksToBounds = true
+//        segmentedControl.layer.borderColor = UIColor.white.cgColor
+        
+//        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(segmentedControl)
         
         tableView.separatorColor = .white
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         
         
         exploreButton.setTitle("EXPLORE EVENTS", for: .normal)
@@ -155,27 +147,49 @@ class EventsViewController: UIViewController {
         configureImageEmpty()
         configureLabelEmpty()
         configureSmallLabelEmpty()
-    
-    NSLayoutConstraint.activate([
         
-        imageEmpty.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        imageEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        imageEmpty.widthAnchor.constraint(equalToConstant: 200),
-        imageEmpty.heightAnchor.constraint(equalToConstant: 200),
-    
-        labelEmpty.topAnchor.constraint(equalTo: imageEmpty.bottomAnchor, constant: 16),
-        labelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
-        smallLabelEmpty.topAnchor.constraint(equalTo: labelEmpty.bottomAnchor, constant: 8),
-        smallLabelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        smallLabelEmpty.widthAnchor.constraint(equalToConstant: 300)
+        NSLayoutConstraint.activate([
+            
+            imageEmpty.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            imageEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageEmpty.widthAnchor.constraint(equalToConstant: 200),
+            imageEmpty.heightAnchor.constraint(equalToConstant: 200),
+            
+            labelEmpty.topAnchor.constraint(equalTo: imageEmpty.bottomAnchor, constant: 16),
+            labelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            smallLabelEmpty.topAnchor.constraint(equalTo: labelEmpty.bottomAnchor, constant: 8),
+            smallLabelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            smallLabelEmpty.widthAnchor.constraint(equalToConstant: 300)
         ])
+    }
+    
+    func setUpSegment() {
+        
+        segmentedControl = CapsuleSegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
+        view.addSubview(segmentedControl)
+        segmentedControl.selectedSegmentIndex = 0
+        
+                let normalTextAttributes: [NSAttributedString.Key: Any] = [
+                    .foregroundColor: UIColor.gray,
+                    .font: UIFont(name: "AirbnbCerealApp", size: 15) ?? .systemFont(ofSize: 15)
+                ]
+                let selectedTextAttributes: [NSAttributedString.Key: Any] = [
+                    .foregroundColor: UIColor(named: "primaryBlue") ?? .blue,
+                    .font: UIFont(name: "AirbnbCerealApp", size: 15) ?? .systemFont(ofSize: 15)
+                ]
+                
+                segmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
+                segmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
+        
     }
     
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         loadItemsInSegment()
         showEmptyScreen()
-
+        
     }
     
     @objc private func exploreButtonTapped() {
@@ -206,7 +220,7 @@ class EventsViewController: UIViewController {
             imageEmpty.isHidden = false
             labelEmpty.isHidden = false
             smallLabelEmpty.isHidden = false
-         
+            
         } else {
             imageEmpty.isHidden = true
             labelEmpty.isHidden = true
@@ -219,13 +233,7 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        if filteredEvents.count < 5 {
-//            return filteredEvents.count
-//        } else {
-//            return 5
-//        }
-//    }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -250,20 +258,20 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            
+        
         // переход на Ивент + передать данные об ивенте
         
-//        let selectedEvent = eventData[indexPath.row]
-//        let eventVC = Explore()
-//        eventVC.event = selectedEvent
-//             
-//            navigationController?.pushViewController(eventVC, animated: true)
-//            tableView.deselectRow(at: indexPath, animated: true)
-        }
- 
+        //        let selectedEvent = eventData[indexPath.row]
+        //        let eventVC = Explore()
+        //        eventVC.event = selectedEvent
+        //
+        //            navigationController?.pushViewController(eventVC, animated: true)
+        //            tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     
 }
 
 
 
-//#Preview { EventsViewController() }
+#Preview { EventsViewController() }

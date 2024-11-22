@@ -8,7 +8,7 @@
 import UIKit
 
 class FavoritesViewController: UIViewController {
-
+    
     
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let date = Date()
@@ -62,10 +62,10 @@ class FavoritesViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            self.tabBarController?.tabBar.isHidden = false
-  
-        }
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+        
+    }
     
     
     private func setupUI() {
@@ -92,10 +92,10 @@ class FavoritesViewController: UIViewController {
         imageEmpty.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-      
+            
             imageEmpty.widthAnchor.constraint(equalToConstant: 170),
             imageEmpty.heightAnchor.constraint(equalToConstant: 170)
- 
+            
         ])
         
     }
@@ -120,14 +120,14 @@ class FavoritesViewController: UIViewController {
             emptyStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyStack.widthAnchor.constraint(equalToConstant: 300),
             emptyStack.heightAnchor.constraint(equalToConstant: 250)
- 
+            
         ])
     }
-
+    
     private func updateUI(with bookmarks: [EventModel]) {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
-
+        
         
         if bookmarks.isEmpty {
             DispatchQueue.main.async {
@@ -150,7 +150,7 @@ class FavoritesViewController: UIViewController {
     
     @objc private func didTapSearchButton() {
         print("Search")
-    
+        
     }
 }
 
@@ -186,17 +186,10 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == .delete else { return }
-        
-        //        PersistenceManager.updateWith(bookmark: bookmarks[indexPath.row], actionType: .remove) { [weak self] error in
-        //            guard let self = self else { return }
-        //            guard let error = error else {
-        
-        //update favorites only if we have success persistence update
-        bookmarks.remove(at: indexPath.row)
-        //                tableView.deleteRows(at: [indexPath], with: .left)
-        //                updateUI(with: bookmarks)
-        //                return
+        if editingStyle == .delete {
+            bookmarks.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
     
     

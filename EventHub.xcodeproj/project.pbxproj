@@ -63,6 +63,8 @@
 		F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D992CED1657008E4707 /* CarouselSection.swift */; };
 		F3C91D9C2CED168B008E4707 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */; };
 		F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */; };
+		F4F71D6C2CF0AA05003A1C4E /* ModelResponseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F71D6B2CF0AA05003A1C4E /* ModelResponseEvent.swift */; };
+		F4F71D6E2CF0AA0D003A1C4E /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F71D6D2CF0AA0D003A1C4E /* HTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +102,9 @@
 		F3C91D992CED1657008E4707 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
 		F3C91D9B2CED168B008E4707 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
 		F3C91D9D2CED24AB008E4707 /* OnboardingItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemCell.swift; sourceTree = "<group>"; };
+		F4F71D6A2CF0A9FC003A1C4E /* ModelEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelEvent.swift; sourceTree = "<group>"; };
+		F4F71D6B2CF0AA05003A1C4E /* ModelResponseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelResponseEvent.swift; sourceTree = "<group>"; };
+		F4F71D6D2CF0AA0D003A1C4E /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +235,9 @@
 		8F8EA6E42CEA3FEE00FC1364 /* EventHub */ = {
 			isa = PBXGroup;
 			children = (
+				F4F71D6A2CF0A9FC003A1C4E /* ModelEvent.swift */,
+				F4F71D6B2CF0AA05003A1C4E /* ModelResponseEvent.swift */,
+				F4F71D6D2CF0AA0D003A1C4E /* HTTPClient.swift */,
 				31DEECBE2CEE7F470098E212 /* Models */,
 				31DEECBA2CEE779E0098E212 /* Managers */,
 				8F8452DB2CEC76F0000AE3BD /* Controllers */,
@@ -377,6 +385,7 @@
 				8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */,
 				8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */,
 				8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */,
+				F4F71D6E2CF0AA0D003A1C4E /* HTTPClient.swift in Sources */,
 				8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */,
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
@@ -398,6 +407,7 @@
 				31DEECC42CEE8DAE0098E212 /* UIImageView + Ext.swift in Sources */,
 				F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */,
 				8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */,
+				F4F71D6C2CF0AA05003A1C4E /* ModelResponseEvent.swift in Sources */,
 				31DEECC22CEE824A0098E212 /* TextField + Ext.swift in Sources */,
 				31DEECBD2CEE78960098E212 /* Constants.swift in Sources */,
 				31DEECC02CEE7F560098E212 /* UserModel.swift in Sources */,

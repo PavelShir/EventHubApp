@@ -25,6 +25,19 @@ class SearchViewController: UIViewController {
         let search = UISearchBar()
         search.placeholder = "Search..."
         search.translatesAutoresizingMaskIntoConstraints = false
+        search.backgroundColor = .clear
+        
+        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        search.searchTextField.backgroundColor = .white
+        search.layer.cornerRadius = 10
+        search.clipsToBounds = true
+        
+        let customImageView = UIImageView(image: UIImage(named: "search"))
+        customImageView.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+        customImageView.contentMode = .scaleAspectFit
+        search.searchTextField.leftView = customImageView
+        search.searchTextField.leftViewMode = .always
+        
         return search
     }()
     
@@ -34,7 +47,7 @@ class SearchViewController: UIViewController {
         filterButton.setTitleColor(.white, for: .normal)
         
         var config = UIButton.Configuration.filled()
-        config.image = UIImage(systemName: "line.horizontal.3.decrease.circle")
+        config.image = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")
         config.imagePlacement = .leading
         config.imagePadding = 8
         config.cornerStyle = .capsule
@@ -75,12 +88,16 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+        
         searchBar.delegate = self
-
+        
+        filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
 
     }
 
-    
+    @objc private func filterPressed() {
+        print("filter")
+    }
     
     private func setupTable() {
         
@@ -93,10 +110,11 @@ class SearchViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 10),
+            
+            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
+            tableView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
             
             labelEmpty.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             labelEmpty.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -114,11 +132,11 @@ class SearchViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchBar.heightAnchor.constraint(equalToConstant: 44),
+//            searchBar.heightAnchor.constraint(equalToConstant: 44),
             searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -15),
 
 
-            filterButton.heightAnchor.constraint(equalToConstant: 44),
+            filterButton.heightAnchor.constraint(equalToConstant: 30),
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -144,11 +162,6 @@ class SearchViewController: UIViewController {
                 self.view.bringSubviewToFront(self.tableView)
             }
         }
-    }
-    
-    @objc private func didTapSearchButton() {
-        print("Search")
-        
     }
     
     fileprivate func convertDate(date: String) -> String {
@@ -210,8 +223,10 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: SearchBar Delegate methods
 
 extension SearchViewController: UISearchBarDelegate {
-    
+        
+        
+    }
    
-}
+
 
 #Preview { SearchViewController() }

@@ -95,3 +95,4 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 iOSInjectionProject/
+EventHub.xcodeproj/project.xcworkspace/xcuserdata/vp.xcuserdatad/UserInterfaceState.xcuserstate

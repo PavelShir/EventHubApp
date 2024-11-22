@@ -18,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                        self.window = window
                        
                        let navigationController: UINavigationController
-                       let onboardingController = SingInController()
+
+                       let onboardingController = LaunchScreenViewController()
                        navigationController = UINavigationController(rootViewController: onboardingController)
                     
                        window.rootViewController = navigationController

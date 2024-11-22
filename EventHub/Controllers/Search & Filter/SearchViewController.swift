@@ -132,7 +132,7 @@ class SearchViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            searchBar.heightAnchor.constraint(equalToConstant: 44),
+            searchBar.heightAnchor.constraint(equalToConstant: 30),
             searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -15),
 
 

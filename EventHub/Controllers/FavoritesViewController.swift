@@ -77,10 +77,12 @@ class FavoritesViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
+            
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+            tableView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+            
         ])
     }
     

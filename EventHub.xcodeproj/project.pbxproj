@@ -53,6 +53,7 @@
 		8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */; };
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
+		F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659262CF0DC3D00CA3DE7 /* FavCell.swift */; };
 		F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */; };
 		F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8A2CEB7E83008E4707 /* EventCell.swift */; };
 		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
@@ -90,6 +91,7 @@
 		8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F33659262CF0DC3D00CA3DE7 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
 		F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		F3C91D8A2CEB7E83008E4707 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
 				8F8452DD2CEC76F0000AE3BD /* ExploreViewController.swift */,
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
+				F33659262CF0DC3D00CA3DE7 /* FavCell.swift */,
 				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
 				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
 				F3C91D962CED00B0008E4707 /* OnboardingScreen */,
@@ -386,6 +389,7 @@
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
 				31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */,
 				F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */,
+				F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */,
 				8F8452E62CEC76F0000AE3BD /* ExploreViewController.swift in Sources */,
 				F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,

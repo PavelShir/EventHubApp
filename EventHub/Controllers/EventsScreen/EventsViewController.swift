@@ -111,7 +111,7 @@ class EventsViewController: UIViewController {
             segmentedControl.widthAnchor.constraint(equalToConstant: 300),
             segmentedControl.heightAnchor.constraint(equalToConstant: 40),
             
-            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo: exploreButton.topAnchor, constant: -5),

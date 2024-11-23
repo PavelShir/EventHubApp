@@ -11,11 +11,11 @@ struct ResponseEvent: Decodable {
         let count: Int?
         let next: String?
         let previous: String?
-        let results: [Result]
+        let results: [Results]
     }
 
     // MARK: - Result
-    struct Result: Codable {
+    struct Results: Codable {
         let id: Int
         let dates: [DateElement]
         let title, slug: String?

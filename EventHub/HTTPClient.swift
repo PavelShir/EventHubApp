@@ -55,7 +55,7 @@ struct Event {
     let locationSlug: String?
     let placeId: Int?
 
-    init(from result: Result) {
+    init(from result: Results) {
         self.id = result.id
         self.title = result.title ?? "Default title"
         self.description = result.description ?? "Default description"

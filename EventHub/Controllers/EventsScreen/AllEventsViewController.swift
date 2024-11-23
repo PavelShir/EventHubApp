@@ -47,6 +47,7 @@ class AllEventsViewController: UIViewController {
 
         
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
 

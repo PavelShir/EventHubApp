@@ -96,7 +96,10 @@ class SearchViewController: UIViewController {
     }
 
     @objc private func filterPressed() {
-        print("filter")
+        let filterVC = FilterViewController()
+        filterVC.modalPresentationStyle = .popover
+        
+        present(filterVC, animated: true)
     }
     
     private func setupTable() {
@@ -106,6 +109,7 @@ class SearchViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
@@ -177,6 +181,8 @@ class SearchViewController: UIViewController {
         
         return formatter.string(from: date)
     }
+  
+    
     
 }
 

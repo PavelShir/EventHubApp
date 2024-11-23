@@ -274,4 +274,4 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 
-#Preview { EventsViewController() }
+//#Preview { EventsViewController() }

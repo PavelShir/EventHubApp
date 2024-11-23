@@ -100,15 +100,19 @@ final class SingInController: UIViewController {
         return button
     }()
     
-    private let segmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["", ""])
+    private let segmentedControl: UISwitch = {
+        let segmentedControl = UISwitch()
         segmentedControl.backgroundColor = UIColor(named: Constants.allColors.primaryButtonBlue)
-        segmentedControl.layer.cornerRadius = 19/2
+        segmentedControl.layer.cornerRadius = 23/2
         segmentedControl.layer.borderColor = UIColor(named: Constants.allColors.primaryButtonBlue)?.cgColor
         segmentedControl.layer.borderWidth = 1
         segmentedControl.layer.masksToBounds = true
-        segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        let scaleX: CGFloat = 36 / segmentedControl.bounds.width
+        let scaleY: CGFloat = 23 / segmentedControl.bounds.height
+        segmentedControl.transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+            
         return segmentedControl
     }()
 
@@ -191,10 +195,7 @@ final class SingInController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setupView()
-//        setupHierarchy()
-//        setupLayout()
-//        setupPasswordObservers()
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -304,7 +305,7 @@ final class SingInController: UIViewController {
             stackViewPass.heightAnchor.constraint(
                 equalToConstant: 30
             ),
-            segmentedControl.heightAnchor.constraint(equalToConstant: 19
+            segmentedControl.heightAnchor.constraint(equalToConstant: 23
             ),
             segmentedControl.widthAnchor.constraint(equalToConstant: 36
             ),

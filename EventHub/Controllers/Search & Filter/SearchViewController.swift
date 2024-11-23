@@ -61,15 +61,6 @@ class SearchViewController: UIViewController {
          
     
     var events: [EventModel] = []
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-//    ]
     var filteredEvents: [EventModel] = []
     var isSearching: Bool = false
     
@@ -224,9 +215,60 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension SearchViewController: UISearchBarDelegate {
         
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        filteredEvents.removeAll()
+        
+        guard searchText != "" || searchText != " " else {
+            print("empty search")
+            return
+        }
+        
+        for event in events {
+            
+            let lowercasedSearchText = searchText.lowercased()
+//            let arrayContains = event.title.lowercased().range(of: lowercasedSearchText)
+
+            }
+        
+        if searchBar.text == "" {
+            isSearching = false
+            filteredEvents = events
+               tableView.reloadData()
+                
+        } else {
+         
+            let lowercasedSearchText = searchText.lowercased()
+                filteredEvents = events.filter { event in
+                    event.title.lowercased().contains(lowercasedSearchText) ||
+                    event.place.lowercased().contains(lowercasedSearchText) ||
+                    convertDate(date: event.date).lowercased().contains(lowercasedSearchText)
+                }
+                
+            print(filteredEvents)
+
+                isSearching = true
+                tableView.reloadData()
+            
+            }
+            
+        }
+        
+
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.resignFirstResponder()
+      }
+      
+      func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.text = ""
+          filteredEvents = events
+          tableView.reloadData()
+          searchBar.resignFirstResponder()
+      }
         
     }
    
 
 
-#Preview { SearchViewController() }
+//#Preview { SearchViewController() }

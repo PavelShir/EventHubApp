@@ -207,8 +207,10 @@ extension FilterViewController {
         datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.sizeToFit()
-        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.preferredDatePickerStyle = .inline
         datePicker.backgroundColor = .white
+        datePicker.center = view.center
+        datePicker.tintColor = UIColor(named: Constants.allColors.primaryBlue)
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         view.addSubview(datePicker)
         
@@ -222,7 +224,12 @@ extension FilterViewController {
         let formattedDate = dateFormatter.string(from: date)
 
         currentDate = formattedDate
+        print(currentDate)
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+               self.datePicker.isHidden = true
+           }
+
     }
 }
 

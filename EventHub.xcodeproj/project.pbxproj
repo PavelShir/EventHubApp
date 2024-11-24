@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,6 +25,7 @@
 		31DEECC42CEE8DAE0098E212 /* UIImageView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC32CEE8DAE0098E212 /* UIImageView + Ext.swift */; };
 		31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */; };
 		31DEECC82CEE9DBA0098E212 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */; };
+		79C4C6072CF340B200CA9742 /* UIStackView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C6062CF340B200CA9742 /* UIStackView + Ext.swift */; };
 		8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */; };
 		8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */; };
 		8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */; };
@@ -62,6 +63,7 @@
 		31DEECC32CEE8DAE0098E212 /* UIImageView + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Ext.swift"; sourceTree = "<group>"; };
 		31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Ext.swift"; sourceTree = "<group>"; };
 		31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		79C4C6062CF340B200CA9742 /* UIStackView + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Ext.swift"; sourceTree = "<group>"; };
 		8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +91,10 @@
 		F4F71D6B2CF0AA05003A1C4E /* ModelResponseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelResponseEvent.swift; sourceTree = "<group>"; };
 		F4F71D6D2CF0AA0D003A1C4E /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		79C4C5FA2CF33A6200CA9742 /* ExploreScreen */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ExploreScreen; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8F8EA6DF2CEA3FEE00FC1364 /* Frameworks */ = {
@@ -151,6 +157,7 @@
 				31DEECC32CEE8DAE0098E212 /* UIImageView + Ext.swift */,
 				31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */,
 				31A6E9DF2CEFEBA9006DB793 /* UIButton + Ext.swift */,
+				79C4C6062CF340B200CA9742 /* UIStackView + Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -166,6 +173,7 @@
 		8F8452DB2CEC76F0000AE3BD /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				79C4C5FA2CF33A6200CA9742 /* ExploreScreen */,
 				8F8452E42CEC76F0000AE3BD /* TabBarController.swift */,
 				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
@@ -270,6 +278,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				79C4C5FA2CF33A6200CA9742 /* ExploreScreen */,
+			);
 			name = EventHub;
 			packageProductDependencies = (
 				31A6E9E22CF11665006DB793 /* FirebaseAnalytics */,
@@ -339,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				31DEECC82CEE9DBA0098E212 /* FirestoreManager.swift in Sources */,
+				79C4C6072CF340B200CA9742 /* UIStackView + Ext.swift in Sources */,
 				8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */,
 				8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */,
 				8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */,

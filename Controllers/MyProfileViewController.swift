@@ -16,6 +16,7 @@ class MyProfileViewController: UIViewController {
     let titleNavigationBar = "Profile"
     var imageUser = "user"
     var nameUser = "Ashfak Sayem"
+    var aboutMeContext = "dspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdks"
    
     private let scrollView: UIScrollView = {
         let element = UIScrollView()
@@ -27,6 +28,7 @@ class MyProfileViewController: UIViewController {
 //    private let contentView: UIView = {
 //        let element = UIView()
 //        element.backgroundColor = .white
+//        element.isUserInteractionEnabled = true
 //        element.translatesAutoresizingMaskIntoConstraints = false
 //        return element
 //    }()
@@ -42,12 +44,6 @@ class MyProfileViewController: UIViewController {
 //        return element
 //    }()
     
-    private lazy var contentStackView: UIView = {
-        let element = UIView()
-        element.isUserInteractionEnabled = true
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
     
     private lazy var nameLabel: UITextField = {
         let textField = UITextField()
@@ -64,6 +60,16 @@ class MyProfileViewController: UIViewController {
         textField.text = "About Me"
         textField.textColor = UIColor(red: 51/255, green: 54/255, blue: 71/255, alpha: 1)
         textField.font = UIFont(name: "Inter-SemiBold", size: 16)
+        textField.layer.masksToBounds = true
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    private lazy var aboutMeText: UITextField = {
+        let textField = UITextField()
+        textField.text = aboutMeContext
+        textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
+        textField.font = UIFont(name: "Inter-Regular", size: 14)
         textField.layer.masksToBounds = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -152,6 +158,7 @@ class MyProfileViewController: UIViewController {
         scrollView.addSubview(nameLabel)
         scrollView.addSubview(editButton)
         scrollView.addSubview(aboutMeLabel)
+        scrollView.addSubview(aboutMeText)
         scrollView.addSubview(signOutButton)
         
         
@@ -176,20 +183,11 @@ class MyProfileViewController: UIViewController {
             aboutMeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
             aboutMeLabel.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 25),
             
+            aboutMeText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
+            aboutMeText.topAnchor.constraint(equalTo: aboutMeLabel.bottomAnchor, constant: 40),
+            
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            signOutButton.topAnchor.constraint(equalTo: aboutMeLabel.bottomAnchor, constant: 20),
-            
-            
-//            pictureUser.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-//            editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            editButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//            editButton.heightAnchor.constraint(equalToConstant: 50),
-//            editButton.widthAnchor.constraint(equalToConstant: 154),
-//
-//            pictureUser.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            pictureUser.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 29),
-//
+            signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
         ])
     }

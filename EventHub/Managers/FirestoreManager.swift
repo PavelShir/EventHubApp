@@ -7,6 +7,7 @@
 
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseFirestoreInternal
 
 final class FirestoreManager {
 

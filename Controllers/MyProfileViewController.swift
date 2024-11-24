@@ -25,14 +25,6 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         return element
     }()
     
-    //    private let contentView: UIView = {
-    //        let element = UIView()
-    //        element.backgroundColor = .white
-    //        element.isUserInteractionEnabled = true
-    //        element.translatesAutoresizingMaskIntoConstraints = false
-    //        return element
-    //    }()
-    
     private lazy var nameStackView: UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
@@ -126,7 +118,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         
         let element = UIButton(configuration: configuration)
         element.contentHorizontalAlignment = .fill
-        element.addTarget(self, action: #selector(toggleEditMode), for: .touchUpInside)
+        element.addTarget(self, action: #selector(tapEditButton), for: .touchUpInside)
         element.isUserInteractionEnabled = true
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -210,6 +202,14 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         scrollView.addSubview(signOutButton)
         
         
+//        let backSaveButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditMode))
+//                navigationItem.leftBarButtonItem = backSaveButton
+//        // Set the title color to white for light mode or dark for dark mode
+//        
+//        navigationItem.leftBarButtonItem = backSaveButton
+//        
+        
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19.5),
@@ -259,7 +259,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
             
             // Change button title to "Save"
             editButton.configuration?.title = "Save"
-//            navigationItem.leftBarButtonItem?.title = "Save"
+           
+            navigationItem.leftBarButtonItem?.title = "Save"
             // Add picture "edit" on UIElement
             pictureEdit1.image = UIImage(named: imageEdit)
             pictureEdit2.image = UIImage(named: imageEdit)
@@ -271,7 +272,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
             
             // Change button title to "Edit"
             editButton.configuration?.title = "Edit Profile"
-//            navigationItem.leftBarButtonItem?.title = "Save"
+            navigationItem.leftBarButtonItem?.title = "Edit"
+            
             //                navigationItem.rightBarButtonItem?.title = "Edit Profile"
             // delete picture "edit" on UIElement
             pictureEdit1.image = .emtyImage(with: CGSize(width: 22, height: 22))

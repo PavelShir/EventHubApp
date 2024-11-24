@@ -137,6 +137,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         private lazy var pictureUser: UIImageView = {
             let element = UIImageView()
             element.frame.size = CGSize(width: 96, height: 96)
+            
+            
             element.image = UIImage(named: imageUser)
             element.contentMode = .scaleAspectFill
             element.layer.cornerRadius = 48
@@ -154,7 +156,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             super.viewDidLoad()
             view.backgroundColor = .white
             self.navigationItem.title = titleEditProfile
+            loadProfileData()
             configureUI()
+            setupGestureRecognizer()
+            setupTextFieldDelegates()
+            
         }
         
         //     MARK: - UI Setup
@@ -191,7 +197,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 pictureUser.heightAnchor.constraint(equalToConstant: 96),
                 pictureUser.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 
-                nameStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                nameStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 30),
                 nameStackView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 21),
                 nameStackView.heightAnchor.constraint(equalToConstant: 22),
                 
@@ -209,7 +215,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 
             ])
             
-            updateUIForEditMode()
+//            updateUIForEditMode()
             
         }
         
@@ -217,54 +223,71 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             nameLabel.delegate = self
             aboutMeText.delegate = self
         }
-        func updateUIForEditMode() {
-            if isEditMode {
-                // Enable text fields for editing
-                pictureUser.isUserInteractionEnabled = true
-                nameLabel.isEnabled = true
-                aboutMeText.isEnabled = true
-                
-                // Change button title to "Save"
+//        func updateUIForEditMode() {
+//            pictureUser.isUserInteractionEnabled = true
+//            nameLabel.isEnabled = true
+//            aboutMeText.isEnabled = true
+////
+////            if isEditMode {
+////                // Enable text fields for editing
+////                pictureUser.isUserInteractionEnabled = true
+////                nameLabel.isEnabled = true
+////                aboutMeText.isEnabled = true
+////
+////                // Change button title to "Save"
+////
+////
+////            } else {
+////                // Disable text fields
+////                pictureUser.isUserInteractionEnabled = false
+////                nameLabel.isEnabled = false
+////                aboutMeText.isEnabled = false
+////
+////            }
+//        }
 //
-//                navigationItem.leftBarButtonItem?.title = "Cancel"
-//                navigationItem.rightBarButtonItem?.title = "Done"
-                
-               
-            } else {
-                // Disable text fields
-                pictureUser.isUserInteractionEnabled = false
-                nameLabel.isEnabled = false
-                aboutMeText.isEnabled = false
-                let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(toggleEditMode))
-                        navigationItem.leftBarButtonItem = cancelButton
-                let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(toggleEditMode))
-                        navigationItem.rightBarButtonItem = doneButton
-               
-            }
-        }
-        
-        var changesMade = true
-        var isEditMode = true
-        
-        @objc func toggleEditMode() {
-            if changesMade {
-                saveProfileData() // Save changes before toggling edit mode
-            }
-            isEditMode = !isEditMode
-            updateUIForEditMode()
-        }
+//        var changesMade = true
+//        var isEditMode = true
+//
+//        @objc func toggleEditMode() {
+//            if changesMade {
+//                saveProfileData() // Save changes before toggling edit mode
+//            }
+//            isEditMode = !isEditMode
+//            updateUIForEditMode()
+//        }
         
         @objc func handleImageTap() {
+            
+            let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButton))
+                    navigationItem.leftBarButtonItem = cancelButton
+            let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
+                    navigationItem.rightBarButtonItem = doneButton
+            
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = .photoLibrary
             imagePicker.allowsEditing = true
             present(imagePicker, animated: true, completion: nil)
         }
+    
+    @objc func handleNameLabelTap() {
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButton))
+                navigationItem.leftBarButtonItem = cancelButton
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
+                navigationItem.rightBarButtonItem = doneButton
+        
+    }
         
         func setupGestureRecognizer() {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleImageTap))
             pictureUser.addGestureRecognizer(tapGesture)
+            
+            let tapNameLabelGesture = UITapGestureRecognizer(target: self, action: #selector(handleNameLabelTap))
+            nameLabel.addGestureRecognizer(tapNameLabelGesture)
+            let tapaboutMeTextGesture = UITapGestureRecognizer(target: self, action: #selector(handleNameLabelTap))
+            nameLabel.addGestureRecognizer(tapNameLabelGesture)
+            aboutMeText.addGestureRecognizer(tapaboutMeTextGesture)
             
             let tapToDismissGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapToDismiss))
             view.addGestureRecognizer(tapToDismissGesture)
@@ -311,7 +334,28 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             }
         }
         
+    @objc func cancelButton() {
         
+//        if #available(iOS 16.0, *) {
+//            navigationItem.leftBarButtonItem?.isHidden
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//
+//        if #available(iOS 16.0, *) {
+//            navigationItem.rightBarButtonItem?.isHidden
+//        } else {
+//            // Fallback on earlier versions
+//        }
+        navigationController?.popViewController(animated: true)
+//        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
+    }
+    
+    @objc func doneButton() {
+        saveProfileData()
+        navigationController?.popViewController(animated: true)
+//        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
+    }
         
         @objc func tapSignOutButton() {
             self.navigationController?.pushViewController(OnboardingViewController(), animated: true)

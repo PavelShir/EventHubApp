@@ -47,33 +47,13 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         return element
     }()
     
-    
-    private lazy var pictureEdit1: UIImageView = {
-        let element = UIImageView()
-        element.frame.size = CGSize(width: 22, height: 22)
-        element.image = UIImage(named: imageEdit )
-        element.contentMode = .scaleAspectFill
-        element.isUserInteractionEnabled = true
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    private lazy var pictureEdit2: UIImageView = {
-        let element = UIImageView()
-        element.frame.size = CGSize(width: 22, height: 22)
-        element.image = UIImage(named: imageEdit )
-        element.contentMode = .scaleAspectFill
-        element.isUserInteractionEnabled = true
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    
     private lazy var nameLabel: UITextField = {
         let textField = UITextField()
         textField.text = nameUser
         textField.textColor = UIColor(red: 51/255, green: 54/255, blue: 71/255, alpha: 1)
         textField.font = UIFont(name: "Inter-SemiBold", size: 24)
         textField.layer.masksToBounds = true
-        textField.isUserInteractionEnabled = true
+        textField.isUserInteractionEnabled = false
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -84,7 +64,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         textField.textColor = UIColor(red: 51/255, green: 54/255, blue: 71/255, alpha: 1)
         textField.font = UIFont(name: "Inter-SemiBold", size: 16)
         textField.layer.masksToBounds = true
-        textField.isUserInteractionEnabled = true
+        textField.isUserInteractionEnabled = false
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -97,7 +77,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         textField.font = UIFont(name: "Inter-Regular", size: 14)
         textField.sizeThatFits(CGSize(width: 120, height: 40))
         textField.layer.masksToBounds = true
-        textField.isUserInteractionEnabled = true
+//        textField.isUserInteractionEnabled = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -146,7 +126,13 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     private lazy var pictureUser: UIImageView = {
         let element = UIImageView()
         element.frame.size = CGSize(width: 96, height: 96)
-        element.image = UIImage(named: imageUser)
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
+           let image = UIImage(data: imageData) {
+            element.image = image
+        } else {
+            element.image = UIImage(named: imageUser)
+        }
+//        element.image = UIImage(named: imageUser)
         element.contentMode = .scaleAspectFill
         element.layer.cornerRadius = 48
         element.clipsToBounds = true
@@ -163,52 +149,47 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = titleNavigationBar
+        
         configureUI()
+        
     }
     
+    func loadProfileData() {
+        
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
+           let image = UIImage(data: imageData) {
+            pictureUser.image = image
+        }
+        
+        if let storedName = UserDefaults.standard.string(forKey: "profileName") {
+            nameLabel.text = storedName
+        }
+        
+        if let storedAddress = UserDefaults.standard.string(forKey: "profileAddress") {
+            aboutMeText.text = storedAddress
+        }
+        
+    }
     
-    //    override func viewWillAppear(_ animated: Bool) {
-    //         super.viewWillAppear(animated)
-    //         navigationController?.navigationBar.isHidden = false
-    //         navigationItem.title = titleNavigationBar
-    //
-    //        navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.07058823529, green: 0.05098039216, blue: 0.1490196078, alpha: 1), NSAttributedString.Key.font: UIFont.init(name: "SF Pro", size: 24)]
-    //
-    //     }
     //     MARK: - UI Setup
     func configureUI() {
-        
-        //        let scrollContentGuide = scrollView.contentLayoutGuide
-        //        let scrollFrameGuide = scrollView.frameLayoutGuide
         
         view.addSubview(scrollView)
         scrollView.addSubview(pictureUser)
         scrollView.addSubview(editButton)
         
         scrollView.addSubview(nameStackView)
-        
-       
-        
-        
+    
         scrollView.addSubview(aboutMeStackView)
         
         aboutMeStackView.addArrangedSubview(aboutMeLabel)
-        aboutMeStackView.addArrangedSubview(pictureEdit1)
+//        aboutMeStackView.addArrangedSubview(pictureEdit1)
         nameStackView.addArrangedSubview(nameLabel)
-        nameStackView.addArrangedSubview(pictureEdit2)
+//        nameStackView.addArrangedSubview(pictureEdit2)
         
         scrollView.addSubview(aboutMeText)
         
         scrollView.addSubview(signOutButton)
-        
-        
-//        let backSaveButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toggleEditMode))
-//                navigationItem.leftBarButtonItem = backSaveButton
-//        // Set the title color to white for light mode or dark for dark mode
-//        
-//        navigationItem.leftBarButtonItem = backSaveButton
-//        
-        
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -241,121 +222,16 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
             signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
         ])
-        
-        updateUIForEditMode()
-        
+        loadProfileData()
     }
     
-    func setupTextFieldDelegates() {
-        nameLabel.delegate = self
-        aboutMeText.delegate = self
-    }
-    func updateUIForEditMode() {
-        if isEditMode {
-            // Enable text fields for editing
-            pictureUser.isUserInteractionEnabled = true
-            nameLabel.isEnabled = true
-            aboutMeText.isEnabled = true
-            
-            // Change button title to "Save"
-            editButton.configuration?.title = "Save"
-           
-            navigationItem.leftBarButtonItem?.title = "Save"
-            // Add picture "edit" on UIElement
-            pictureEdit1.image = UIImage(named: imageEdit)
-            pictureEdit2.image = UIImage(named: imageEdit)
-        } else {
-            // Disable text fields
-            pictureUser.isUserInteractionEnabled = false
-            nameLabel.isEnabled = false
-            aboutMeText.isEnabled = false
-            
-            // Change button title to "Edit"
-            editButton.configuration?.title = "Edit Profile"
-            navigationItem.leftBarButtonItem?.title = "Edit"
-            
-            //                navigationItem.rightBarButtonItem?.title = "Edit Profile"
-            // delete picture "edit" on UIElement
-            pictureEdit1.image = .emtyImage(with: CGSize(width: 22, height: 22))
-            pictureEdit2.image = .emtyImage(with: CGSize(width: 22, height: 22))
-        }
-    }
-    
-    var changesMade = false
-    var isEditMode = false
-    
-    @objc func toggleEditMode() {
-        if changesMade {
-            saveProfileData() // Save changes before toggling edit mode
-        }
-        isEditMode = !isEditMode
-        updateUIForEditMode()
-    }
-    
-    @objc func handleImageTap() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = true
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    func setupGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleImageTap))
-        pictureUser.addGestureRecognizer(tapGesture)
-        
-        let tapToDismissGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapToDismiss))
-        view.addGestureRecognizer(tapToDismissGesture)
-        tapToDismissGesture.cancelsTouchesInView = false
-    }
-    
-    @objc func handleTapToDismiss() {
-        view.endEditing(true)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let editedImage = info[.editedImage] as? UIImage { // Use edited image if available
-            pictureUser.image = editedImage
-            UserDefaults.standard.set(editedImage.pngData(), forKey: "profileImage")
-        } else if let originalImage = info[.originalImage] as? UIImage {
-            pictureUser.image = originalImage
-            UserDefaults.standard.set(originalImage.pngData(), forKey: "profileImage")
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func loadProfileData() {
-        
-        if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
-           let image = UIImage(data: imageData) {
-            pictureUser.image = image
-        }
-        
-        if let storedName = UserDefaults.standard.string(forKey: "profileName") {
-            nameLabel.text = storedName
-        }
-        
-        if let storedAddress = UserDefaults.standard.string(forKey: "profileAddress") {
-            aboutMeText.text = storedAddress
-        }
-        
-    }
-    
-    
-    @objc func saveProfileData() {
-        if let name = nameLabel.text, let text = aboutMeText.text {
-            UserDefaults.standard.set(name, forKey: "profileName")
-            UserDefaults.standard.set(text, forKey: "profileAddress")
-        }
-    }
-    
-    
-    @objc func tapEditButton() {
-        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
-    }
     
     @objc func tapSignOutButton() {
         self.navigationController?.pushViewController(OnboardingViewController(), animated: true)
+    }
+    
+    @objc func tapEditButton() {
+        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
     }
 }
     extension UIImage {

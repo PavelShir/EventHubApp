@@ -40,41 +40,16 @@ class FilterViewController: UIViewController {
         return stack
     }()
 
-    private let todayButton = FilterViewController.makeTimeButton(title: "Today")
-    private let tomorrowButton = FilterViewController.makeTimeButton(title: "Tomorrow")
-    private let thisWeekButton = FilterViewController.makeTimeButton(title: "This week")
-
-    private let calendarButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Choose from calendar", for: .normal)
-        button.setImage(UIImage(systemName: "calendar"), for: .normal)
-        button.tintColor = .systemBlue
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.contentHorizontalAlignment = .left
-        button.layer.cornerRadius = 8
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let todayButton = createButton(title: "Today")
+    private let tomorrowButton = createButton(title: "Tomorrow")
+    private let thisWeekButton = createButton(title: "This week")
+    private let calendarButton = createButton(title: "Choose from calendar")
     
     private var datePicker: UIDatePicker!
-    private var datePickerBackgroundView: UIView!
-    private lazy var dateLabel = UILabel()
+//    private var datePickerBackgroundView: UIView!
+    var currentDate: String!
 
-    private let locationButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("New York, USA", for: .normal)
-        button.setImage(UIImage(systemName: "mappin.and.ellipse"), for: .normal)
-        button.tintColor = .systemBlue
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.contentHorizontalAlignment = .left
-        button.layer.cornerRadius = 8
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let locationButton = createButton(title: "Choose city")
 
     private let priceRangeLabel: UILabel = {
         let label = UILabel()
@@ -94,28 +69,9 @@ class FilterViewController: UIViewController {
         return slider
     }()
 
-    private let resetButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("RESET", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        button.backgroundColor = .white
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 1
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let resetButton = createButton(title: "RESET")
+    private let applyButton = createButton(title: "APPLY")
 
-    private let applyButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("APPLY", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        button.backgroundColor = UIColor(named: Constants.allColors.primaryBlue)
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
 
     // MARK: - Lifecycle
 
@@ -123,6 +79,8 @@ class FilterViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupCategoryCollection()
+        
+        calendarButton.addTarget(self, action: #selector(calendarButtonPressed), for: .touchUpInside)
     }
 
     // MARK: - Setup UI
@@ -149,15 +107,17 @@ class FilterViewController: UIViewController {
         NSLayoutConstraint.activate([
             timeStackView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
             timeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            timeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            timeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            timeStackView.heightAnchor.constraint(equalToConstant: 44)
+
         ])
 
          view.addSubview(calendarButton)
         NSLayoutConstraint.activate([
             calendarButton.topAnchor.constraint(equalTo: timeStackView.bottomAnchor, constant: 20),
             calendarButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            calendarButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            calendarButton.heightAnchor.constraint(equalToConstant: 44)
+            calendarButton.heightAnchor.constraint(equalToConstant: 44),
+            calendarButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -120)
         ])
 
          view.addSubview(locationButton)
@@ -209,9 +169,10 @@ class FilterViewController: UIViewController {
     }
 
 
-    private static func makeTimeButton(title: String) -> UIButton {
+    private static func createButton(title: String) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
+        button.tintColor = UIColor(named: Constants.allColors.primaryBlue)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
@@ -242,46 +203,26 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 extension FilterViewController {
     private func showDatePicker() {
-        // Create background view to block the rest of the screen
-        datePickerBackgroundView = UIView()
-        datePickerBackgroundView.frame = view.bounds
-        datePickerBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        view.addSubview(datePickerBackgroundView)
-        
-        // Initialize UIDatePicker
+       
         datePicker = UIDatePicker()
-        datePicker.frame = CGRect(x: 0, y: view.bounds.height - 250, width: view.bounds.width, height: 250)
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels // For iOS 14+ (iPhone)
+        datePicker.sizeToFit()
+        datePicker.preferredDatePickerStyle = .wheels
         datePicker.backgroundColor = .white
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         view.addSubview(datePicker)
         
-        // Add a button to dismiss the date picker
-        let doneButton = UIButton(type: .system)
-        doneButton.setTitle("Done", for: .normal)
-        doneButton.frame = CGRect(x: view.bounds.width - 100, y: view.bounds.height - 300, width: 80, height: 50)
-        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
-        view.addSubview(doneButton)
     }
     
     @objc private func dateChanged() {
-        let selectedDate = datePicker.date
-        // Optionally, update the label immediately when the date changes
+        let date = datePicker.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        dateLabel.text = dateFormatter.string(from: selectedDate)
-    }
-    
-    @objc private func doneButtonPressed() {
-        // Hide the date picker and the background view
-        datePicker.removeFromSuperview()
-        datePickerBackgroundView.removeFromSuperview()
+
+        let formattedDate = dateFormatter.string(from: date)
+
+        currentDate = formattedDate
         
-        // Update label with the selected date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateLabel.text = dateFormatter.string(from: datePicker.date)
     }
 }
 

@@ -124,10 +124,17 @@ class EventCell: UITableViewCell {
     }
     
     func configure(with event: Event) {
-//        eventImageView.image = UIImage(named: event.imageName)
+
         dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
 //        placeLabel.text = event.place
+        
+        if let urlToImage = event.images {
+        didUpdateImage(from: urlToImage)
+        } else {
+            eventImageView.image = UIImage(named: "girlimage")
+        }
+        
     }
     
     private func convertDate(date: Int?) -> String {
@@ -136,18 +143,37 @@ class EventCell: UITableViewCell {
                 return "error invalid Date"
             }
             
-            // Преобразуем Int в TimeInterval (Double)
             let timeInterval = TimeInterval(date)
             
-            // Создаём дату на основе временного интервала
             let dateObject = Date(timeIntervalSince1970: timeInterval)
             
-            // Форматируем дату в читаемый строковый формат
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EEE, MMM d • h:mm a" // Настройте формат даты по вашему усмотрению
+            dateFormatter.dateFormat = "EEE, MMM d • h:mm a"
             return dateFormatter.string(from: dateObject)
     }
     
+private func didUpdateImage(from url: String) {
+    
+    guard let imageUrl = URL(string: url) else {
+        DispatchQueue.main.async {
+            self.eventImageView.image = UIImage(named: "girlimage")
+        }
+        return
+    }
+    
+    URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+        if let data = data, let image = UIImage(data: data) {
+            DispatchQueue.main.async {
+                self.eventImageView.image = image
+            }
+        } else {
+            print(error?.localizedDescription ?? "error")
+            DispatchQueue.main.async {
+                self.eventImageView.image = UIImage(named: "girlimage")
+            }
+        }
+    }.resume()
+}
     
 }
 

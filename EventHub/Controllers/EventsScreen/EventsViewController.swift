@@ -20,7 +20,7 @@ class EventsViewController: UIViewController {
     
     private var events: [Event] = []
     
-    private var filteredEvents: [Event] = []
+    private var upcomingEvents: [Event] = []
     
     // MARK: Lifecycle ViewDidLoad
     
@@ -177,16 +177,20 @@ class EventsViewController: UIViewController {
     }
     
     private func loadItemsInSegment() {
-        let currentDate = Date().timeIntervalSince1970
         let index = segmentedControl.selectedSegmentIndex
+        
+        let currentDate = String(Date().timeIntervalSince1970)
+        let filterUntrilToday = EventFilter(location: .moscow, actualUntil: currentDate)
+        let filterAfterToday = EventFilter(location: .moscow, actualSince: currentDate)
+
         
         switch index {
             
-        case 0: filteredEvents = loadEvents()
-        case 1: events = loadEvents()
+        case 0: upcomingEvents = loadEvents(with: filterAfterToday)
+            tableView.reloadData()
+        case 1: events = loadEvents(with: filterAfterToday)
+            tableView.reloadData()
 
-//        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
-//        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
         default: print("no index")
         }
         
@@ -195,7 +199,7 @@ class EventsViewController: UIViewController {
     
     private func showEmptyScreen() {
         
-        if filteredEvents.isEmpty {
+        if upcomingEvents.isEmpty {
             imageEmpty.isHidden = false
             labelEmpty.isHidden = false
             smallLabelEmpty.isHidden = false
@@ -216,8 +220,8 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if filteredEvents.count < 5 {
-            return filteredEvents.count
+        if upcomingEvents.count < 5 {
+            return upcomingEvents.count
         } else {
             return 5
         }
@@ -227,7 +231,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = filteredEvents[indexPath.row]
+        let event = upcomingEvents[indexPath.row]
         cell.configure(with: event)
         return cell
     }

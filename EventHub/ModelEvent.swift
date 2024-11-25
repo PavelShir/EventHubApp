@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 struct Event {
     let id: Int
     let title: String

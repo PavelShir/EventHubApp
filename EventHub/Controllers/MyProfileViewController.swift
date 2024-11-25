@@ -75,14 +75,15 @@ dsgeryertdggwrsrd
     }()
     
     
-    private lazy var aboutMeText: UITextField = {
-        let textField = UITextField()
+    private lazy var aboutMeText: UITextView = {
+        let textField = UITextView()
         textField.text = aboutMeContext
         textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
         textField.font = UIFont(name: "Inter-Regular", size: 14)
-        textField.sizeThatFits(CGSize(width: 120, height: 40))
-        textField.layer.masksToBounds = true
-//        textField.isUserInteractionEnabled = true
+        //textField.sizeThatFits(CGSize(width: 120, height: 40))
+        textField.backgroundColor = .white
+        textField.isEditable = true
+        textField.isScrollEnabled = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -146,18 +147,7 @@ dsgeryertdggwrsrd
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
-    
-    private lazy var aboutMeTextView: UITextView = {
-        let element = UITextView()
-        element.text = aboutMeContext
-        element.backgroundColor = .red
-        element.isScrollEnabled = true
-        element.textContainer.maximumNumberOfLines = 4
-//        element.isUserInteractionEnabled = false
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    
+  
     var heightConstraint = NSLayoutConstraint()
     
     private lazy var button: UIButton = {
@@ -176,11 +166,11 @@ dsgeryertdggwrsrd
     @objc func actionButton() {
         let isNormal = heightConstraint.constant
         if isNormal  == 80 {
-            heightConstraint.constant = aboutMeTextView.contentSize.height
-            print("открываем. \(aboutMeTextView.contentSize.height)")
+            heightConstraint.constant = aboutMeText.contentSize.height
+            print("открываем. \(aboutMeText.contentSize.height)")
         } else {
             heightConstraint.constant = 80
-            print("закрыывеем, \(aboutMeTextView.contentSize.height)")
+            print("закрыывеем, \(aboutMeText.contentSize.height)")
         }
     }
     
@@ -198,10 +188,6 @@ dsgeryertdggwrsrd
     }
     
     func loadProfileData() {
-        
-//        NSLayoutConstraint.activate([
-//            aboutMeTextView.heightAnchor.constraint(equalToConstant: heightConstraint.constant),
-//        ])
         
         if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
            let image = UIImage(data: imageData) {
@@ -225,20 +211,12 @@ dsgeryertdggwrsrd
         view.addSubview(scrollView)
         scrollView.addSubview(pictureUser)
         scrollView.addSubview(editButton)
-        
         scrollView.addSubview(nameStackView)
-    
         scrollView.addSubview(aboutMeStackView)
-        
         aboutMeStackView.addArrangedSubview(aboutMeLabel)
-//        aboutMeStackView.addArrangedSubview(pictureEdit1)
         nameStackView.addArrangedSubview(nameLabel)
-//        nameStackView.addArrangedSubview(pictureEdit2)
-        
-//        scrollView.addSubview(aboutMeText)
-        scrollView.addSubview(aboutMeTextView)
+        scrollView.addSubview(aboutMeText)
         scrollView.addSubview(button)
-//        scrollView.addSubview(aboutMeTextView)
         scrollView.addSubview(signOutButton)
         
         NSLayoutConstraint.activate([
@@ -264,20 +242,15 @@ dsgeryertdggwrsrd
             aboutMeStackView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 143),
             aboutMeStackView.heightAnchor.constraint(equalToConstant: 22),
             
-            aboutMeTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
-            aboutMeTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            aboutMeTextView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
-            aboutMeTextView.heightAnchor.constraint(equalToConstant: 80),
+            aboutMeText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
+            aboutMeText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
+            aboutMeText.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
+            aboutMeText.heightAnchor.constraint(equalToConstant: 80),
             
             button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
             button.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
             button.heightAnchor.constraint(equalToConstant: 80),
-            
-            
-//            aboutMeText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
-//            aboutMeText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-//            aboutMeText.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
             
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49),

@@ -81,6 +81,19 @@ struct ResponseEvent: Decodable {
         case krasnoyarsk = "Красноярск"
         case kev = "Киев"
         case newYork = "Нью-Йорк"
+        
+        init(from decoder: Decoder) throws {
+             let container = try decoder.singleValueContainer()
+             let value = try container.decode(String.self)
+
+             // Маппинг для значений, не определённых в перечислении
+             switch value {
+             case "spb": self = .spb
+             case "msk": self = .msk
+              
+             default: self = .msk
+             }
+         }
     }
 
     // MARK: - Place

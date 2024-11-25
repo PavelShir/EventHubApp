@@ -123,25 +123,29 @@ class EventCell: UITableViewCell {
         ])
     }
     
-    func configure(with event: EventModel) {
-        eventImageView.image = UIImage(named: event.imageName)
-        dateLabel.text = convertDate(date: event.date)
+    func configure(with event: Event) {
+//        eventImageView.image = UIImage(named: event.imageName)
+        dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
-        placeLabel.text = event.place
+//        placeLabel.text = event.place
     }
     
-    private func convertDate(date: String) -> String {
+    private func convertDate(date: Int?) -> String {
         
-        guard let timeInterval = Double(date) else {
-            return "error invalid Date"
-        }
-        
-        let date = Date(timeIntervalSince1970: timeInterval)
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d • h:mm a"
-        
-        return formatter.string(from: date)
+        guard let date = date else {
+                return "error invalid Date"
+            }
+            
+            // Преобразуем Int в TimeInterval (Double)
+            let timeInterval = TimeInterval(date)
+            
+            // Создаём дату на основе временного интервала
+            let dateObject = Date(timeIntervalSince1970: timeInterval)
+            
+            // Форматируем дату в читаемый строковый формат
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, MMM d • h:mm a" // Настройте формат даты по вашему усмотрению
+            return dateFormatter.string(from: dateObject)
     }
     
     

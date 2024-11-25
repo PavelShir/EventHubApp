@@ -18,18 +18,9 @@ class EventsViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    private var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "banana Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Bananas Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa banana, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-    ]
+    private var events: [Event] = []
     
-    private var filteredEvents: [EventModel] = []
+    private var filteredEvents: [Event] = []
     
     // MARK: Lifecycle ViewDidLoad
     
@@ -58,20 +49,6 @@ class EventsViewController: UIViewController {
     func setupUI() {
         
         setUpSegment()
-//        segmentedControl = CapsuleSegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
-//        segmentedControl.selectedSegmentIndex = 0
-//        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.3)
-//        segmentedControl.selectedSegmentTintColor = .white
-        
-
-//        
-//        segmentedControl.layer.cornerRadius = 40/2
-//        segmentedControl.layer.borderWidth = 0
-//        segmentedControl.layer.masksToBounds = true
-//        segmentedControl.layer.borderColor = UIColor.white.cgColor
-        
-//        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(segmentedControl)
         
         tableView.separatorColor = .white
         tableView.separatorStyle = .none
@@ -193,7 +170,6 @@ class EventsViewController: UIViewController {
     }
     
     @objc private func exploreButtonTapped() {
-        print("Explore button tapped")
         
         let allEventsVC = AllEventsViewController()
         allEventsVC.modalPresentationStyle = .fullScreen
@@ -206,8 +182,11 @@ class EventsViewController: UIViewController {
         
         switch index {
             
-        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
-        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
+        case 0: filteredEvents = loadEvents()
+        case 1: events = loadEvents()
+
+//        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
+//        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
         default: print("no index")
         }
         

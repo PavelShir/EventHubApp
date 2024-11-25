@@ -18,13 +18,39 @@ private func fetchEvent() async throws -> [Event] {
         throw URLError(.badServerResponse)
     }
     
+    if let jsonString = String(data: data, encoding: .utf8) {
+            print("JSON Response: \(jsonString)")
+        }
+    
     let decoder = JSONDecoder()
-    let eventResponse = try decoder.decode(ResponseEvent.self, from: data)
-    return eventResponse.results.map { Event(from: $0) }
+    
+    do {
+        let eventResponse = try decoder.decode(ResponseEvent.self, from: data)
+        return eventResponse.results.map { Event(from: $0) }
+    } catch let decodingError as DecodingError {
+        // Ловим и выводим конкретную ошибку
+        switch decodingError {
+        case .typeMismatch(let type, let context):
+            print("Type mismatch for type \(type): \(context.debugDescription), codingPath: \(context.codingPath)")
+        case .valueNotFound(let type, let context):
+            print("Value not found for type \(type): \(context.debugDescription), codingPath: \(context.codingPath)")
+        case .keyNotFound(let key, let context):
+            print("Key '\(key.stringValue)' not found: \(context.debugDescription), codingPath: \(context.codingPath)")
+        case .dataCorrupted(let context):
+            print("Data corrupted: \(context.debugDescription), codingPath: \(context.codingPath)")
+        @unknown default:
+            print("Unknown decoding error")
+        }
+        throw decodingError
+    } catch {
+        print("Unknown error: \(error.localizedDescription)")
+        throw error
+    }
+    
 }
 
 // Функция для загрузки событий
-func loadEvents() {
+func loadEvents() -> [Event]{
     Task {
         do {
             events = try await fetchEvent()
@@ -33,6 +59,8 @@ func loadEvents() {
             print("Error fetching events: \(error.localizedDescription)")
         }
     }
+    
+    return events
 }
 
 func testJsonText() {

@@ -88,13 +88,36 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             return textField
         }()
         
-        
+//    private lazy var aboutMeTextView: UITextView = {
+//        let element = UITextView()
+//        element.text = aboutMeContext
+//        element.isUserInteractionEnabled = false
+//        element.translatesAutoresizingMaskIntoConstraints = false
+//        return element
+//    }()
+//    
+//    var heightConstraint = NSLayoutConstraint()
+//    
+//    private lazy var button: UIButton = {
+//        let element = UIButton()
+//        var config = UIButton.Configuration.plain()
+//        config.title = "Read More"
+//        config.baseForegroundColor = .blue
+//        config.titleAlignment = .center
+////        config.indicator = .none
+//        element.configuration = config
+//        element.translatesAutoresizingMaskIntoConstraints = false
+//        return element
+//    }()
+    
+    
         private lazy var aboutMeText: UITextField = {
             let textField = UITextField()
             textField.text = aboutMeContext
             textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
             textField.font = UIFont(name: "Inter-Regular", size: 14)
             textField.sizeThatFits(CGSize(width: 120, height: 40))
+            
             textField.layer.masksToBounds = true
             textField.isUserInteractionEnabled = true
             textField.translatesAutoresizingMaskIntoConstraints = false
@@ -168,6 +191,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             
             //        let scrollContentGuide = scrollView.contentLayoutGuide
             //        let scrollFrameGuide = scrollView.frameLayoutGuide
+            
             
             view.addSubview(scrollView)
             view.addSubview(backButton)

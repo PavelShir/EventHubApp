@@ -8,7 +8,7 @@
 import UIKit
 
 class EventsViewController: UIViewController {
-    
+        
     private var segmentedControl = UISegmentedControl()
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var exploreButton = UIButton()
@@ -30,6 +30,7 @@ class EventsViewController: UIViewController {
     ]
     
     private var filteredEvents: [EventModel] = []
+    var networkManager = NetworkManager()
     
     // MARK: Lifecycle ViewDidLoad
     
@@ -37,6 +38,7 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        networkManager.delegate = self
 
         setupUI()
         loadItemsInSegment()
@@ -49,6 +51,8 @@ class EventsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+         = self
+
         
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
@@ -233,8 +237,6 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if filteredEvents.count < 5 {
@@ -242,7 +244,6 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             return 5
         }
-        
     }
     
     
@@ -268,10 +269,15 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         //            navigationController?.pushViewController(eventVC, animated: true)
         //            tableView.deselectRow(at: indexPath, animated: true)
     }
+}
+
+extension EventsViewController: NetworkManagerDelegate {
+    func didFailWithError(error: any Error) {
+        <#code#>
+    }
     
     
 }
-
 
 
 //#Preview { EventsViewController() }

@@ -179,16 +179,16 @@ class EventsViewController: UIViewController {
     private func loadItemsInSegment() {
         let index = segmentedControl.selectedSegmentIndex
         
-        let currentDate = String(Date().timeIntervalSince1970)
-        let filterUntrilToday = EventFilter(location: .moscow, actualUntil: currentDate)
-        let filterAfterToday = EventFilter(location: .moscow, actualSince: currentDate)
+        let currentDate = Int(Date().timeIntervalSince1970)
+        let filterUntrilToday = EventFilter(location: .moscow, actualUntil: String(currentDate - 604800))
+        let filterAfterToday = EventFilter(location: .moscow, actualSince: String(currentDate + 604800))
 
         
         switch index {
             
         case 0: upcomingEvents = loadEvents(with: filterAfterToday)
             tableView.reloadData()
-        case 1: events = loadEvents(with: filterAfterToday)
+        case 1: events = loadEvents(with: filterUntrilToday)
             tableView.reloadData()
 
         default: print("no index")

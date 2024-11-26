@@ -127,7 +127,23 @@ class EventCell: UITableViewCell {
 
         dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
-//        placeLabel.text = event.place
+        placeLabel.text = "Loading..."
+        
+        guard let placeId = event.placeId else {
+            placeLabel.text = event.locationSlug
+                return
+            }
+        
+        loadPlace(placeId: placeId) { [weak self] place in
+                DispatchQueue.main.async {
+                    if let place = place {
+                        self?.placeLabel.text = place.address ?? "No address available"
+                    } else {
+                        self?.placeLabel.text = "Failed to load place"
+                    }
+                }
+            }
+        
         
         if let urlToImage = event.images {
         didUpdateImage(from: urlToImage)
@@ -174,6 +190,8 @@ private func didUpdateImage(from url: String) {
         }
     }.resume()
 }
+    
+    
     
 }
 

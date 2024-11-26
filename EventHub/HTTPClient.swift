@@ -142,3 +142,41 @@ struct Event {
         self.placeId = result.place?.id
     }
 }
+
+    //Загрузка информации о месте
+
+private func fetchPlace(placeId: Int) async throws -> Place {
+    guard let url = URL(string: "https://kudago.com/public-api/v1.4/places/\(placeId)") else {
+        throw URLError(.badURL)
+    }
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+        throw URLError(.badServerResponse)
+    }
+    
+    let decoder = JSONDecoder()
+    
+    do {
+        let place = try decoder.decode(Place.self, from: data)
+        return place  
+    } catch {
+        print("Decoding error: \(error.localizedDescription)")
+        throw error
+    }
+}
+
+func loadPlace(placeId: Int, completion: @escaping (Place?) -> Void) {
+    Task {
+        do {
+            let place = try await fetchPlace(placeId: placeId)
+                        completion(place)
+            
+        } catch {
+            print("Error fetching place: \(error.localizedDescription)")
+                        completion(nil)
+        }
+    }
+}
+

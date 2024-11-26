@@ -132,6 +132,7 @@ struct Place: Codable {
     let slug: String?
     let address: String?
     let coords: Coords?
+    
 }
 
 struct Coords: Codable {

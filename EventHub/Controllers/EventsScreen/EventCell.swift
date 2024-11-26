@@ -164,7 +164,7 @@ class EventCell: UITableViewCell {
             let dateObject = Date(timeIntervalSince1970: timeInterval)
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EEE, MMM d • h:mm a"
+            dateFormatter.dateFormat = "EEE, MMM d, yy • HH:mm"
             return dateFormatter.string(from: dateObject)
     }
     

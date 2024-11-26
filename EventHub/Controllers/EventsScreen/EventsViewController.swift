@@ -12,23 +12,27 @@ class EventsViewController: UIViewController {
     private var segmentedControl = UISegmentedControl()
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var exploreButton = UIButton()
-    private let date = Date()
+    private let currentDate = Int(Date().timeIntervalSince1970)
+
     
     private let imageEmpty = UIImageView()
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    private var events: [Event] = []
-    
+    private var pastEvents: [Event] = []
     private var upcomingEvents: [Event] = []
+    private var eventsDisplayed: [Event] = []
+     
     
-    // MARK: Lifecycle ViewDidLoad
-    
+    // MARK: Lifecycle
+
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
 
+       
+        
         setupUI()
         loadItemsInSegment()
         setupUIEmpty()
@@ -178,28 +182,25 @@ class EventsViewController: UIViewController {
     
     private func loadItemsInSegment() {
         let index = segmentedControl.selectedSegmentIndex
-        
-        let currentDate = Int(Date().timeIntervalSince1970)
-        let filterUntrilToday = EventFilter(location: .moscow, actualUntil: String(currentDate - 604800))
+        let filterUntilToday = EventFilter(location: .moscow, actualUntil: String(currentDate - 604800))
         let filterAfterToday = EventFilter(location: .moscow, actualSince: String(currentDate + 604800))
-
-        
+              
         switch index {
             
-        case 0: upcomingEvents = loadEvents(with: filterAfterToday)
-            tableView.reloadData()
-        case 1: events = loadEvents(with: filterUntrilToday)
-            tableView.reloadData()
+        case 0: eventsDisplayed = loadEvents(with: filterAfterToday)
+        case 1: eventsDisplayed = loadEvents(with: filterUntilToday)
 
         default: print("no index")
         }
         
-        tableView.reloadData()
+        DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
     }
     
     private func showEmptyScreen() {
         
-        if upcomingEvents.isEmpty {
+        if eventsDisplayed.isEmpty {
             imageEmpty.isHidden = false
             labelEmpty.isHidden = false
             smallLabelEmpty.isHidden = false
@@ -216,22 +217,16 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if upcomingEvents.count < 5 {
-            return upcomingEvents.count
-        } else {
-            return 5
-        }
+        return eventsDisplayed.count < 5 ? eventsDisplayed.count : 5
         
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = upcomingEvents[indexPath.row]
+        let event = eventsDisplayed[indexPath.row]
         cell.configure(with: event)
         return cell
     }

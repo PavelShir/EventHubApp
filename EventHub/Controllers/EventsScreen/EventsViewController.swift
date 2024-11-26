@@ -24,7 +24,9 @@ class EventsViewController: UIViewController {
     
     private var allEvents: [Event] = []
     private var upcomingEvents: [Event] = []
-    private var eventsDisplayed: [Event] = []
+     var eventsDisplayed: [Event] = []
+    
+    let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
      
     
     // MARK: Lifecycle
@@ -34,13 +36,12 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
 
-       
-        setupUI()
 
-        setupShimmer()
+        setupUI()
         
-      loadItemsInSegment()
-                      
+        setupShimmer()
+        loadItemsInSegment()
+        
         
         self.title = "Events"
         
@@ -48,8 +49,14 @@ class EventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
+        
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -62,7 +69,7 @@ class EventsViewController: UIViewController {
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         
         
         exploreButton.setTitle("EXPLORE EVENTS", for: .normal)
@@ -112,6 +119,10 @@ class EventsViewController: UIViewController {
                     shimmerView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
                     shimmerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
                 ])
+        DispatchQueue.main.async {
+
+            self.tableView.reloadData()
+        }
     }
     
     private func configureImageEmpty() {
@@ -202,10 +213,11 @@ class EventsViewController: UIViewController {
     
     private func loadItemsInSegment() {
         
+        self.allEvents = loadEvents(with: filter)
+        self.tableView.reloadData()
+
         let index = segmentedControl.selectedSegmentIndex
         
-        let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
-        self.allEvents = loadEvents(with: filter)
      
                 switch index {
                 case 0:
@@ -223,15 +235,16 @@ class EventsViewController: UIViewController {
                 }
             
         DispatchQueue.main.async {
+            
             self.tableView.reloadData()
             }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.shimmerView.isHidden = true
+
         }
 
      
-        
     }
     
     

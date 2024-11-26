@@ -19,7 +19,7 @@ class EventsViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    private var pastEvents: [Event] = []
+    private var allEvents: [Event] = []
     private var upcomingEvents: [Event] = []
     private var eventsDisplayed: [Event] = []
      
@@ -176,19 +176,28 @@ class EventsViewController: UIViewController {
     @objc private func exploreButtonTapped() {
         
         let allEventsVC = AllEventsViewController()
+        
+        let filters = EventFilter(location: .moscow)
+        allEventsVC.events = loadEvents(with: filters)
         allEventsVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(allEventsVC, animated: true)
     }
     
     private func loadItemsInSegment() {
         let index = segmentedControl.selectedSegmentIndex
-        let filterUntilToday = EventFilter(location: .moscow, actualUntil: String(currentDate - 604800))
-        let filterAfterToday = EventFilter(location: .moscow, actualSince: String(currentDate + 604800))
+        let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
+        allEvents = loadEvents(with: filter)
               
         switch index {
             
-        case 0: eventsDisplayed = loadEvents(with: filterAfterToday)
-        case 1: eventsDisplayed = loadEvents(with: filterUntilToday)
+        case 0:  eventsDisplayed = allEvents.filter {
+            let startDate = $0.startDate ?? currentDate
+            return startDate >= currentDate && startDate < currentDate + 604800
+        }
+        case 1:  eventsDisplayed = allEvents.filter {
+            let startDate = $0.startDate ?? currentDate
+            return startDate < currentDate
+        }
 
         default: print("no index")
         }

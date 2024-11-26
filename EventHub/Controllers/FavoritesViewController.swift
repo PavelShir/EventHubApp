@@ -27,8 +27,9 @@ class FavoritesViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    var bookmarks: [Event] = []
-
+    private var bookmarks: [Event] = StorageManager.shared.loadFavorite()
+    
+    
     
     
     
@@ -40,29 +41,37 @@ class FavoritesViewController: UIViewController {
         self.hidesBottomBarWhenPushed = false
         
         setupUI()
-        updateUI(with: bookmarks)
         setupUIEmpty()
         
-        //в ТАббаре тоже появляется подпись,которой быть не должно
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.loadFavorites()
+            
+            DispatchQueue.main.async {
+                self.updateUI(with: self.bookmarks)
+            }
+        }
         
+        
+        //в ТАббаре тоже появляется подпись,которой быть не должно
         self.title = "Favorites"
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(FavCell.self, forCellReuseIdentifier: "FavCell")
         NotificationCenter.default.addObserver(self, selector: #selector(eventAddedToFavorites(_:)), name: .favoriteEventAdded, object: nil)
-
+        
     }
     
     deinit {
-          // Отписка от уведомлений
-          NotificationCenter.default.removeObserver(self)
-      }
+        // Отписка от уведомлений
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        
+        bookmarks = StorageManager.shared.loadFavorite()
+        tableView.reloadData()
     }
     
     
@@ -103,20 +112,20 @@ class FavoritesViewController: UIViewController {
     @objc private func eventAddedToFavorites(_ notification: Notification) {
         if let event = notification.object as? Event {
             
-                  if !bookmarks.contains(where: { $0.id == event.id }) {
-                      bookmarks.append(event)
-                      print("Favorite event added: \(event.title)")
-                      
-                      DispatchQueue.main.async {
-                          self.updateUI(with: self.bookmarks)
-                          self.tableView.reloadData()
-                      }
-                  } else {
-                      print("Event is already in favorites: \(event.title)")
-                  }
-              }
+            if !bookmarks.contains(where: { $0.id == event.id }) {
+                bookmarks.append(event)
+                print("Favorite event added: \(event.title)")
+                
+                DispatchQueue.main.async {
+                    self.updateUI(with: self.bookmarks)
+                    self.tableView.reloadData()
+                }
+            } else {
+                print("Event is already in favorites: \(event.title)")
+            }
+        }
     }
-        
+    
     private func configureLabelEmpty() {
         let labelEmpty = UILabel()
         labelEmpty.text = "NO FAVORITES"
@@ -172,6 +181,13 @@ class FavoritesViewController: UIViewController {
         searchVC.events = bookmarks
         navigationController?.pushViewController(searchVC, animated: true)
     }
+    
+    private func loadFavorites() {
+        bookmarks = StorageManager.shared.loadFavorite()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
 }
 
 
@@ -201,8 +217,19 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            bookmarks.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            let eventToDelete = bookmarks[indexPath.row]
+            tableView.performBatchUpdates({
+                        bookmarks.remove(at: indexPath.row)
+                        StorageManager.shared.deleteFavorite(eventToDelete)
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
+                    }, completion: nil)
+                    
+                    if bookmarks.isEmpty {
+                        DispatchQueue.main.async {
+                            self.updateUI(with: self.bookmarks)
+                        }
+                    }
         }
     }
     

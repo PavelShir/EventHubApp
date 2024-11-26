@@ -75,7 +75,11 @@ class AllEventsViewController: UIViewController {
     }
     
     private func addEventToFavorites(event: Event) {
-        favoritesViewController?.bookmarks.append(event)
+        
+        var favorites = StorageManager.shared.loadFavorite()
+                favorites.append(event)
+                StorageManager.shared.saveFavorites(favorites)
+        
         showFavoriteAddedAlert(for: event)
         NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
 

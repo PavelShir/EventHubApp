@@ -6,8 +6,11 @@ class EventCollectionView: UIView{
     
     private var events: [Event] = []
     {
+        willSet {
+            reloadCollectionView()
+        }
         didSet {
-            mainCollectionView.reloadData()
+            reloadCollectionView()
             }
     }
     

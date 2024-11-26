@@ -103,6 +103,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		79C4C5FA2CF33A6200CA9742 /* ExploreScreen */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ExploreScreen; sourceTree = "<group>"; };
 		79C4C6832CF6414F00CA9742 /* Search & Filter */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Search & Filter"; sourceTree = "<group>"; };
+		79C4C68E2CF64EAB00CA9742 /* EventDetails */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EventDetails; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +184,7 @@
 		8F8452DB2CEC76F0000AE3BD /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				79C4C68E2CF64EAB00CA9742 /* EventDetails */,
 				79C4C5FA2CF33A6200CA9742 /* ExploreScreen */,
 				8F8452E42CEC76F0000AE3BD /* TabBarController.swift */,
 				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
@@ -295,6 +297,7 @@
 			fileSystemSynchronizedGroups = (
 				79C4C5FA2CF33A6200CA9742 /* ExploreScreen */,
 				79C4C6832CF6414F00CA9742 /* Search & Filter */,
+				79C4C68E2CF64EAB00CA9742 /* EventDetails */,
 			);
 			name = EventHub;
 			packageProductDependencies = (

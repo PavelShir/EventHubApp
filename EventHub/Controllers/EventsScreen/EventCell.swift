@@ -15,7 +15,7 @@ class EventCell: UITableViewCell {
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         view.layer.shadowColor = UIColor(named: "primaryBlue")?.cgColor
-        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOpacity = 0.25
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
         view.layer.shadowRadius = 5
         view.layer.masksToBounds = false
@@ -127,7 +127,23 @@ class EventCell: UITableViewCell {
 
         dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
-//        placeLabel.text = event.place
+        placeLabel.text = "Loading..."
+        
+        guard let placeId = event.placeId else {
+            placeLabel.text = event.locationSlug
+                return
+            }
+        
+        loadPlace(placeId: placeId) { [weak self] place in
+                DispatchQueue.main.async {
+                    if let place = place {
+                        self?.placeLabel.text = place.address ?? "No address available"
+                    } else {
+                        self?.placeLabel.text = "Failed to load place"
+                    }
+                }
+            }
+        
         
         if let urlToImage = event.images {
         didUpdateImage(from: urlToImage)
@@ -148,7 +164,7 @@ class EventCell: UITableViewCell {
             let dateObject = Date(timeIntervalSince1970: timeInterval)
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EEE, MMM d • h:mm a"
+            dateFormatter.dateFormat = "EEE, MMM d, yy"
             return dateFormatter.string(from: dateObject)
     }
     
@@ -174,6 +190,8 @@ private func didUpdateImage(from url: String) {
         }
     }.resume()
 }
+    
+    
     
 }
 

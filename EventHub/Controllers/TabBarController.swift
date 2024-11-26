@@ -34,8 +34,8 @@ class TabBarViewController: UITabBarController {
         generateTabBar()
         setupCenterButton()
         addTabBarShadow()
-        loadEvents()
-        testJsonText()
+//        loadEvents()
+//        testJsonText()
         
         
         //        setValue(customTabBar, forKey: "tabBar")

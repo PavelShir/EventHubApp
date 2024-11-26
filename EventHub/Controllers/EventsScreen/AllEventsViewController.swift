@@ -11,17 +11,17 @@ class AllEventsViewController: UIViewController {
 
     private var tableView = UITableView()
 
-    private var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-    ]
-    private var filteredEvents: [EventModel] = []
+    private var events: [Event] = []
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//    ]
+    private var filteredEvents: [Event] = []
 
     
     override func viewDidLoad() {
@@ -61,12 +61,16 @@ class AllEventsViewController: UIViewController {
     }
     
     @objc private func didTapSearchButton() {
-        print("Search")
+        let searchVC = SearchViewController()
+        searchVC.hidesBottomBarWhenPushed = true
+//        searchVC.source = "Events"
+        searchVC.events = events
+        navigationController?.pushViewController(searchVC, animated: true)
     
     }
     
-    private func filterEvents() -> [EventModel] {
-        filteredEvents = events.sorted { Double($1.date)! < Double($0.date)! }
+    private func filterEvents() -> [Event] {
+//        filteredEvents = events.sorted { Double($1.date)! < Double($0.date)! }
         return filteredEvents
     
     }

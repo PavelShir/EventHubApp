@@ -5,8 +5,8 @@
 //  Created by vp.off on 21.11.2024.
 //
 
-import Foundation
-
+import UIKit
+/*
 struct Event {
     let id: Int
     let title: String

@@ -18,6 +18,9 @@ class EventsViewController: UIViewController {
     private let imageEmpty = UIImageView()
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
+
+    private var shimmerView: ShimmerView!
+
     
     private var allEvents: [Event] = []
     private var upcomingEvents: [Event] = []
@@ -32,12 +35,12 @@ class EventsViewController: UIViewController {
         view.backgroundColor = .white
 
        
-        
         setupUI()
-        loadItemsInSegment()
-        setupUIEmpty()
-        showEmptyScreen()
+
+        setupShimmer()
         
+      loadItemsInSegment()
+                      
         
         self.title = "Events"
         
@@ -95,6 +98,20 @@ class EventsViewController: UIViewController {
             exploreButton.heightAnchor.constraint(equalToConstant: 50),
             
         ])
+    }
+    
+    private func setupShimmer() {
+        shimmerView = ShimmerView(frame: tableView.bounds)
+        shimmerView.isHidden = false
+        view.addSubview(shimmerView)
+        shimmerView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    shimmerView.topAnchor.constraint(equalTo: tableView.topAnchor),
+                    shimmerView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+                    shimmerView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+                    shimmerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+                ])
     }
     
     private func configureImageEmpty() {
@@ -184,28 +201,39 @@ class EventsViewController: UIViewController {
     }
     
     private func loadItemsInSegment() {
+        
         let index = segmentedControl.selectedSegmentIndex
+        
         let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
-        allEvents = loadEvents(with: filter)
-              
-        switch index {
+        self.allEvents = loadEvents(with: filter)
+     
+                switch index {
+                case 0:
+                    self.eventsDisplayed = allEvents.filter {
+                        let startDate = $0.startDate ?? self.currentDate
+                        return startDate >= currentDate && startDate < currentDate + 604800
+                    }
+                case 1:
+                    self.eventsDisplayed = allEvents.filter {
+                        let startDate = $0.startDate ?? currentDate
+                        return startDate < currentDate
+                    }
+                default:
+                    print("no index")
+                }
             
-        case 0:  eventsDisplayed = allEvents.filter {
-            let startDate = $0.startDate ?? currentDate
-            return startDate >= currentDate && startDate < currentDate + 604800
-        }
-        case 1:  eventsDisplayed = allEvents.filter {
-            let startDate = $0.startDate ?? currentDate
-            return startDate < currentDate
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.shimmerView.isHidden = true
         }
 
-        default: print("no index")
-        }
+     
         
-        DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
     }
+    
     
     private func showEmptyScreen() {
         

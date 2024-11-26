@@ -15,7 +15,7 @@ class EventCell: UITableViewCell {
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         view.layer.shadowColor = UIColor(named: "primaryBlue")?.cgColor
-        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOpacity = 0.25
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
         view.layer.shadowRadius = 5
         view.layer.masksToBounds = false

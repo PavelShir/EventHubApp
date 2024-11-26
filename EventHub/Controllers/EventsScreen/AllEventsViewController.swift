@@ -57,8 +57,7 @@ class AllEventsViewController: UIViewController {
     @objc private func didTapSearchButton() {
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-        //        searchVC.source = "Events"
-        searchVC.events = events
+        searchVC.events = filteredEvents
         navigationController?.pushViewController(searchVC, animated: true)
         
     }

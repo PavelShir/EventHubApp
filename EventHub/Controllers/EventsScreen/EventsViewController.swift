@@ -205,8 +205,8 @@ class EventsViewController: UIViewController {
         
         let allEventsVC = AllEventsViewController()
         
-        let filters = EventFilter(location: .moscow)
-        allEventsVC.events = loadEvents(with: filters)
+       
+        allEventsVC.events = loadEvents(with: filter)
         allEventsVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(allEventsVC, animated: true)
     }

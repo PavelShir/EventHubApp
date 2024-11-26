@@ -28,15 +28,7 @@ class FavoritesViewController: UIViewController {
     private let smallLabelEmpty = UILabel()
     
     var bookmarks: [Event] = []
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "AppIcon"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's banana's International Kids", place: "Santa Cruz, CA", imageName: "noEvent"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, banana", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Banana Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-//    ]
+
     
     
     
@@ -58,8 +50,14 @@ class FavoritesViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(FavCell.self, forCellReuseIdentifier: "FavCell")
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(eventAddedToFavorites(_:)), name: .favoriteEventAdded, object: nil)
+
     }
+    
+    deinit {
+          // Отписка от уведомлений
+          NotificationCenter.default.removeObserver(self)
+      }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -102,6 +100,23 @@ class FavoritesViewController: UIViewController {
         
     }
     
+    @objc private func eventAddedToFavorites(_ notification: Notification) {
+        if let event = notification.object as? Event {
+            
+                  if !bookmarks.contains(where: { $0.id == event.id }) {
+                      bookmarks.append(event)
+                      print("Favorite event added: \(event.title)")
+                      
+                      DispatchQueue.main.async {
+                          self.updateUI(with: self.bookmarks)
+                          self.tableView.reloadData()
+                      }
+                  } else {
+                      print("Event is already in favorites: \(event.title)")
+                  }
+              }
+    }
+        
     private func configureLabelEmpty() {
         let labelEmpty = UILabel()
         labelEmpty.text = "NO FAVORITES"
@@ -154,7 +169,6 @@ class FavoritesViewController: UIViewController {
         
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-//        searchVC.source = "Favorites"
         searchVC.events = bookmarks
         navigationController?.pushViewController(searchVC, animated: true)
     }

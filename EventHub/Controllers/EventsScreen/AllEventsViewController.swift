@@ -11,7 +11,8 @@ class AllEventsViewController: UIViewController {
     
     private var tableView = UITableView()
     private let currentDate = Int(Date().timeIntervalSince1970)
-    
+    var favoritesViewController: FavoritesViewController?
+
     
     var events: [Event] = []
     
@@ -72,6 +73,28 @@ class AllEventsViewController: UIViewController {
         return filteredEvents
         
     }
+    
+    private func addEventToFavorites(event: Event) {
+        favoritesViewController?.bookmarks.append(event)
+        showFavoriteAddedAlert(for: event)
+        NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
+
+        }
+    
+    private func showFavoriteAddedAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Added to Favorites",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
 }
 
 
@@ -95,6 +118,25 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            
+            let event = filteredEvents[indexPath.row]
+            
+            let addFavoriteAction = UIContextualAction(style: .normal, title: "Add to Favorites") { (action, view, completionHandler) in
+                 self.addEventToFavorites(event: event)
+                 tableView.reloadData()
+                completionHandler(true)
+            }
+            
+        addFavoriteAction.backgroundColor = UIColor(named: "primaryBlue")
+            let configuration = UISwipeActionsConfiguration(actions: [addFavoriteAction])
+            return configuration
+        }
 }
 
 //#Preview { AllEventsViewController() }
+
+extension Notification.Name {
+    static let favoriteEventAdded = Notification.Name("favoriteEventAdded")
+}

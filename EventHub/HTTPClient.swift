@@ -95,6 +95,20 @@ func loadEvents(with filters: EventFilter) -> [Event]{
     return events
 }
 
+func loadEventsSuccess(with filters: EventFilter, success: (([Event]) -> Void)? = nil)  {
+    Task {
+        do {
+            events = try await fetchEvent(with: filters)
+            success?(events)
+            //print(events) // Или ваша функция вывода данных
+        } catch {
+            print("Error fetching events: \(error.localizedDescription)")
+        }
+    }
+    
+   // return events
+}
+
 //func testJsonText() {
 //    for event in events {
 //        print(event)

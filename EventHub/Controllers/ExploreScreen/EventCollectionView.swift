@@ -5,14 +5,7 @@ class EventCollectionView: UIView{
     
     
     private var events: [Event] = []
-    {
-        willSet {
-            reloadCollectionView()
-        }
-        didSet {
-            reloadCollectionView()
-            }
-    }
+    
     
     
         //            EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "39 Santa Cruz, CA", imageName: "hands"),
@@ -44,16 +37,24 @@ class EventCollectionView: UIView{
     override init(frame: CGRect) {
             super.init(frame: frame)
         
-            events = loadEvents(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)))
+           // events = loadEvents(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)))
             setupView()
         }
     required init?(coder: NSCoder) {
          fatalError("init(coder:) has not been implemented")
      }
+    
+    func configure(e: [Event])
+    {
+        events = e
+        reloadCollectionView()
+        
+    }
     func reloadCollectionView() {
         DispatchQueue.main.async { [weak self] in
             self?.mainCollectionView.reloadData()
         }
+       
     }
     
     private func setupView() {

@@ -11,6 +11,7 @@ import SwiftUI
 
 class ExploreViewController: UIViewController {
     
+    
     // MARK: - UI
    
     lazy var categoryCollectionView: CategoryCollectionView = {
@@ -78,15 +79,31 @@ class ExploreViewController: UIViewController {
     }()
    
     
+    // MARK: - Variable
+    
+    private var events: [Event] = []
+    {
+        
+        didSet {
+            eventViewController.configure(e: events)
+            
+            }
+    }
     
     // MARK: - Life Cicle
     
-    override func viewDidLoad() {
+    override func viewDidLoad()  {
             super.viewDidLoad()
             setView()
             setupConstrains()
+        
+        loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
             
         }
+    
+    func loadSuccess(e: [Event]) {
+        events = e
+    }
     
     private func setView(){
         view.backgroundColor =  .white

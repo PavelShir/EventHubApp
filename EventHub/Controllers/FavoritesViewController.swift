@@ -111,19 +111,19 @@ class FavoritesViewController: UIViewController {
     
     @objc private func eventAddedToFavorites(_ notification: Notification) {
         if let event = notification.object as? Event {
-            
-            if !bookmarks.contains(where: { $0.id == event.id }) {
-                bookmarks.append(event)
-                print("Favorite event added: \(event.title)")
-                
-                DispatchQueue.main.async {
-                    self.updateUI(with: self.bookmarks)
-                    self.tableView.reloadData()
+                 if !bookmarks.contains(where: { $0.id == event.id }) {
+
+                     bookmarks.append(event)
+                    
+                    // Обновляем UI
+                    DispatchQueue.main.async {
+                        self.updateUI(with: self.bookmarks)
+                        self.tableView.reloadData()
+                    }
+                } else {
+                     print("Event is already in favorites: \(event.title)")
                 }
-            } else {
-                print("Event is already in favorites: \(event.title)")
             }
-        }
     }
     
     private func configureLabelEmpty() {
@@ -198,9 +198,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return bookmarks.count
-        
     }
     
     

@@ -75,14 +75,21 @@ class AllEventsViewController: UIViewController {
     }
     
     private func addEventToFavorites(event: Event) {
-        
-        var favorites = StorageManager.shared.loadFavorite()
+        //проверяем, есть ли такая закладка
+            var favorites = StorageManager.shared.loadFavorite()
+           
+            if favorites.contains(where: { $0.id == event.id }) {
+                showAlreadyInFavoritesAlert(for: event)
+           } else {
                 favorites.append(event)
+               
                 StorageManager.shared.saveFavorites(favorites)
+               
+                showFavoriteAddedAlert(for: event)
+               
+                NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
+           }
         
-        showFavoriteAddedAlert(for: event)
-        NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
-
         }
     
     private func showFavoriteAddedAlert(for event: Event) {
@@ -99,6 +106,19 @@ class AllEventsViewController: UIViewController {
         }
     }
     
+    private func showAlreadyInFavoritesAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Already in Favorites!",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
 }
 
 

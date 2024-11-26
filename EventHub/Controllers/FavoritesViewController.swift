@@ -27,16 +27,16 @@ class FavoritesViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    var bookmarks: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "AppIcon"),
-        EventModel(date: "1732017600", title: "Jo Malone London's banana's International Kids", place: "Santa Cruz, CA", imageName: "noEvent"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, banana", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Banana Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-    ]
+    var bookmarks: [Event] = []
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "AppIcon"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's banana's International Kids", place: "Santa Cruz, CA", imageName: "noEvent"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, banana", imageName: "girlimage"),
+//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Banana Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
+//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
+//    ]
     
     
     
@@ -126,7 +126,7 @@ class FavoritesViewController: UIViewController {
         ])
     }
     
-    private func updateUI(with bookmarks: [EventModel]) {
+    private func updateUI(with bookmarks: [Event]) {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
         

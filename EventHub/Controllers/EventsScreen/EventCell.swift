@@ -123,27 +123,57 @@ class EventCell: UITableViewCell {
         ])
     }
     
-    func configure(with event: EventModel) {
-        eventImageView.image = UIImage(named: event.imageName)
-        dateLabel.text = convertDate(date: event.date)
+    func configure(with event: Event) {
+
+        dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
-        placeLabel.text = event.place
-    }
-    
-    private func convertDate(date: String) -> String {
+//        placeLabel.text = event.place
         
-        guard let timeInterval = Double(date) else {
-            return "error invalid Date"
+        if let urlToImage = event.images {
+        didUpdateImage(from: urlToImage)
+        } else {
+            eventImageView.image = UIImage(named: "girlimage")
         }
         
-        let date = Date(timeIntervalSince1970: timeInterval)
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d • h:mm a"
-        
-        return formatter.string(from: date)
     }
     
+    private func convertDate(date: Int?) -> String {
+        
+        guard let date = date else {
+                return "error invalid Date"
+            }
+            
+            let timeInterval = TimeInterval(date)
+            
+            let dateObject = Date(timeIntervalSince1970: timeInterval)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, MMM d • h:mm a"
+            return dateFormatter.string(from: dateObject)
+    }
+    
+private func didUpdateImage(from url: String) {
+    
+    guard let imageUrl = URL(string: url) else {
+        DispatchQueue.main.async {
+            self.eventImageView.image = UIImage(named: "girlimage")
+        }
+        return
+    }
+    
+    URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+        if let data = data, let image = UIImage(data: data) {
+            DispatchQueue.main.async {
+                self.eventImageView.image = image
+            }
+        } else {
+            print(error?.localizedDescription ?? "error")
+            DispatchQueue.main.async {
+                self.eventImageView.image = UIImage(named: "girlimage")
+            }
+        }
+    }.resume()
+}
     
 }
 

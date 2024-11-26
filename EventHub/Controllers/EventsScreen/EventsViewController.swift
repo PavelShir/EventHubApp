@@ -18,18 +18,9 @@ class EventsViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    private var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "banana Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Bananas Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa banana, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-    ]
+    private var events: [Event] = []
     
-    private var filteredEvents: [EventModel] = []
+    private var upcomingEvents: [Event] = []
     
     // MARK: Lifecycle ViewDidLoad
     
@@ -58,20 +49,6 @@ class EventsViewController: UIViewController {
     func setupUI() {
         
         setUpSegment()
-//        segmentedControl = CapsuleSegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
-//        segmentedControl.selectedSegmentIndex = 0
-//        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.3)
-//        segmentedControl.selectedSegmentTintColor = .white
-        
-
-//        
-//        segmentedControl.layer.cornerRadius = 40/2
-//        segmentedControl.layer.borderWidth = 0
-//        segmentedControl.layer.masksToBounds = true
-//        segmentedControl.layer.borderColor = UIColor.white.cgColor
-        
-//        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(segmentedControl)
         
         tableView.separatorColor = .white
         tableView.separatorStyle = .none
@@ -193,7 +170,6 @@ class EventsViewController: UIViewController {
     }
     
     @objc private func exploreButtonTapped() {
-        print("Explore button tapped")
         
         let allEventsVC = AllEventsViewController()
         allEventsVC.modalPresentationStyle = .fullScreen
@@ -201,13 +177,20 @@ class EventsViewController: UIViewController {
     }
     
     private func loadItemsInSegment() {
-        let currentDate = Date().timeIntervalSince1970
         let index = segmentedControl.selectedSegmentIndex
+        
+        let currentDate = String(Date().timeIntervalSince1970)
+        let filterUntrilToday = EventFilter(location: .moscow, actualUntil: currentDate)
+        let filterAfterToday = EventFilter(location: .moscow, actualSince: currentDate)
+
         
         switch index {
             
-        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
-        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
+        case 0: upcomingEvents = loadEvents(with: filterAfterToday)
+            tableView.reloadData()
+        case 1: events = loadEvents(with: filterAfterToday)
+            tableView.reloadData()
+
         default: print("no index")
         }
         
@@ -216,7 +199,7 @@ class EventsViewController: UIViewController {
     
     private func showEmptyScreen() {
         
-        if filteredEvents.isEmpty {
+        if upcomingEvents.isEmpty {
             imageEmpty.isHidden = false
             labelEmpty.isHidden = false
             smallLabelEmpty.isHidden = false
@@ -237,8 +220,8 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if filteredEvents.count < 5 {
-            return filteredEvents.count
+        if upcomingEvents.count < 5 {
+            return upcomingEvents.count
         } else {
             return 5
         }
@@ -248,7 +231,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = filteredEvents[indexPath.row]
+        let event = upcomingEvents[indexPath.row]
         cell.configure(with: event)
         return cell
     }

@@ -60,8 +60,8 @@ class SearchViewController: UIViewController {
     }()
          
     
-    var events: [EventModel] = []
-    var filteredEvents: [EventModel] = []
+    var events: [Event] = []
+    var filteredEvents: [Event] = []
     var isSearching: Bool = false
     
     
@@ -133,7 +133,7 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    private func updateUI(with events: [EventModel]) {
+    private func updateUI(with events: [Event]) {
         
         
         if events.isEmpty {
@@ -238,12 +238,12 @@ extension SearchViewController: UISearchBarDelegate {
                 
         } else {
          
-            let lowercasedSearchText = searchText.lowercased()
-                filteredEvents = events.filter { event in
-                    event.title.lowercased().contains(lowercasedSearchText) ||
-                    event.place.lowercased().contains(lowercasedSearchText) ||
-                    convertDate(date: event.date).lowercased().contains(lowercasedSearchText)
-                }
+//            let lowercasedSearchText = searchText.lowercased()
+//                filteredEvents = events.filter { event in
+//                    event.title.lowercased().contains(lowercasedSearchText) ||
+//                    event.place.lowercased().contains(lowercasedSearchText) ||
+//                    convertDate(date: event.date).lowercased().contains(lowercasedSearchText)
+//                }
                 
             print(filteredEvents)
 

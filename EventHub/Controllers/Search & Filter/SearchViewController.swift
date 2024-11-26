@@ -214,9 +214,16 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: SearchBar Delegate methods
 
 extension SearchViewController: UISearchBarDelegate {
-        
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        // Если строка поиска пуста, показываем все события
+                if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+                    isSearching = false
+                    filteredEvents = events
+                    tableView.reloadData()
+                    return
+                }
+        
         filteredEvents.removeAll()
         
         guard searchText != "" || searchText != " " else {
@@ -224,37 +231,25 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         
-        for event in events {
-            
-            let lowercasedSearchText = searchText.lowercased()
-//            let arrayContains = event.title.lowercased().range(of: lowercasedSearchText)
-
-            }
         
-        if searchBar.text == "" {
-            isSearching = false
-            filteredEvents = events
-               tableView.reloadData()
-                
-        } else {
-         
-//            let lowercasedSearchText = searchText.lowercased()
-//                filteredEvents = events.filter { event in
-//                    event.title.lowercased().contains(lowercasedSearchText) ||
-//                    event.place.lowercased().contains(lowercasedSearchText) ||
-//                    convertDate(date: event.date).lowercased().contains(lowercasedSearchText)
-//                }
-                
-            print(filteredEvents)
-
-                isSearching = true
-                tableView.reloadData()
-            
+        let lowercasedSearchText = searchText.lowercased()
+        
+        
+        for event in events {
+            if event.title.lowercased().contains(lowercasedSearchText) ||
+                convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText) {
+                filteredEvents.append(event)
             }
-            
         }
         
+        print(filteredEvents)
+        
+        isSearching = true
+        tableView.reloadData()
+        
+    }
 
+        
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
           searchBar.resignFirstResponder()

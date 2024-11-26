@@ -8,27 +8,21 @@
 import UIKit
 
 class AllEventsViewController: UIViewController {
-
+    
     private var tableView = UITableView()
-
-    private var events: [Event] = []
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//    ]
+    private let currentDate = Int(Date().timeIntervalSince1970)
+    
+    
+    var events: [Event] = []
+    
     private var filteredEvents: [Event] = []
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
-
+        
         filteredEvents = filterEvents()
         tableView.reloadData()
         
@@ -36,23 +30,23 @@ class AllEventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
-     }
+    }
     
-
+    
     private func setupUI() {
         
         view.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
-
+        
         
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-
+        
         
         NSLayoutConstraint.activate([
-             
+            
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
@@ -63,16 +57,20 @@ class AllEventsViewController: UIViewController {
     @objc private func didTapSearchButton() {
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-//        searchVC.source = "Events"
-        searchVC.events = events
+        searchVC.events = filteredEvents
         navigationController?.pushViewController(searchVC, animated: true)
-    
+        
     }
     
     private func filterEvents() -> [Event] {
-//        filteredEvents = events.sorted { Double($1.date)! < Double($0.date)! }
+        
+        filteredEvents = events.sorted {
+            let firstDate = $0.startDate ?? currentDate
+            let secondDate = $1.startDate ?? currentDate
+            return firstDate > secondDate
+        }
         return filteredEvents
-    
+        
     }
 }
 
@@ -87,7 +85,7 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-
+        
         
         let event = filteredEvents[indexPath.row]
         cell.configure(with: event)

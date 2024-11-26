@@ -9,6 +9,8 @@ import Foundation
 var events: [Event] = []
 var filters = EventFilter()
 
+let currentTimestamp = Int(Date().timeIntervalSince1970)
+
 //let urlEvent = URL(string: "https://kudago.com/public-api/v1.4/events/?fields=id,dates,title,slug,place,description,body_text,location,categories,price,images,favorites_count&text_format=text")
 
 
@@ -18,9 +20,9 @@ func createURL(with filters: EventFilter,
       var components = URLComponents(string: "https://kudago.com/public-api/v1.4/events/")
       
       components?.queryItems = [
-          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,body_text,location,categories,price,images,favorites_count"),
-          URLQueryItem(name: "text_format", value: "text")
-          
+          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images"),
+          URLQueryItem(name: "text_format", value: "text"),
+          URLQueryItem(name: "page_size", value: "35") //максимальное число объектов в массиве
       ]
       
       if let location = filters.location {
@@ -128,17 +130,81 @@ struct Event {
         
         self.favoritesCount = result.favoritesCount ?? 0
 
-        // Берем посл дату из массива 'dates'
-        if let firstDateElement = result.dates.last {
-            self.startDate = firstDateElement.start
-            self.endDate = firstDateElement.end
-        } else {
-            self.startDate = nil
-            self.endDate = nil
-        }
+        // выбираем дату из массива
+        let processedDates = processDates(dates: result.dates, currentTimestamp: currentTimestamp)
+        self.startDate = processedDates.startDate
+        self.endDate = processedDates.endDate
 
-        // Получаем slug местоположения и id места
         self.locationSlug = result.location.slug?.rawValue ?? ""
         self.placeId = result.place?.id
     }
 }
+
+// функция для обработки массива дат. Получаем 1 дату из массива
+private func processDates(dates: [DateElement], currentTimestamp: Int) -> (startDate: Int?, endDate: Int?) {
+    let threeMonthsAgoTimestamp = 1722076800
+
+    let validDates = dates.map { date -> DateElement in
+        // Заменяем некорректные даты текущей датой
+        if let start = date.start, start == -62135433000 {
+            return DateElement(start: currentTimestamp, end: date.end ?? currentTimestamp)
+        }
+        return date
+    }
+        .filter { date in
+                // Убираем даты старше 3 месяцев от текущей даты
+                if let start = date.start {
+                    return start >= threeMonthsAgoTimestamp
+                }
+                return false
+            }
+
+    // Определяем ближайшую будущую или ближ последнюю дату
+    if let nearestFutureDate = validDates.first(where: { $0.start ?? 0 >= currentTimestamp }) {
+        return (startDate: nearestFutureDate.start, endDate: nearestFutureDate.end)
+    }
+    if let nearestPastDate = validDates.last(where: { $0.end ?? 0 < currentTimestamp }) {
+        return (startDate: nearestPastDate.start, endDate: nearestPastDate.end)
+    }
+ 
+    return (startDate: currentTimestamp, endDate: currentTimestamp)
+}
+
+
+    // MARK: Загрузка информации о месте по айди
+
+private func fetchPlace(placeId: Int) async throws -> Place {
+    guard let url = URL(string: "https://kudago.com/public-api/v1.4/places/\(placeId)") else {
+        throw URLError(.badURL)
+    }
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+        throw URLError(.badServerResponse)
+    }
+    
+    let decoder = JSONDecoder()
+    
+    do {
+        let place = try decoder.decode(Place.self, from: data)
+        return place
+    } catch {
+        print("Decoding error: \(error.localizedDescription)")
+        throw error
+    }
+}
+
+func loadPlace(placeId: Int, completion: @escaping (Place?) -> Void) {
+    Task {
+        do {
+            let place = try await fetchPlace(placeId: placeId)
+                        completion(place)
+            
+        } catch {
+            print("Error fetching place: \(error.localizedDescription)")
+                        completion(nil)
+        }
+    }
+}
+

@@ -5,6 +5,7 @@
 //  Created by vp.off on 21.11.2024.
 //
 
+import UIKit
 import Foundation
 
 struct ResponseEvent: Decodable {

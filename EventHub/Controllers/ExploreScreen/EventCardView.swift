@@ -18,10 +18,10 @@ class EventCardView: UIView {
         return element
     }()
         
-    func configure(event: EventModel){
-        image.image = UIImage(named: event.imageName)
+    func configure(event: Event){
+        image.image = UIImage(named: event.images ?? "hands")
         titleLabel.text = event.title
-        address.text = event.place
+        address.text = "event.placeId"
         dayLabel.text = "12"
         monthLabel.text = "JAN"
         

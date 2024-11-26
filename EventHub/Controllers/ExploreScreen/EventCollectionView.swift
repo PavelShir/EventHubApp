@@ -4,16 +4,23 @@ import SwiftUI
 class EventCollectionView: UIView{
     
     
-    var events: [EventModel] = [
-            EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "39 Santa Cruz, CA", imageName: "hands"),
-            EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "foots"),
-            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
-            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
-            EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands")
-        ]
+    private var events: [Event] = []
+    {
+        didSet {
+            mainCollectionView.reloadData()
+            }
+    }
+    
+    
+        //            EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "39 Santa Cruz, CA", imageName: "hands"),
+//            EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "foots"),
+//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
+//            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
+//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
+//            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
+//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
+//            EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands")
+        
     
     private lazy var mainCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -33,6 +40,8 @@ class EventCollectionView: UIView{
     
     override init(frame: CGRect) {
             super.init(frame: frame)
+        
+            events = loadEvents(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)))
             setupView()
         }
     required init?(coder: NSCoder) {
@@ -99,7 +108,7 @@ class EventCollectionViewCell: UICollectionViewCell {
     }
     
     // Configure the cell with the image name
-    func configure(event: EventModel) {
+    func configure(event: Event) {
  
         backgroundColor = .white
         layer.cornerRadius = 10

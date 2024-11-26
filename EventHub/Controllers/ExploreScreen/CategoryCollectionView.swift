@@ -3,10 +3,10 @@ import SwiftUI
 
 class CategoryCollectionView: UIView{
     
-    let categoryList = [ Category(label: "Sport", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
-                         Category(label: "Music", imageName: "music.note", color: UIColor(named: "primaryOrange")!),
-                         Category(label: "Food", imageName: "fork.knife", color: UIColor(named: "primaryGreen")!),
-                         Category(label: "Art", imageName: "paintpalette.fill", color: UIColor(named: "primaryLightBlue")!)
+    let categoryList = [ CategoryModel(label: "Sport", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
+                         CategoryModel(label: "Music", imageName: "music.note", color: UIColor(named: "primaryOrange")!),
+                         CategoryModel(label: "Food", imageName: "fork.knife", color: UIColor(named: "primaryGreen")!),
+                         CategoryModel(label: "Art", imageName: "paintpalette.fill", color: UIColor(named: "primaryLightBlue")!)
     
     ]
     
@@ -168,8 +168,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
 //    }
 //}
 
-// MARK: - CategoryMOdel
-struct Category {
+// MARK: - CategoryModel
+struct CategoryModel {
     let label: String
     let imageName: String
     let color: UIColor

@@ -26,6 +26,10 @@
 		31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */; };
 		31DEECC82CEE9DBA0098E212 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */; };
 		79C4C6072CF340B200CA9742 /* UIStackView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C6062CF340B200CA9742 /* UIStackView + Ext.swift */; };
+		79C4C6872CF6423C00CA9742 /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C6862CF6423C00CA9742 /* EventFilter.swift */; };
+		79C4C6892CF642DB00CA9742 /* CityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C6882CF642DB00CA9742 /* CityFilter.swift */; };
+		79C4C68B2CF6434400CA9742 /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C68A2CF6434400CA9742 /* CategoryFilter.swift */; };
+		79C4C68D2CF6440E00CA9742 /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C4C68C2CF6440E00CA9742 /* CustomSegmentControl.swift */; };
 		8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */; };
 		8F8452E72CEC76F0000AE3BD /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */; };
 		8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */; };
@@ -64,6 +68,10 @@
 		31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Ext.swift"; sourceTree = "<group>"; };
 		31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		79C4C6062CF340B200CA9742 /* UIStackView + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Ext.swift"; sourceTree = "<group>"; };
+		79C4C6862CF6423C00CA9742 /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
+		79C4C6882CF642DB00CA9742 /* CityFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityFilter.swift; sourceTree = "<group>"; };
+		79C4C68A2CF6434400CA9742 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
+		79C4C68C2CF6440E00CA9742 /* CustomSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentControl.swift; sourceTree = "<group>"; };
 		8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		8F8452DE2CEC76F0000AE3BD /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +102,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		79C4C5FA2CF33A6200CA9742 /* ExploreScreen */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ExploreScreen; sourceTree = "<group>"; };
+		79C4C6832CF6414F00CA9742 /* Search & Filter */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Search & Filter"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				31DEECBC2CEE78960098E212 /* Constants.swift */,
+				79C4C68C2CF6440E00CA9742 /* CustomSegmentControl.swift */,
 				31DEECC12CEE824A0098E212 /* TextField + Ext.swift */,
 				31DEECC32CEE8DAE0098E212 /* UIImageView + Ext.swift */,
 				31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */,
@@ -177,6 +187,7 @@
 				8F8452E42CEC76F0000AE3BD /* TabBarController.swift */,
 				8F8452E12CEC76F0000AE3BD /* LaunchScreenViewController.swift */,
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
+				79C4C6832CF6414F00CA9742 /* Search & Filter */,
 				F33659262CF0DC3D00CA3DE7 /* FavCell.swift */,
 				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
 				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
@@ -219,6 +230,9 @@
 			children = (
 				F4F71D6A2CF0A9FC003A1C4E /* ModelEvent.swift */,
 				F4F71D6B2CF0AA05003A1C4E /* ModelResponseEvent.swift */,
+				79C4C6862CF6423C00CA9742 /* EventFilter.swift */,
+				79C4C68A2CF6434400CA9742 /* CategoryFilter.swift */,
+				79C4C6882CF642DB00CA9742 /* CityFilter.swift */,
 				F4F71D6D2CF0AA0D003A1C4E /* HTTPClient.swift */,
 				31DEECBE2CEE7F470098E212 /* Models */,
 				31DEECBA2CEE779E0098E212 /* Managers */,
@@ -280,6 +294,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				79C4C5FA2CF33A6200CA9742 /* ExploreScreen */,
+				79C4C6832CF6414F00CA9742 /* Search & Filter */,
 			);
 			name = EventHub;
 			packageProductDependencies = (
@@ -351,17 +366,21 @@
 			files = (
 				31DEECC82CEE9DBA0098E212 /* FirestoreManager.swift in Sources */,
 				79C4C6072CF340B200CA9742 /* UIStackView + Ext.swift in Sources */,
+				79C4C6892CF642DB00CA9742 /* CityFilter.swift in Sources */,
 				8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */,
 				8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */,
 				8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */,
 				F4F71D6E2CF0AA0D003A1C4E /* HTTPClient.swift in Sources */,
 				8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */,
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
+				79C4C68D2CF6440E00CA9742 /* CustomSegmentControl.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
 				31A6E9E02CEFEBA9006DB793 /* UIButton + Ext.swift in Sources */,
 				F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */,
+				79C4C68B2CF6434400CA9742 /* CategoryFilter.swift in Sources */,
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
+				79C4C6872CF6423C00CA9742 /* EventFilter.swift in Sources */,
 				31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */,
 				F3C91D952CECFFA0008E4707 /* OnboardingViewController.swift in Sources */,
 				F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */,

@@ -11,8 +11,6 @@ enum Category: String, Codable {
     case business = "business-events"
     case cinema = "cinema"
     case concerts = "concert"
-    case education = "education"
-    case entertainment = "entertainment"
     case exhibitions = "exhibition"
     case fashionAndStyle = "fashion"
     case festivals = "festival"
@@ -20,15 +18,6 @@ enum Category: String, Codable {
     case kids = "kids"
     case other = "other"
     case parties = "party"
-    case photography = "photo"
-    case quests = "quest"
-    case sports = "recreation"
-    case shopping = "shopping"
-    case charity = "social-activity"
-    case promotions = "stock"
-    case theater = "theater"
-    case tours = "tour"
-    case fairs = "yarmarki-razvlecheniya-yarmarki"
 
     var fullName: String {
            switch self {
@@ -38,10 +27,6 @@ enum Category: String, Codable {
                return "Cinema"
            case .concerts:
                return "Concerts"
-           case .education:
-               return "Education"
-           case .entertainment:
-               return "Entertainment"
            case .exhibitions:
                return "Exhibitions"
            case .fashionAndStyle:
@@ -56,24 +41,6 @@ enum Category: String, Codable {
                return "Other"
            case .parties:
                return "Parties"
-           case .photography:
-               return "Photography"
-           case .quests:
-               return "Quests"
-           case .sports:
-               return "Sports"
-           case .shopping:
-               return "Shopping"
-           case .charity:
-               return "Charity"
-           case .promotions:
-               return "Promotions"
-           case .theater:
-               return "Theater"
-           case .tours:
-               return "Tours"
-           case .fairs:
-               return "Fairs"
            }
        }
 }

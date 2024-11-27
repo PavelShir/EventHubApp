@@ -23,6 +23,6 @@ extension UIImageView {
 extension UIImageView {
     
     func setImage(url: String) {
-        self.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "girlimage"))
+        self.kf.setImage(with: URL(string: url))
     }
 }

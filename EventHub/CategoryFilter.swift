@@ -48,10 +48,10 @@ enum Category: String, Codable, CaseIterable {
             case .business: return "bubble.left.and.bubble.right"
             case .cinema: return "film"
             case .music: return "music.note"
-            case .art: return "pencil.and.outline"
+            case .art: return "paintpalette"
             case .fashionAndStyle: return "camera"
-            case .kids: return "person.crop.circle"
-            case .parties: return "moon.stars.circle"
+            case .kids: return "figure.2.and.child.holdinghands"
+            case .parties: return "figure.dance"
             case .other: return "binoculars"
 
             }

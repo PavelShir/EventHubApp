@@ -69,7 +69,7 @@ class FilterViewController: UIViewController {
     private let priceRangeSlider: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 0
-        slider.maximumValue = 300
+        slider.maximumValue = 10000
         slider.value = 50
         slider.tintColor = UIColor(named: Constants.allColors.primaryBlue)
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +79,7 @@ class FilterViewController: UIViewController {
     private let resetButton = createButton(title: "RESET")
     private let applyButton = createButton(title: "APPLY")
     
+    let eventFilters = EventFilter()
     
     // MARK: - Lifecycle
     
@@ -111,7 +112,7 @@ class FilterViewController: UIViewController {
             categoryCircleView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             categoryCircleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            categoryCircleView.heightAnchor.constraint(equalToConstant: 80)
+            categoryCircleView.heightAnchor.constraint(equalToConstant: 130)
         ])
         
         view.addSubview(headerDate)
@@ -219,8 +220,15 @@ class FilterViewController: UIViewController {
         return label
     }
     
+    func setFilters() {
+        
+        eventFilters.categories
+            
+            
+        }
+    }
     
-}
+
 
 // MARK: - UICollectionView Delegate & DataSource
 
@@ -245,19 +253,19 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 // MARK: - UICollectionView layout
 
-extension FilterViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 150)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
-}
+//extension FilterViewController: UICollectionViewDelegateFlowLayout {
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: 120, height: 160)
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 8
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return 8
+//    }
+//}
 
 
 // MARK: - Date picker

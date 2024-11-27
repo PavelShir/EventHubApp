@@ -346,7 +346,6 @@ class EventDetailsViewController: UIViewController {
                    StorageManager.shared.saveFavorites(favorites)
                    showFavoriteAddedAlert(for: eventDetail!)
                    
-                   // Отправляем уведомление, что событие добавлено в избранное
                    NotificationCenter.default.post(name: .favoriteEventAdded, object: eventDetail!)
                }
            } else {

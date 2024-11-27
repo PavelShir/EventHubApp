@@ -86,7 +86,7 @@ class FilterViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupCategoryCollection()
-        
+        setupCityPicker()
         
         calendarButton.addTarget(self, action: #selector(calendarButtonPressed), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
@@ -127,8 +127,6 @@ class FilterViewController: UIViewController {
             timeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             timeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             timeStackView.heightAnchor.constraint(equalToConstant: 44)
-            
-                        
         ])
         
         view.addSubview(calendarButton)
@@ -213,6 +211,8 @@ class FilterViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
+    
+    
 }
 
 // MARK: - UICollectionView Delegate & DataSource
@@ -277,7 +277,7 @@ extension FilterViewController {
         
         
         selectedtDate = dateFormatter.string(from: date)
-        locationButton.setTitle(selectedtDate, for: .normal)
+        calendarButton.setTitle(selectedtDate, for: .normal)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.datePicker.isHidden = true
@@ -307,7 +307,7 @@ extension FilterViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         ])
     }
     
-    @objc private func showCityPicker() {
+    @objc fileprivate func showCityPicker() {
         cityPicker.isHidden = false
     }
     
@@ -326,8 +326,9 @@ extension FilterViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedCity = City.allCases[row].fullName
         locationButton.setTitle(selectedCity, for: .normal)
-        cityPicker.isHidden = true
-    }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.cityPicker.isHidden = true
+        }    }
 }
 
 #Preview { FilterViewController() }

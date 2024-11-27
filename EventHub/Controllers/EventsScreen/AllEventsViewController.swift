@@ -42,6 +42,7 @@ class AllEventsViewController: UIViewController {
         
         
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
@@ -157,6 +158,17 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
             let configuration = UISwipeActionsConfiguration(actions: [addFavoriteAction])
             return configuration
         }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // переход на Ивент + передать данные об ивенте
+        
+                let selectedEvent = filteredEvents[indexPath.row]
+                let eventVC = EventDetailsViewController()
+                eventVC.eventDetail = selectedEvent
+        
+                    navigationController?.pushViewController(eventVC, animated: true)
+                    tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 //#Preview { AllEventsViewController() }

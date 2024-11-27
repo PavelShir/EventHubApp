@@ -54,6 +54,7 @@
 		F336593F2CF5F39100CA3DE7 /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336593E2CF5F39100CA3DE7 /* ShimmerView.swift */; };
 		F33659412CF6791E00CA3DE7 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659402CF6791E00CA3DE7 /* StorageManager.swift */; };
 		F33659442CF695E800CA3DE7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F33659432CF695E800CA3DE7 /* Kingfisher */; };
+		F33659462CF762AC00CA3DE7 /* CategoryCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659452CF762AC00CA3DE7 /* CategoryCircleCell.swift */; };
 		F3C91D892CEB7C0C008E4707 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */; };
 		F3C91D8B2CEB7E83008E4707 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8A2CEB7E83008E4707 /* EventCell.swift */; };
 		F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C91D8D2CEB7F58008E4707 /* EventModel.swift */; };
@@ -109,6 +110,7 @@
 		F336593C2CF521D300CA3DE7 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
 		F336593E2CF5F39100CA3DE7 /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
 		F33659402CF6791E00CA3DE7 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		F33659452CF762AC00CA3DE7 /* CategoryCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCircleCell.swift; sourceTree = "<group>"; };
 		F3C91D882CEB7C0C008E4707 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		F3C91D8A2CEB7E83008E4707 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		F3C91D8D2CEB7F58008E4707 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 			children = (
 				F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */,
 				F336592E2CF1427000CA3DE7 /* FilterViewController.swift */,
+				F33659452CF762AC00CA3DE7 /* CategoryCircleCell.swift */,
 			);
 			path = "Search & Filter";
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
 				F336593D2CF521D300CA3DE7 /* CategoryFilter.swift in Sources */,
+				F33659462CF762AC00CA3DE7 /* CategoryCircleCell.swift in Sources */,
 				31DEEC2E2CEE6B800098E212 /* SingInController.swift in Sources */,
 				31DEEC302CEE6B9B0098E212 /* SingUpController.swift in Sources */,
 				F3C91D932CEC193C008E4707 /* AllEventsViewController.swift in Sources */,

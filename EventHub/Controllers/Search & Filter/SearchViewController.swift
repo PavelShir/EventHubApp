@@ -87,7 +87,10 @@ class SearchViewController: UIViewController {
     }
 
     @objc private func filterPressed() {
-        print("filter")
+        let filterVC = FilterViewController()
+        filterVC.modalPresentationStyle = .popover
+        
+        present(filterVC, animated: true)
     }
     
     private func setupTable() {
@@ -97,6 +100,7 @@ class SearchViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
@@ -178,6 +182,8 @@ class SearchViewController: UIViewController {
         
         return formatter.string(from: date)
     }
+  
+    
     
 }
 
@@ -208,15 +214,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // переход на Ивент + передать данные об ивенте
-        
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
-        //        }
-        
+        let selectedEvent = isSearching ? filteredEvents[indexPath.row] : events[indexPath.row] 
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = selectedEvent
+
+            navigationController?.pushViewController(eventVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

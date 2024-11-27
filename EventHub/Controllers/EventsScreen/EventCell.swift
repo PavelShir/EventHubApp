@@ -139,7 +139,7 @@ class EventCell: UITableViewCell {
                     if let place = place {
                         self?.placeLabel.text = place.address ?? "No address available"
                     } else {
-                        self?.placeLabel.text = "Failed to load place"
+                        self?.placeLabel.text = event.locationSlug
                     }
                 }
             }

@@ -27,16 +27,9 @@ class FavoritesViewController: UIViewController {
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
     
-    var bookmarks: [Event] = []
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "AppIcon"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's banana's International Kids", place: "Santa Cruz, CA", imageName: "noEvent"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, banana", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Banana Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-//    ]
+    private var bookmarks: [Event] = StorageManager.shared.loadFavorite()
+    
+    
     
     
     
@@ -48,23 +41,37 @@ class FavoritesViewController: UIViewController {
         self.hidesBottomBarWhenPushed = false
         
         setupUI()
-        updateUI(with: bookmarks)
         setupUIEmpty()
         
-        //в ТАббаре тоже появляется подпись,которой быть не должно
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.loadFavorites()
+            
+            DispatchQueue.main.async {
+                self.updateUI(with: self.bookmarks)
+            }
+        }
         
+        
+        //в ТАббаре тоже появляется подпись,которой быть не должно
         self.title = "Favorites"
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(FavCell.self, forCellReuseIdentifier: "FavCell")
+        NotificationCenter.default.addObserver(self, selector: #selector(eventAddedToFavorites(_:)), name: .favoriteEventAdded, object: nil)
         
+    }
+    
+    deinit {
+        // Отписка от уведомлений
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        
+        bookmarks = StorageManager.shared.loadFavorite()
+        tableView.reloadData()
     }
     
     
@@ -100,6 +107,23 @@ class FavoritesViewController: UIViewController {
             
         ])
         
+    }
+    
+    @objc private func eventAddedToFavorites(_ notification: Notification) {
+        if let event = notification.object as? Event {
+                 if !bookmarks.contains(where: { $0.id == event.id }) {
+
+                     bookmarks.append(event)
+                    
+                    // Обновляем UI
+                    DispatchQueue.main.async {
+                        self.updateUI(with: self.bookmarks)
+                        self.tableView.reloadData()
+                    }
+                } else {
+                     print("Event is already in favorites: \(event.title)")
+                }
+            }
     }
     
     private func configureLabelEmpty() {
@@ -154,9 +178,15 @@ class FavoritesViewController: UIViewController {
         
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-//        searchVC.source = "Favorites"
         searchVC.events = bookmarks
         navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
+    private func loadFavorites() {
+        bookmarks = StorageManager.shared.loadFavorite()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 
@@ -168,9 +198,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return bookmarks.count
-        
     }
     
     
@@ -187,8 +215,19 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            bookmarks.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            let eventToDelete = bookmarks[indexPath.row]
+            tableView.performBatchUpdates({
+                        bookmarks.remove(at: indexPath.row)
+                        StorageManager.shared.deleteFavorite(eventToDelete)
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
+                    }, completion: nil)
+                    
+                    if bookmarks.isEmpty {
+                        DispatchQueue.main.async {
+                            self.updateUI(with: self.bookmarks)
+                        }
+                    }
         }
     }
     

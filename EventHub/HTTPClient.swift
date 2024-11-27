@@ -103,7 +103,7 @@ func loadEvents(with filters: EventFilter) -> [Event]{
 //    }
 //}
 
-struct Event {
+struct Event: Codable, Equatable {
     let id: Int
     let title: String
     let description: String

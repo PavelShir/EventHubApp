@@ -173,7 +173,7 @@ class FilterViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
         button.tintColor = UIColor(named: Constants.allColors.primaryBlue)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 18)
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 8

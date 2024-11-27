@@ -45,8 +45,12 @@ class FavoritesViewController: UIViewController {
         view.backgroundColor = .white
         self.hidesBottomBarWhenPushed = false
         
-        setupUI()
+        
         setupUIEmpty()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.setupUI()
+        }
         
         DispatchQueue.global(qos: .userInitiated).async {
             self.loadFavorites()
@@ -83,7 +87,7 @@ class FavoritesViewController: UIViewController {
         
         view.addSubview(headerLabel)
        NSLayoutConstraint.activate([
-        headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+        headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
            headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
        ])
         
@@ -96,7 +100,7 @@ class FavoritesViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            tableView.topAnchor.constraint(equalTo: headerLabel.topAnchor, constant: 5),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -5)

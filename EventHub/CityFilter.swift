@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum City: String, Codable {
+enum City: String, Codable, CaseIterable {
     case saintPetersburg = "spb"
     case moscow = "msk"
     case novosibirsk = "nsk"

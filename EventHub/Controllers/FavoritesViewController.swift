@@ -251,14 +251,12 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         
         // переход на Ивент + передать данные об ивенте
         
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
-        //        }
-        
+        let selectedEvent = bookmarks[indexPath.row]
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = selectedEvent
+
+            navigationController?.pushViewController(eventVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

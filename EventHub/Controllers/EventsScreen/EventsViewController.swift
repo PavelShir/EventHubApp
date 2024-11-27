@@ -222,9 +222,14 @@ class EventsViewController: UIViewController {
      
                 switch index {
                 case 0:
-                    self.eventsDisplayed = allEvents.filter {
-                        let startDate = $0.startDate ?? self.currentDate
-                        return startDate >= currentDate && startDate < currentDate + 604800
+                    self.eventsDisplayed = allEvents.filter { event in
+                        let startDate = event.startDate ?? self.currentDate
+                        return startDate >= self.currentDate && startDate < self.currentDate + 604800
+                    }.sorted {
+                        let firstDate = $0.startDate ?? self.currentDate
+                        let secondDate = $1.startDate ?? self.currentDate
+                        return firstDate > secondDate
+                    
                     }
                 case 1:
                     self.eventsDisplayed = allEvents.filter {

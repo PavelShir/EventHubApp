@@ -131,6 +131,8 @@ class EventDetailsViewController: UIViewController {
     private let captionLocationLabel: UILabel = {
             let view = UILabel()
             view.text = "14 Decenber, 2021"
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.6
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
@@ -138,6 +140,8 @@ class EventDetailsViewController: UIViewController {
     private let descriptionLocationLabel: UILabel = {
             let view = UILabel()
             view.text = ""
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.2
         view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
@@ -230,6 +234,13 @@ class EventDetailsViewController: UIViewController {
     
     
    // let exploreDetailRow = ExploreDetailRow()
+    var bookmark : UIButton = {
+        let button = UIButton(type: .system)
+            button.setImage(UIImage(systemName: "bookmark"), for: .normal)
+            button.tintColor = .white
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -239,6 +250,9 @@ class EventDetailsViewController: UIViewController {
         getImageData()
         getData()
         getPlaceData()
+        
+        bookmark.addTarget(self, action: #selector(toggleBookmark), for: .touchUpInside)
+
     }
     
     func setView(){
@@ -269,6 +283,9 @@ class EventDetailsViewController: UIViewController {
         
         view.backgroundColor = .white
         view.addSubview(headerView)
+        view.addSubview(bookmark)
+        view.bringSubviewToFront(bookmark)
+
         
     }
     
@@ -293,7 +310,7 @@ class EventDetailsViewController: UIViewController {
     func getPlaceData() {
 
         captionLocationLabel.text = ""
-        descriptionLocationLabel.text = "36 Guild Street London, UK"
+        descriptionLocationLabel.text = ""
 
         guard let placeId = eventDetail?.placeId else {
             captionLocationLabel.text = eventDetail?.locationSlug
@@ -313,6 +330,67 @@ class EventDetailsViewController: UIViewController {
                 }
             }
     }
+    
+    @objc private func toggleBookmark() {
+        
+        
+        if bookmark.image(for: .normal) == UIImage(systemName: "bookmark") {
+            bookmark.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+               
+               var favorites = StorageManager.shared.loadFavorite()
+               
+            if favorites.contains(where: { $0.id == eventDetail?.id }) {
+                showAlreadyInFavoritesAlert(for: eventDetail!)
+               } else {
+                   favorites.append(eventDetail!)
+                   StorageManager.shared.saveFavorites(favorites)
+                   showFavoriteAddedAlert(for: eventDetail!)
+                   
+                   // Отправляем уведомление, что событие добавлено в избранное
+                   NotificationCenter.default.post(name: .favoriteEventAdded, object: eventDetail!)
+               }
+           } else {
+               // Если иконка уже заполненная, это значит событие в избранном, убираем его
+               bookmark.setImage(UIImage(systemName: "bookmark"), for: .normal)
+               
+               var favorites = StorageManager.shared.loadFavorite()
+               
+               if let index = favorites.firstIndex(where: { $0.id == eventDetail?.id }) {
+                   favorites.remove(at: index)
+                   StorageManager.shared.saveFavorites(favorites)
+                    
+               }
+           }
+       }
+    
+    private func showFavoriteAddedAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Added to Favorites",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    private func showAlreadyInFavoritesAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Already in Favorites!",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
     
     private func convertDate(date: Int?) -> String {
         
@@ -343,7 +421,6 @@ class EventDetailsViewController: UIViewController {
             dateFormatter.dateFormat = "HH:mm"
             return dateFormatter.string(from: dateObject)
     }
-    
     
     
     // MARK: - Action
@@ -410,6 +487,11 @@ extension EventDetailsViewController {
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 244),
+            
+            bookmark.heightAnchor.constraint(equalToConstant: 20),
+            bookmark.widthAnchor.constraint(equalToConstant: 20),
+            bookmark.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
+            bookmark.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
           
         ])
     }

@@ -214,15 +214,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // переход на Ивент + передать данные об ивенте
-        
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
-        //        }
-        
+        let selectedEvent = isSearching ? filteredEvents[indexPath.row] : events[indexPath.row] 
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = selectedEvent
+
+            navigationController?.pushViewController(eventVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

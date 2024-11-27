@@ -48,7 +48,7 @@ class FilterViewController: UIViewController {
     private let headerDate = createHeaderOfSection(title: "Time & Date")
     private let headerLocation = createHeaderOfSection(title: "Location")
     private let headerPrice = createHeaderOfSection(title: "Select price range")
-    private let priceLabel = createHeaderOfSection(title: "100$")
+    private let priceLabel = createHeaderOfSection(title: "100 rub")
     
     
     private var cityPicker: UIPickerView!
@@ -69,7 +69,7 @@ class FilterViewController: UIViewController {
     private let priceRangeSlider: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 0
-        slider.maximumValue = 100
+        slider.maximumValue = 300
         slider.value = 50
         slider.tintColor = UIColor(named: Constants.allColors.primaryBlue)
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +91,8 @@ class FilterViewController: UIViewController {
         calendarButton.addTarget(self, action: #selector(calendarButtonPressed), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
         
+        priceRangeSlider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+
     }
     
     // MARK: - Setup UI
@@ -183,6 +185,11 @@ class FilterViewController: UIViewController {
         showDatePicker()
     }
     
+    @objc private func sliderValueChanged(_ sender: UISlider) {
+        let priceValue = Int(sender.value)
+        
+        priceLabel.text = "\(priceValue)" + " rub"
+    }
     
     private func setupCategoryCollection() {
         categoryCircleView.delegate = self
@@ -240,7 +247,7 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 extension FilterViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 140)
+        return CGSize(width: 100, height: 150)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

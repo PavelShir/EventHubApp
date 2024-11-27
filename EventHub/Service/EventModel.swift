@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct EventModel {
-    let date: String
-    let title: String
-    let place: String
-    let imageName: String
-}
+//struct EventModel {
+//    let date: String
+//    let title: String
+//    let place: String
+//    let imageName: String
+//}

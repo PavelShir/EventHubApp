@@ -34,11 +34,13 @@ class TabBarViewController: UITabBarController {
         generateTabBar()
         setupCenterButton()
         addTabBarShadow()
-        loadEvents()
-        testJsonText()
+//        loadEvents()
         
-        
-        //        setValue(customTabBar, forKey: "tabBar")
+        let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
+        let eventVC = EventsViewController()
+        eventVC.eventsDisplayed = loadEvents(with: filter)
+
+ 
         
     }
     

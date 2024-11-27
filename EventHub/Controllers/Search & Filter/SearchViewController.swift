@@ -60,8 +60,8 @@ class SearchViewController: UIViewController {
     }()
          
     
-    var events: [EventModel] = []
-    var filteredEvents: [EventModel] = []
+    var events: [Event] = []
+    var filteredEvents: [Event] = []
     var isSearching: Bool = false
     
     
@@ -137,26 +137,36 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    private func updateUI(with events: [EventModel]) {
-        
-        
-        if events.isEmpty {
-            DispatchQueue.main.async {
-                self.labelEmpty.isHidden = false
-                self.tableView.isHidden = true
-                self.view.bringSubviewToFront(self.labelEmpty)
-            }
-        } else {
-            self.events = events
-            DispatchQueue.main.async {
-                
-                self.labelEmpty.isHidden = true
-                self.tableView.isHidden = false
-                self.tableView.reloadData()
-                
-                self.view.bringSubviewToFront(self.tableView)
-            }
-        }
+    private func updateUI() {
+        if isSearching {
+               // Поиск активен: показываем "NO RESULTS", если ничего не найдено
+               if filteredEvents.isEmpty {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = false
+                       self.tableView.isHidden = true
+                   }
+               } else {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = true
+                       self.tableView.isHidden = false
+                       self.tableView.reloadData()
+                   }
+               }
+           } else {
+               // Поиск не активен: показываем таблицу с событиями, если они есть
+               if events.isEmpty {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = false
+                       self.tableView.isHidden = true
+                   }
+               } else {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = true
+                       self.tableView.isHidden = false
+                       self.tableView.reloadData()
+                   }
+               }
+           }
     }
     
     fileprivate func convertDate(date: String) -> String {
@@ -220,9 +230,16 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: SearchBar Delegate methods
 
 extension SearchViewController: UISearchBarDelegate {
-        
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        // Если строка поиска пуста, показываем все события
+                if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+                    isSearching = false
+                    filteredEvents = events
+                    tableView.reloadData()
+                    return
+                }
+        
         filteredEvents.removeAll()
         
         guard searchText != "" || searchText != " " else {
@@ -230,47 +247,29 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         
-        for event in events {
-            
-            let lowercasedSearchText = searchText.lowercased()
-//            let arrayContains = event.title.lowercased().range(of: lowercasedSearchText)
-
-            }
         
-        if searchBar.text == "" {
-            isSearching = false
-            filteredEvents = events
-               tableView.reloadData()
-                
-        } else {
-         
-            let lowercasedSearchText = searchText.lowercased()
-                filteredEvents = events.filter { event in
-                    event.title.lowercased().contains(lowercasedSearchText) ||
-                    event.place.lowercased().contains(lowercasedSearchText) ||
-                    convertDate(date: event.date).lowercased().contains(lowercasedSearchText)
-                }
-                
-            print(filteredEvents)
+        let lowercasedSearchText = searchText.lowercased()
+          filteredEvents = events.filter { event in
+              event.title.lowercased().contains(lowercasedSearchText) ||
+              convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
+          }
+          
+          isSearching = true
+        updateUI()
+      }
 
-                isSearching = true
-                tableView.reloadData()
-            
-            }
-            
-        }
         
-
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
           searchBar.resignFirstResponder()
       }
       
       func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-          searchBar.text = ""
-          filteredEvents = events
-          tableView.reloadData()
-          searchBar.resignFirstResponder()
+          isSearching = false
+             searchBar.text = ""
+             filteredEvents = events
+             searchBar.resignFirstResponder()
+             updateUI()
       }
         
     }

@@ -25,6 +25,7 @@ class EventsViewController: UIViewController {
     private var allEvents: [Event] = []
     private var upcomingEvents: [Event] = []
      var eventsDisplayed: [Event] = []
+    private var userCity: City = .moscow
     
     let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
      
@@ -289,12 +290,12 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         
         // переход на Ивент + передать данные об ивенте
         
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
+                let selectedEvent = eventsDisplayed[indexPath.row]
+                let eventVC = EventDetailsViewController()
+                eventVC.eventDetail = selectedEvent
+        
+                    navigationController?.pushViewController(eventVC, animated: true)
+                    tableView.deselectRow(at: indexPath, animated: true)
     }
     
     

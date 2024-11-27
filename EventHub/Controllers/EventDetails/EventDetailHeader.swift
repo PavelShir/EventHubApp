@@ -11,9 +11,9 @@ class EventDetailHeader: UIView {
     
     // MARK: - UI
     
-    private lazy var imageHeader : UIImageView = {
+    var imageHeader : UIImageView = {
         let element = UIImageView()
-        element.image = UIImage(named: "party")
+        element.image = UIImage(named: "")
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()

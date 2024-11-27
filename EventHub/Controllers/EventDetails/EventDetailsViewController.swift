@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 import SwiftUI
+import Kingfisher
 
 class EventDetailsViewController: UIViewController {
+    
+    var eventDetail: Event?
     
     private lazy var headerView : EventDetailHeader = {
         let element = EventDetailHeader()
@@ -20,6 +23,8 @@ class EventDetailsViewController: UIViewController {
     private let bodyLabel: UILabel = {
             let view = UILabel()
         view.numberOfLines = 2
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.2
             return view
         }()
     
@@ -132,7 +137,7 @@ class EventDetailsViewController: UIViewController {
     
     private let descriptionLocationLabel: UILabel = {
             let view = UILabel()
-            view.text = "Tuesday, 4:00PM - 9:00PM"
+            view.text = ""
         view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
@@ -187,14 +192,14 @@ class EventDetailsViewController: UIViewController {
     
     private let captionOrganizatorLabel: UILabel = {
             let view = UILabel()
-            view.text = "14 Decenber, 2021"
+            view.text = "" /*14 Decenber, 2021"*/
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
     
     private let descriptionOrganizatorLabel: UILabel = {
             let view = UILabel()
-            view.text = "Tuesday, 4:00PM - 9:00PM"
+            view.text = "" /*Tuesday, 4:00PM - 9:00PM"*/
         view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
@@ -210,9 +215,9 @@ class EventDetailsViewController: UIViewController {
     }()
     
     func configureOrganizatorRow(){
-        organizatorImage.image = UIImage(named: "organizator")
-        captionOrganizatorLabel.text = "Ashfak Sayem"
-        descriptionOrganizatorLabel.text = "Organizer"
+//        organizatorImage.image = UIImage(named: "organizator")
+//        captionOrganizatorLabel.text = "Ashfak Sayem"
+//        descriptionOrganizatorLabel.text = "Organizer"
     }
     
     private lazy var aboutLabel : UILabel = {
@@ -230,12 +235,14 @@ class EventDetailsViewController: UIViewController {
         super.viewDidLoad()
         setView()
         setupConstrains()
+        
+        getImageData()
+        getData()
+        getPlaceData()
     }
     
     func setView(){
-        bodyLabel.text = "International Band Music Concert"
-        bodyLabel.font = .systemFont(ofSize: 35)
-        contentTextView.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        bodyLabel.font = .systemFont(ofSize: 25)
         
         //contentTextView.backgroundColor = .yellow
         contentTextView.font = .systemFont(ofSize: 20.0, weight: .light)
@@ -264,6 +271,80 @@ class EventDetailsViewController: UIViewController {
         view.addSubview(headerView)
         
     }
+    
+    func getImageData() {
+        
+        let image = headerView.imageHeader
+//        image.image = UIImage(named: "girlimage")
+        if let urlToImage = eventDetail?.images {
+            image.setImage(url: urlToImage)
+        } else {
+            image.image = UIImage(named: "girlimage")
+        }
+    }
+    
+    func getData() {
+        bodyLabel.text = eventDetail?.title
+        contentTextView.text = eventDetail?.description
+
+        captionLabel.text = convertDate(date: eventDetail?.startDate)
+        descriptionLabel.text = convertTime(date: eventDetail?.startDate)
+    }
+    func getPlaceData() {
+
+        captionLocationLabel.text = ""
+        descriptionLocationLabel.text = "36 Guild Street London, UK"
+
+        guard let placeId = eventDetail?.placeId else {
+            captionLocationLabel.text = eventDetail?.locationSlug
+            descriptionLocationLabel.text = ""
+                return
+            }
+        
+        loadPlace(placeId: placeId) { [weak self] place in
+                DispatchQueue.main.async {
+                    if let place = place {
+                        self?.captionLocationLabel.text = place.title ?? "No address available"
+                        self?.descriptionLocationLabel.text = place.address ?? "No address available"
+                    } else {
+                        self?.captionLocationLabel.text = self?.eventDetail?.locationSlug
+                        self?.descriptionLocationLabel.text = ""
+                    }
+                }
+            }
+    }
+    
+    private func convertDate(date: Int?) -> String {
+        
+        guard let date = date else {
+                return "No date information"
+            }
+            
+            let timeInterval = TimeInterval(date)
+            
+            let dateObject = Date(timeIntervalSince1970: timeInterval)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d MMMM, yyyy"
+            return dateFormatter.string(from: dateObject)
+    }
+    
+    private func convertTime(date: Int?) -> String {
+        
+        guard let date = date else {
+                return ""
+            }
+            
+            let timeInterval = TimeInterval(date)
+            
+            let dateObject = Date(timeIntervalSince1970: timeInterval)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            return dateFormatter.string(from: dateObject)
+    }
+    
+    
     
     // MARK: - Action
     

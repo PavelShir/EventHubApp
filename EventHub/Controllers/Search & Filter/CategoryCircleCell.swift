@@ -16,12 +16,13 @@ class CategoryCircleCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 30  // Круглый фон
         view.layer.masksToBounds = true
+//        view.layer.shadowOffset = 1
+//        view.layer.shadowOpacity = 0.2
         view.backgroundColor = UIColor(named: Constants.allColors.primaryBlue) // Синий фон
         return view
     }()
 
-    // Иконка категории
-    private let iconView: UIImageView = {
+     private let iconView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -43,29 +44,26 @@ class CategoryCircleCell: UICollectionViewCell {
         
         // Добавляем круг и текст в contentView
         contentView.addSubview(circleView)
-                circleView.addSubview(iconView)  // Иконка теперь добавляется в circleView
+                circleView.addSubview(iconView)
                 contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-                    // Окружность с иконкой
                     circleView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                    circleView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),  // Отступ сверху
-                    circleView.widthAnchor.constraint(equalToConstant: 60),  // Ширина круга
-                    circleView.heightAnchor.constraint(equalToConstant: 60),  // Высота круга
+                    circleView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+                    circleView.widthAnchor.constraint(equalToConstant: 60),
+                    circleView.heightAnchor.constraint(equalToConstant: 60),
 
                     iconView.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
-                    iconView.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),  // Центрируем иконку внутри круга
-                    iconView.widthAnchor.constraint(equalToConstant: 30),  // Размер иконки
-                    iconView.heightAnchor.constraint(equalToConstant: 30),  // Размер иконки
+                    iconView.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
+                    iconView.widthAnchor.constraint(equalToConstant: 30),
+                    iconView.heightAnchor.constraint(equalToConstant: 30),
 
-                    // Текст под кругом
                     titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                    titleLabel.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 6),  // Отступ между иконкой и текстом
+                    titleLabel.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 6),
                     titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
                     titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
                 ])
-        // Сделаем контентВью прозрачным
-        contentView.backgroundColor = .clear
+        contentView.backgroundColor = .white
     }
 
     required init?(coder: NSCoder) {
@@ -73,11 +71,10 @@ class CategoryCircleCell: UICollectionViewCell {
     }
 
     func configure(with category: Category) {
-        iconView.image = UIImage(named: "music.note" )
+        iconView.image = UIImage(named: "music.note")
         titleLabel.text = category.fullName
     }
 
-    // Обработка выделенной ячейки (изменение цвета фона при выделении)
     override var isSelected: Bool {
         didSet {
             if isSelected {

@@ -47,7 +47,7 @@ enum Category: String, Codable, CaseIterable {
             case .sports: return "basketball"
             case .business: return "bubble.left.and.bubble.right"
             case .cinema: return "film"
-            case .music: return "photo.artframe"
+            case .music: return "music.note"
             case .art: return "pencil.and.outline"
             case .fashionAndStyle: return "camera"
             case .kids: return "person.crop.circle"

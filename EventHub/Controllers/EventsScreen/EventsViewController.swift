@@ -12,36 +12,35 @@ class EventsViewController: UIViewController {
     private var segmentedControl = UISegmentedControl()
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var exploreButton = UIButton()
-    private let date = Date()
+    private let currentDate = Int(Date().timeIntervalSince1970)
+
     
     private let imageEmpty = UIImageView()
     private let labelEmpty = UILabel()
     private let smallLabelEmpty = UILabel()
+
+    private var shimmerView: ShimmerView!
+
     
-    private var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "banana Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's Bananas Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa banana, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-    ]
+    private var allEvents: [Event] = []
+    private var upcomingEvents: [Event] = []
+     var eventsDisplayed: [Event] = []
     
-    private var filteredEvents: [EventModel] = []
+    let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
+     
     
-    // MARK: Lifecycle ViewDidLoad
-    
+    // MARK: Lifecycle
+
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+
 
         setupUI()
+        
+        setupShimmer()
         loadItemsInSegment()
-        setupUIEmpty()
-        showEmptyScreen()
         
         
         self.title = "Events"
@@ -50,35 +49,27 @@ class EventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
+        
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         exploreButton.addTarget(self, action: #selector(exploreButtonTapped), for: .touchUpInside)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            
+            self.tableView.reloadData()
+        }
     }
     
     
     func setupUI() {
         
         setUpSegment()
-//        segmentedControl = CapsuleSegmentedControl(items: ["UPCOMING", "PAST EVENTS"])
-//        segmentedControl.selectedSegmentIndex = 0
-//        segmentedControl.backgroundColor = UIColor(white: 1, alpha: 0.3)
-//        segmentedControl.selectedSegmentTintColor = .white
-        
-
-//        
-//        segmentedControl.layer.cornerRadius = 40/2
-//        segmentedControl.layer.borderWidth = 0
-//        segmentedControl.layer.masksToBounds = true
-//        segmentedControl.layer.borderColor = UIColor.white.cgColor
-        
-//        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(segmentedControl)
         
         tableView.separatorColor = .white
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         
         
         exploreButton.setTitle("EXPLORE EVENTS", for: .normal)
@@ -114,6 +105,24 @@ class EventsViewController: UIViewController {
             exploreButton.heightAnchor.constraint(equalToConstant: 50),
             
         ])
+    }
+    
+    private func setupShimmer() {
+        shimmerView = ShimmerView(frame: tableView.bounds)
+        shimmerView.isHidden = false
+        view.addSubview(shimmerView)
+        shimmerView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    shimmerView.topAnchor.constraint(equalTo: tableView.topAnchor),
+                    shimmerView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+                    shimmerView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+                    shimmerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+                ])
+        DispatchQueue.main.async {
+
+            self.tableView.reloadData()
+        }
     }
     
     private func configureImageEmpty() {
@@ -193,30 +202,55 @@ class EventsViewController: UIViewController {
     }
     
     @objc private func exploreButtonTapped() {
-        print("Explore button tapped")
         
         let allEventsVC = AllEventsViewController()
+        
+       
+        allEventsVC.events = loadEvents(with: filter)
         allEventsVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(allEventsVC, animated: true)
     }
     
     private func loadItemsInSegment() {
-        let currentDate = Date().timeIntervalSince1970
+        
+        self.allEvents = loadEvents(with: filter)
+        self.tableView.reloadData()
+
         let index = segmentedControl.selectedSegmentIndex
         
-        switch index {
+     
+                switch index {
+                case 0:
+                    self.eventsDisplayed = allEvents.filter {
+                        let startDate = $0.startDate ?? self.currentDate
+                        return startDate >= currentDate && startDate < currentDate + 604800
+                    }
+                case 1:
+                    self.eventsDisplayed = allEvents.filter {
+                        let startDate = $0.startDate ?? currentDate
+                        return startDate < currentDate
+                    }
+                default:
+                    print("no index")
+                }
             
-        case 0: filteredEvents = events.filter { Double($0.date)! >= currentDate &&  Double($0.date)! < currentDate + 604800}
-        case 1: filteredEvents = events.filter { Double($0.date)! < currentDate }
-        default: print("no index")
-        }
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+            }
         
-        tableView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.shimmerView.isHidden = true
+
+        }
+
+     
     }
+    
     
     private func showEmptyScreen() {
         
-        if filteredEvents.isEmpty {
+        if eventsDisplayed.isEmpty {
             imageEmpty.isHidden = false
             labelEmpty.isHidden = false
             smallLabelEmpty.isHidden = false
@@ -233,22 +267,16 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if filteredEvents.count < 5 {
-            return filteredEvents.count
-        } else {
-            return 5
-        }
+        return eventsDisplayed.count < 5 ? eventsDisplayed.count : 5
         
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        let event = filteredEvents[indexPath.row]
+        let event = eventsDisplayed[indexPath.row]
         cell.configure(with: event)
         return cell
     }
@@ -274,4 +302,4 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 
-#Preview { EventsViewController() }
+//#Preview { EventsViewController() }

@@ -60,17 +60,8 @@ class SearchViewController: UIViewController {
     }()
          
     
-    var events: [EventModel] = []
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-//        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage")
-//    ]
-    var filteredEvents: [EventModel] = []
+    var events: [Event] = []
+    var filteredEvents: [Event] = []
     var isSearching: Bool = false
     
     
@@ -142,26 +133,36 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    private func updateUI(with events: [EventModel]) {
-        
-        
-        if events.isEmpty {
-            DispatchQueue.main.async {
-                self.labelEmpty.isHidden = false
-                self.tableView.isHidden = true
-                self.view.bringSubviewToFront(self.labelEmpty)
-            }
-        } else {
-            self.events = events
-            DispatchQueue.main.async {
-                
-                self.labelEmpty.isHidden = true
-                self.tableView.isHidden = false
-                self.tableView.reloadData()
-                
-                self.view.bringSubviewToFront(self.tableView)
-            }
-        }
+    private func updateUI() {
+        if isSearching {
+               // Поиск активен: показываем "NO RESULTS", если ничего не найдено
+               if filteredEvents.isEmpty {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = false
+                       self.tableView.isHidden = true
+                   }
+               } else {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = true
+                       self.tableView.isHidden = false
+                       self.tableView.reloadData()
+                   }
+               }
+           } else {
+               // Поиск не активен: показываем таблицу с событиями, если они есть
+               if events.isEmpty {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = false
+                       self.tableView.isHidden = true
+                   }
+               } else {
+                   DispatchQueue.main.async {
+                       self.labelEmpty.isHidden = true
+                       self.tableView.isHidden = false
+                       self.tableView.reloadData()
+                   }
+               }
+           }
     }
     
     fileprivate func convertDate(date: String) -> String {
@@ -223,10 +224,50 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: SearchBar Delegate methods
 
 extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Если строка поиска пуста, показываем все события
+                if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+                    isSearching = false
+                    filteredEvents = events
+                    tableView.reloadData()
+                    return
+                }
         
+        filteredEvents.removeAll()
+        
+        guard searchText != "" || searchText != " " else {
+            print("empty search")
+            return
+        }
+        
+        
+        let lowercasedSearchText = searchText.lowercased()
+          filteredEvents = events.filter { event in
+              event.title.lowercased().contains(lowercasedSearchText) ||
+              convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
+          }
+          
+          isSearching = true
+        updateUI()
+      }
+
+        
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.resignFirstResponder()
+      }
+      
+      func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+          isSearching = false
+             searchBar.text = ""
+             filteredEvents = events
+             searchBar.resignFirstResponder()
+             updateUI()
+      }
         
     }
    
 
 
-#Preview { SearchViewController() }
+//#Preview { SearchViewController() }

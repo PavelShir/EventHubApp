@@ -14,17 +14,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-                       let window = UIWindow(windowScene: windowScene)
-                       self.window = window
-                       
-                       let navigationController: UINavigationController
-
-                       let onboardingController = LaunchScreenViewController()
-                       navigationController = UINavigationController(rootViewController: onboardingController)
-                    
-                       window.rootViewController = navigationController
-                       navigationController.navigationBar.isHidden = true
-                       window.makeKeyAndVisible()
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        
+        let navigationController: UINavigationController
+        
+        let onboardingController = LaunchScreenViewController()
+//        let onboardingController = SingInController()
+        navigationController = UINavigationController(rootViewController: onboardingController)
+        
+        window.rootViewController = navigationController
+        navigationController.navigationBar.isHidden = true
+        window.makeKeyAndVisible()
         
     }
 

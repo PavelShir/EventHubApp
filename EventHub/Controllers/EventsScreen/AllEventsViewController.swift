@@ -8,27 +8,22 @@
 import UIKit
 
 class AllEventsViewController: UIViewController {
-
+    
     private var tableView = UITableView()
+    private let currentDate = Int(Date().timeIntervalSince1970)
+    var favoritesViewController: FavoritesViewController?
 
-    private var events: [EventModel] = [
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-        EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "girlimage"),
-    ]
-    private var filteredEvents: [EventModel] = []
-
+    
+    var events: [Event] = []
+    
+    private var filteredEvents: [Event] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
-
+        
         filteredEvents = filterEvents()
         tableView.reloadData()
         
@@ -36,23 +31,23 @@ class AllEventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
-     }
+    }
     
-
+    
     private func setupUI() {
         
         view.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
-
+        
         
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-
+        
         
         NSLayoutConstraint.activate([
-             
+            
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
@@ -63,16 +58,66 @@ class AllEventsViewController: UIViewController {
     @objc private func didTapSearchButton() {
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-//        searchVC.source = "Events"
-        searchVC.events = events
+        searchVC.events = filteredEvents
         navigationController?.pushViewController(searchVC, animated: true)
-    
+        
     }
     
-    private func filterEvents() -> [EventModel] {
-        filteredEvents = events.sorted { Double($1.date)! < Double($0.date)! }
+    private func filterEvents() -> [Event] {
+        
+        filteredEvents = events.sorted {
+            let firstDate = $0.startDate ?? currentDate
+            let secondDate = $1.startDate ?? currentDate
+            return firstDate > secondDate
+        }
         return filteredEvents
+        
+    }
     
+    private func addEventToFavorites(event: Event) {
+        //проверяем, есть ли такая закладка
+            var favorites = StorageManager.shared.loadFavorite()
+           
+            if favorites.contains(where: { $0.id == event.id }) {
+                showAlreadyInFavoritesAlert(for: event)
+           } else {
+                favorites.append(event)
+               
+                StorageManager.shared.saveFavorites(favorites)
+               
+                showFavoriteAddedAlert(for: event)
+               
+                NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
+           }
+        
+        }
+    
+    private func showFavoriteAddedAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Added to Favorites",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    private func showAlreadyInFavoritesAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Already in Favorites!",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 }
 
@@ -87,7 +132,7 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-
+        
         
         let event = filteredEvents[indexPath.row]
         cell.configure(with: event)
@@ -97,6 +142,25 @@ extension AllEventsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            
+            let event = filteredEvents[indexPath.row]
+            
+            let addFavoriteAction = UIContextualAction(style: .normal, title: "Add to Favorites") { (action, view, completionHandler) in
+                 self.addEventToFavorites(event: event)
+                 tableView.reloadData()
+                completionHandler(true)
+            }
+            
+        addFavoriteAction.backgroundColor = UIColor(named: "primaryBlue")
+            let configuration = UISwipeActionsConfiguration(actions: [addFavoriteAction])
+            return configuration
+        }
 }
 
 //#Preview { AllEventsViewController() }
+
+extension Notification.Name {
+    static let favoriteEventAdded = Notification.Name("favoriteEventAdded")
+}

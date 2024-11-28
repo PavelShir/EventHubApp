@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class EventCell: UITableViewCell {
     
@@ -15,7 +16,7 @@ class EventCell: UITableViewCell {
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         view.layer.shadowColor = UIColor(named: "primaryBlue")?.cgColor
-        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOpacity = 0.25
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
         view.layer.shadowRadius = 5
         view.layer.masksToBounds = false
@@ -123,26 +124,74 @@ class EventCell: UITableViewCell {
         ])
     }
     
-    func configure(with event: EventModel) {
-        eventImageView.image = UIImage(named: event.imageName)
-        dateLabel.text = convertDate(date: event.date)
+    func configure(with event: Event) {
+
+        dateLabel.text = convertDate(date: event.startDate)
         titleLabel.text = event.title
-        placeLabel.text = event.place
-    }
-    
-    private func convertDate(date: String) -> String {
+        placeLabel.text = "Loading..."
         
-        guard let timeInterval = Double(date) else {
-            return "error invalid Date"
+        guard let placeId = event.placeId else {
+            placeLabel.text = event.locationSlug
+                return
+            }
+        
+        loadPlace(placeId: placeId) { [weak self] place in
+                DispatchQueue.main.async {
+                    if let place = place {
+                        self?.placeLabel.text = place.address ?? "No address available"
+                    } else {
+                        self?.placeLabel.text = event.locationSlug
+                    }
+                }
+            }
+        
+        
+        if let urlToImage = event.images {
+            eventImageView.setImage(url: urlToImage)
+        } else {
+            eventImageView.image = UIImage(named: "girlimage")
         }
         
-        let date = Date(timeIntervalSince1970: timeInterval)
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d • h:mm a"
-        
-        return formatter.string(from: date)
     }
+    
+    private func convertDate(date: Int?) -> String {
+        
+        guard let date = date else {
+                return "error invalid Date"
+            }
+            
+            let timeInterval = TimeInterval(date)
+            
+            let dateObject = Date(timeIntervalSince1970: timeInterval)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, MMM d, yy"
+            return dateFormatter.string(from: dateObject)
+    }
+    
+//private func didUpdateImage(from url: String) {
+//    
+//    guard let imageUrl = URL(string: url) else {
+//        DispatchQueue.main.async {
+//            self.eventImageView.image = UIImage(named: "girlimage")
+//        }
+//        return
+//    }
+//    
+//    URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+//        if let data = data, let image = UIImage(data: data) {
+//            DispatchQueue.main.async {
+//                self.eventImageView.image = image
+//            }
+//        } else {
+//            print(error?.localizedDescription ?? "error")
+//            DispatchQueue.main.async {
+//                self.eventImageView.image = UIImage(named: "girlimage")
+//            }
+//        }
+//    }.resume()
+//}
+    
     
     
 }

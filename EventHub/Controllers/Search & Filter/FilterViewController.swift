@@ -9,6 +9,8 @@ import UIKit
 
 class FilterViewController: UIViewController {
     
+    let currentTime = Date().timeIntervalSince1970
+    
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Filter"
@@ -79,7 +81,7 @@ class FilterViewController: UIViewController {
     private let resetButton = createButton(title: "RESET")
     private let applyButton = createButton(title: "APPLY")
     
-    let eventFilters = EventFilter()
+    var eventFilters = EventFilter()
     
     // MARK: - Lifecycle
     
@@ -94,6 +96,15 @@ class FilterViewController: UIViewController {
         
         priceRangeSlider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
 
+        todayButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
+        tomorrowButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
+        thisWeekButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
+        calendarButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
+        resetButton.addTarget(self, action: #selector(resetTapped), for: .touchUpInside)
+        
+        eventFilters.actualSince = String(currentTime)
+        eventFilters.actualUntil = String(currentTime)
+        
     }
     
     // MARK: - Setup UI
@@ -184,6 +195,17 @@ class FilterViewController: UIViewController {
     
     @objc private func calendarButtonPressed() {
         showDatePicker()
+        todayButton.isSelected = false
+        tomorrowButton.isSelected = false
+        thisWeekButton.isSelected = false
+        todayButton.backgroundColor = .white
+        tomorrowButton.backgroundColor = .white
+        thisWeekButton.backgroundColor = .white
+
+    }
+    
+    @objc private func resetTapped() {
+        self.dismiss(animated: true)
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
@@ -207,7 +229,9 @@ class FilterViewController: UIViewController {
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 8
+        button.backgroundColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
+
         return button
     }
     
@@ -220,11 +244,67 @@ class FilterViewController: UIViewController {
         return label
     }
     
-    func setFilters() {
+    @objc func selectDate(sender: UIButton) {
+        todayButton.isSelected = false
+        tomorrowButton.isSelected = false
+        thisWeekButton.isSelected = false
+      
         
-        eventFilters.categories
+        sender.isSelected = true
+        sender.backgroundColor = sender.isSelected ? UIColor(named: Constants.allColors.primaryBlue) : .white
+        
+        print(eventFilters.actualSince)
+        print(eventFilters.actualUntil)
+
+        
+        switch sender {
+        case todayButton: 
+            
+            eventFilters.actualSince = String(Int(currentTime))
+            eventFilters.actualUntil = String(Int(currentTime + 86400))
+            thisWeekButton.backgroundColor = .white
+            tomorrowButton.backgroundColor = .white
             
             
+        case tomorrowButton:
+            eventFilters.actualSince = String(Int(currentTime + 86400))
+            eventFilters.actualUntil = String(Int(currentTime + 86400 * 2))
+            todayButton.backgroundColor = .white
+            thisWeekButton.backgroundColor = .white
+            
+            
+        case thisWeekButton:
+            eventFilters.actualSince = String(Int(currentTime))
+            eventFilters.actualUntil = String(Int(currentTime + 86400 * 7))
+            todayButton.backgroundColor = .white
+            tomorrowButton.backgroundColor = .white
+           
+//        case calendarButton:
+//            
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "dd MMM yyyy"
+//            dateFormatter.locale = Locale(identifier: "ru_RU")
+//
+//            if let date = dateFormatter.date(from: selectedtDate) {
+//                let timestamp = date.timeIntervalSince1970
+//                eventFilters.actualSince = String(timestamp)
+//            } else {
+//                eventFilters.actualSince = String(Date().timeIntervalSince1970)
+//            }
+//            todayButton.backgroundColor = .white
+//            tomorrowButton.backgroundColor = .white
+//            thisWeekButton.backgroundColor = .white
+
+        default:
+            eventFilters.actualSince = String(Date().timeIntervalSince1970)
+        }
+    }
+    
+    func setFilters() {
+
+        eventFilters.location = City(rawValue: selectedCity)
+        
+        
         }
     }
     
@@ -249,23 +329,27 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.configure(with: category)
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
+                return
+            }
+            let selectedCategory = cell.titleLabel.text
+        
+     
+         
+        }
+
+        func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
+                return
+            }
+
+            if let category = cell.titleLabel.text {
+                eventFilters.categories = nil
+            }
+        }
 }
-
-// MARK: - UICollectionView layout
-
-//extension FilterViewController: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: 120, height: 160)
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 8
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 8
-//    }
-//}
 
 
 // MARK: - Date picker
@@ -289,7 +373,6 @@ extension FilterViewController {
         let date = datePicker.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        
         
         selectedtDate = dateFormatter.string(from: date)
         calendarButton.setTitle(selectedtDate, for: .normal)

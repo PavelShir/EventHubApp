@@ -8,16 +8,17 @@
 import UIKit
 
 class CategoryCircleCell: UICollectionViewCell {
+    
+    
     static let identifier = "CategoryCircleCell"
     
-    // Синий круг для фона
-    private let circleView: UIView = {
+     private let circleView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 30
         view.layer.masksToBounds = true
         view.layer.shadowOpacity = 0.6
-        view.layer.shadowOffset = CGSize(width: 0, height: 2) 
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 3
         view.backgroundColor = .white
         view.layer.borderColor = UIColor.systemGray.cgColor
@@ -34,8 +35,7 @@ class CategoryCircleCell: UICollectionViewCell {
         return imageView
     }()
     
-    // Текст (подпись) категории
-    private let titleLabel: UILabel = {
+      let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AirbnbCerealApp", size: 15)
         label.textColor = .black

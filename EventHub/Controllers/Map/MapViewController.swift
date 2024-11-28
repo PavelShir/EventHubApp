@@ -11,6 +11,10 @@ import MapKit
 class MapViewController: UIViewController {
     
     var cityName: String?
+    var mapEvents: [Event] = []
+    var places: [Place] = []
+    var placeCoordinates: [Coords] = []
+    var eventFilter: EventFilter!
     
     private let categoryCircleView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -44,13 +48,28 @@ class MapViewController: UIViewController {
         setupUI()
         setupMap()
         
+        mapView.delegate = self
+        
         categoryCircleView.delegate = self
         categoryCircleView.dataSource = self
         categoryCircleView.register(MapCollectionCell.self, forCellWithReuseIdentifier: MapCollectionCell.mapIdentifier)
 
-//        let cityFilter = EventFilter(location: cityName)
-//        loadEventsSuccess(with: cityFilter)
+//        var cityNamee = chooseCity(for: "Kazan")
+        
+            //делаем фильтр и загржаем события
+        eventFilter = EventFilter(location: .moscow)
+        loadEventsSuccess(with: eventFilter) { (events: [Event]) in
+            DispatchQueue.main.async {
+                self.mapEvents = events
+                print(self.mapEvents)
+                self.processEvents()
 
+            }
+        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+//            
+//        }
+        
         
     }
     
@@ -76,6 +95,41 @@ class MapViewController: UIViewController {
         
     }
     
+    func processEvents() {
+        
+            let dispatchGroup = DispatchGroup()
+            
+            // Перебираем все события
+            for event in mapEvents {
+                guard let placeId = event.placeId else { continue }  // Проверяем, есть ли placeId
+                
+                dispatchGroup.enter()  // Входим в группу для текущего события
+                
+                // Загружаем место по placeId
+                loadPlace(placeId: placeId) { [weak self] place in
+                    if let place = place, let coords = place.coords {
+                        // Логируем координаты
+                        print("Получены координаты для места: \(place.title), lat: \(coords.lat ?? 0), lon: \(coords.lon ?? 0)")
+
+                        // Добавляем координаты в массив
+                        self?.placeCoordinates.append(coords)
+                        
+                        // Добавляем пин на карту
+                        self?.addPinForPlace(coords)
+                    } else {
+                        print("Ошибка: Нет координат для места с placeId: \(placeId)")
+                    }
+                    dispatchGroup.leave()  // Покидаем группу после завершения загрузки места
+                }
+            }
+            
+            // Ожидаем, пока все запросы завершатся
+            dispatchGroup.notify(queue: .main) {
+                print("Все места загружены и пины добавлены на карту")
+            }
+        }
+        
+    
     private func setupMap() {
         guard let cityName = cityName else {
             print("Нет данных о городе")
@@ -100,6 +154,23 @@ class MapViewController: UIViewController {
             }
         }
     }
+    
+    func addPinForPlace(_ coords: Coords) {
+        guard let lat = coords.lat, let lon = coords.lon else { return }
+
+           let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+           let annotation = MKPointAnnotation()
+           annotation.coordinate = coordinate
+           annotation.title = "Место"
+
+           
+           let markerView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "marker")
+           markerView.markerTintColor = .systemBlue
+           markerView.glyphImage = UIImage(systemName: "star.fill")
+
+           mapView.addAnnotation(annotation)
+        }
+
     
     
     private func setMapRegion(center: CLLocation, radius: CLLocationDistance) {
@@ -177,7 +248,26 @@ extension MapViewController: UICollectionViewDelegateFlowLayout {
 
     }
 
-
+extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKPointAnnotation {
+            // Create an instance of MKMarkerAnnotationView
+            let markerView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "marker")
+            
+            // Customize the marker
+            markerView.markerTintColor = .systemBlue  // Set the color of the marker
+            markerView.glyphImage = UIImage(systemName: "star.fill") // Set an icon (optional)
+            markerView.titleVisibility = .adaptive // Automatically show/hide title
+            markerView.subtitleVisibility = .adaptive // Automatically show/hide subtitle
+            
+            return markerView
+        }
+        
+        return nil
+    }
+    
+    
+}
 
 
 

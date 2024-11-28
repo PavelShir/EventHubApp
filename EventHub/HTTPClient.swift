@@ -188,37 +188,110 @@ private func processDates(dates: [DateElement], currentTimestamp: Int) -> (start
 
     // MARK: Загрузка информации о месте по айди
 
-private func fetchPlace(placeId: Int) async throws -> Place {
+func fetchPlace(placeId: Int, completion: @escaping (Result<Place, Error>) -> Void) {
     guard let url = URL(string: "https://kudago.com/public-api/v1.4/places/\(placeId)") else {
-        throw URLError(.badURL)
+        completion(.failure(URLError(.badURL)))
+        return
     }
-    
-    let (data, response) = try await URLSession.shared.data(from: url)
-    
-    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-        throw URLError(.badServerResponse)
+
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 16
+
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+         if let error = error {
+            print("Network error: \(error.localizedDescription)")
+            completion(.failure(error))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("Invalid response from server")
+            completion(.failure(URLError(.badServerResponse)))
+            return
+        }
+
+        if httpResponse.statusCode != 200 {
+            print("Server error with status code: \(httpResponse.statusCode)")
+            completion(.failure(URLError(.badServerResponse)))
+            return
+        }
+        
+        guard let data = data else {
+            print("No data received")
+            completion(.failure(URLError(.badServerResponse)))
+            return
+        }
+
+        let decoder = JSONDecoder()
+        do {
+            let place = try decoder.decode(Place.self, from: data)
+            completion(.success(place))
+        } catch {
+            print("Error decoding place data: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
     }
-    
-    let decoder = JSONDecoder()
-    
-    do {
-        let place = try decoder.decode(Place.self, from: data)
-        return place
-    } catch {
-        print("Decoding error: \(error.localizedDescription)")
-        throw error
+
+    task.resume()
+}
+
+func fetchPlaceWithRetry(placeId: Int, retryCount: Int = 7, completion: @escaping (Result<Place, Error>) -> Void) {
+    fetchPlace(placeId: placeId) { result in
+        switch result {
+        case .success(let place):
+            completion(.success(place))
+        case .failure(let error):
+            if retryCount > 0 {
+                print("Retrying request for placeId: \(placeId), attempts left: \(retryCount)")
+                // Пауза между запросами перед повторной попыткой
+                DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+                    fetchPlaceWithRetry(placeId: placeId, retryCount: retryCount - 1, completion: completion)
+                }
+            } else {
+                print("All retry attempts failed for placeId: \(placeId). Error: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+}
+
+let queue: OperationQueue = {
+    let q = OperationQueue()
+    q.maxConcurrentOperationCount = 5
+    return q
+}()
+
+
+func fetchAllPlacesWithDelay(placeIds: [Int], delay: TimeInterval = 1.0, completion: @escaping ([Place]) -> Void) {
+    let dispatchGroup = DispatchGroup()
+    var places: [Place] = []
+
+    for (index, placeId) in placeIds.enumerated() {
+        dispatchGroup.enter()
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double(index) * delay) {
+            fetchPlaceWithRetry(placeId: placeId) { result in
+                switch result {
+                case .success(let place):
+                    places.append(place)
+                case .failure:
+                    break
+                }
+                dispatchGroup.leave()
+            }
+        }
+    }
+
+    dispatchGroup.notify(queue: .main) {
+        completion(places)
     }
 }
 
 func loadPlace(placeId: Int, completion: @escaping (Place?) -> Void) {
-    Task {
-        do {
-            let place = try await fetchPlace(placeId: placeId)
-                        completion(place)
-            
-        } catch {
-            print("Error fetching place: \(error.localizedDescription)")
-                        completion(nil)
+    fetchAllPlacesWithDelay(placeIds: [placeId]) { results in
+        if let place = results.first(where: { $0 != nil }) as? Place {
+            completion(place) // Возвращаем первое успешное место
+        } else {
+            completion(nil) // Возвращаем nil, если ничего не найдено
         }
     }
 }

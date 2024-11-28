@@ -66,7 +66,7 @@ class MapCollectionCell: CategoryCircleCell {
     }
     
     let randomColorName = [
-        "primaryGreen", "darkRed","primaryOrange","primaryLightBlue"
+        "primaryGreen", "darkRed","primaryLightBlue"
     ].randomElement()
     
 }

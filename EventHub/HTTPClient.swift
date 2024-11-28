@@ -20,7 +20,7 @@ func createURL(with filters: EventFilter,
       var components = URLComponents(string: "https://kudago.com/public-api/v1.4/events/")
       
       components?.queryItems = [
-          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images"),
+          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images,favorites_count"),
           URLQueryItem(name: "text_format", value: "text"),
           URLQueryItem(name: "page_size", value: "35") //максимальное число объектов в массиве
       ]
@@ -49,6 +49,7 @@ private func fetchEvent(with filters: EventFilter) async throws -> [Event] {
             throw URLError(.badURL)
         }
     
+    print("API URL is \(url)")
     let (data, response) = try await URLSession.shared.data(from: url)
     
     guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {

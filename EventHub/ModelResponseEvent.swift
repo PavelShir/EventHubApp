@@ -118,10 +118,22 @@ enum Slug: String, Codable {
         
         // Маппинг для значений, не определённых в перечислении
         switch value {
-        case "spb": self = .spb
-        case "msk": self = .msk
-            
-        default: self = .msk
+        case "spb", "saintPetersburg", "petersburg": self = .spb
+        case "msk", "moscow": self = .msk
+        case "novosibirsk", "nsk": self = .nsk
+        case "yekaterinburg", "ekb": self = .ekb
+        case "nizhnyNovgorod", "nnv": self = .nnv
+        case "kazan", "kzn": self = .kzn
+        case "vyborg", "vbg": self = .vbg
+        case "samara", "smr": self = .smr
+        case "krasnodar", "krd": self = .krd
+        case "sochi": self = .sochi
+        case "ufa": self = .ufa
+        case "krasnoyarsk": self = .krasnoyarsk
+        case "kyiv", "kev": self = .kev
+        case "newYork", "ny": self = .newYork
+        default:
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unknown value: \(value)")
         }
     }
 }

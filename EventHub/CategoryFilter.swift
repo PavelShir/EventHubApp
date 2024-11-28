@@ -7,73 +7,79 @@
 
 import Foundation
 
-enum Category: String, Codable {
+enum Category: String, Codable, CaseIterable {
+    case sports = "recreation"
+    case music = "concert"
+    case art = "exhibition"
     case business = "business-events"
     case cinema = "cinema"
-    case concerts = "concert"
-    case education = "education"
-    case entertainment = "entertainment"
-    case exhibitions = "exhibition"
     case fashionAndStyle = "fashion"
-    case festivals = "festival"
-    case holidays = "holiday"
     case kids = "kids"
-    case other = "other"
     case parties = "party"
-    case photography = "photo"
-    case quests = "quest"
-    case sports = "recreation"
-    case shopping = "shopping"
-    case charity = "social-activity"
-    case promotions = "stock"
-    case theater = "theater"
-    case tours = "tour"
-    case fairs = "yarmarki-razvlecheniya-yarmarki"
+    case other = "other"
+  
 
     var fullName: String {
            switch self {
+           case .sports:
+              return "Sports"
+           case .music:
+               return "Music"
+           case .art:
+               return "Art"
            case .business:
                return "Business"
            case .cinema:
                return "Cinema"
-           case .concerts:
-               return "Concerts"
-           case .education:
-               return "Education"
-           case .entertainment:
-               return "Entertainment"
-           case .exhibitions:
-               return "Exhibitions"
            case .fashionAndStyle:
                return "Fashion"
-           case .festivals:
-               return "Festivals"
-           case .holidays:
-               return "Holidays"
            case .kids:
                return "Kids"
-           case .other:
-               return "Other"
            case .parties:
                return "Parties"
-           case .photography:
-               return "Photography"
-           case .quests:
-               return "Quests"
-           case .sports:
-               return "Sports"
-           case .shopping:
-               return "Shopping"
-           case .charity:
-               return "Charity"
-           case .promotions:
-               return "Promotions"
-           case .theater:
-               return "Theater"
-           case .tours:
-               return "Tours"
-           case .fairs:
-               return "Fairs"
+           case .other:
+               return "Other"
            }
        }
+    
+    var iconName: String {
+            switch self {
+            case .sports: return "basketball"
+            case .business: return "bubble.left.and.bubble.right"
+            case .cinema: return "film"
+            case .music: return "music.note"
+            case .art: return "paintpalette"
+            case .fashionAndStyle: return "camera"
+            case .kids: return "figure.2.and.child.holdinghands"
+            case .parties: return "figure.dance"
+            case .other: return "binoculars"
+
+            }
+        }
 }
+
+func chooseCategory(for string: String) -> Category {
+    switch string {
+    case "Sports":
+        return .sports
+    case "Music":
+        return .music
+    case "Art":
+        return .art
+    case "Business":
+        return .business
+    case "Cinema":
+        return .cinema
+    case "Fashion":
+        return .fashionAndStyle
+    case "Kids":
+        return .kids
+    case "Parties":
+        return .parties
+    case "Other":
+        return .other
+    default:
+        return .cinema
+    }
+}
+

@@ -7,8 +7,27 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, FilterDelegate {
+    func didApplyFilters(_ eventFilters: EventFilter) {
+        events = []
+        filteredEvents = []
+        print(eventFilters)
         
+        loadEventsSuccess(with: eventFilters) { events in
+            // Этот блок будет выполнен после того, как события будут загружены
+            self.events = events
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+                          
+        
+    }
+
+    var refreshControl: UIRefreshControl!
+    private var shimmerView: ShimmerView!
+
+    
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let date = Date()
     
@@ -79,17 +98,34 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+      
         
         searchBar.delegate = self
         
         filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        tableView.reloadData()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.addSubview(refreshControl)
 
-    }
-
-    @objc private func filterPressed() {
-        print("filter")
     }
     
+    @objc private func filterPressed() {
+        let filterVC = FilterViewController()
+        filterVC.delegate = self
+        filterVC.modalPresentationStyle = .popover
+        
+        present(filterVC, animated: true)
+    }
+    
+    @objc func refreshData() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+
+            }
+        }
     private func setupTable() {
         
         view.addSubview(labelEmpty)
@@ -97,6 +133,7 @@ class SearchViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
@@ -113,7 +150,23 @@ class SearchViewController: UIViewController {
             
         ])
     }
-    
+    private func setupShimmer() {
+        shimmerView = ShimmerView(frame: tableView.bounds)
+        shimmerView.isHidden = false
+        view.addSubview(shimmerView)
+        shimmerView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    shimmerView.topAnchor.constraint(equalTo: tableView.topAnchor),
+                    shimmerView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+                    shimmerView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+                    shimmerView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+                ])
+        DispatchQueue.main.async {
+
+            self.tableView.reloadData()
+        }
+    }
     
     
     private func configureSearchBar() {
@@ -133,7 +186,7 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    private func updateUI() {
+    func updateUI() {
         if isSearching {
                // Поиск активен: показываем "NO RESULTS", если ничего не найдено
                if filteredEvents.isEmpty {
@@ -178,6 +231,8 @@ class SearchViewController: UIViewController {
         
         return formatter.string(from: date)
     }
+  
+    
     
 }
 
@@ -208,15 +263,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // переход на Ивент + передать данные об ивенте
-        
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
-        //        }
-        
+        let selectedEvent = isSearching ? filteredEvents[indexPath.row] : events[indexPath.row] 
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = selectedEvent
+
+            navigationController?.pushViewController(eventVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }
@@ -268,6 +320,15 @@ extension SearchViewController: UISearchBarDelegate {
         
     }
    
+extension SearchViewController: UIPopoverPresentationControllerDelegate {
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // Это будет вызвано, когда поповер фильтра закроется
+        // Обновляем UI на экране поиска после того, как поповер был закрыт
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+               self.tableView.reloadData()
+           }    }
+}
 
 
 //#Preview { SearchViewController() }

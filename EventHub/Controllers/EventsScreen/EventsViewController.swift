@@ -25,8 +25,9 @@ class EventsViewController: UIViewController {
     private var allEvents: [Event] = []
     private var upcomingEvents: [Event] = []
      var eventsDisplayed: [Event] = []
+    private var userCity: City = .moscow
     
-    let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
+    var filter = EventFilter()
      
     
     // MARK: Lifecycle
@@ -36,7 +37,7 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
 
-
+        filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         setupUI()
         
         setupShimmer()
@@ -221,9 +222,14 @@ class EventsViewController: UIViewController {
      
                 switch index {
                 case 0:
-                    self.eventsDisplayed = allEvents.filter {
-                        let startDate = $0.startDate ?? self.currentDate
-                        return startDate >= currentDate && startDate < currentDate + 604800
+                    self.eventsDisplayed = allEvents.filter { event in
+                        let startDate = event.startDate ?? self.currentDate
+                        return startDate >= self.currentDate && startDate < self.currentDate + 604800
+                    }.sorted {
+                        let firstDate = $0.startDate ?? self.currentDate
+                        let secondDate = $1.startDate ?? self.currentDate
+                        return firstDate > secondDate
+                    
                     }
                 case 1:
                     self.eventsDisplayed = allEvents.filter {
@@ -289,12 +295,12 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         
         // переход на Ивент + передать данные об ивенте
         
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
+                let selectedEvent = eventsDisplayed[indexPath.row]
+                let eventVC = EventDetailsViewController()
+                eventVC.eventDetail = selectedEvent
+        
+                    navigationController?.pushViewController(eventVC, animated: true)
+                    tableView.deselectRow(at: indexPath, animated: true)
     }
     
     

@@ -386,7 +386,7 @@ private extension SingInController {
     func handleSignUpButton() {
         let registrationViewController = SingUpController()
         registrationViewController.modalPresentationStyle = .fullScreen
-        present(registrationViewController, animated: true, completion: nil)
+        navigationController?.pushViewController(registrationViewController, animated: true)
     }
 
     func togglePasswordVisibility() {

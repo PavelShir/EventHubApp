@@ -11,18 +11,6 @@ final class SingUpController: UIViewController {
 
     // MARK: - Outlets
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = Constants.Authorization.registerTitle
-        label.font = UIFont.systemFont(
-            ofSize: Constants.Authorization.fontSizeTitleLabel,
-            weight: .bold
-        )
-        label.textColor = UIColor(named: Constants.allColors.darkText)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.Authorization.registerDescription
@@ -168,14 +156,27 @@ final class SingUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupBackButton(action: #selector(backButtonTapped))
+        
         self.title = "Sing up"
+        let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 24, weight: .bold),
+                .foregroundColor: UIColor.black
+            ]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+        
         setupView()
         setupHierarchy()
         setupLayout()
     }
 
     // MARK: - Setups
-
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
         let image = passwordTextField.isSecureTextEntry ? "eye.slash": "eye"
@@ -191,7 +192,6 @@ final class SingUpController: UIViewController {
 
     private func setupHierarchy() {
         [
-            titleLabel,
             descriptionLabel,
             usernameTextField,
             emailTextField,
@@ -210,17 +210,9 @@ final class SingUpController: UIViewController {
 
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(
+            descriptionLabel.topAnchor.constraint(
                 equalTo: view.topAnchor,
                 constant: Constants.Authorization.topMarginTitleLabel
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: Constants.Authorization.horizontalMarginTwenty
-            ),
-            descriptionLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: Constants.Authorization.topMarginDescriptionLabel
             ),
             descriptionLabel.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -389,15 +381,5 @@ extension SingUpController {
     @objc
     private func hideKeyboard() {
         view.endEditing(true)
-    }
-}
-
-extension SingUpController {
-    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-            completion?()
-        }))
-        present(alert, animated: true)
     }
 }

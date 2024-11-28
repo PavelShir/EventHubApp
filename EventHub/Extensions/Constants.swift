@@ -16,7 +16,7 @@ struct Constants {
         static let loginTitle: String = "Welcome Back 👋"
         static let loginDescription: String = "Sing In"
         static let registerTitle: String = "Sing Up"
-        static let registerDescription: String = ""
+        static let registerDescription: String = " \n"
         static let placeholderEmail: String = "Email"
         static let placeholderPassword: String = "Password"
         static let placeholderRepeatPassword: String = "Repeat Password"

@@ -18,14 +18,61 @@ class EventCardView: UIView {
         return element
     }()
         
-    func configure(event: Event){
+    func configure(with event: Event){
         image.image = UIImage(named: event.images ?? "hands")
         titleLabel.text = event.title
         address.text = "event.placeId"
-        dayLabel.text = "12"
-        monthLabel.text = "JAN"
         
+        
+        let ( mmm, d ) = MMMDayPair(date: event.startDate)
+        
+        dayLabel.text = d
+        monthLabel.text = mmm
+        
+        titleLabel.text = event.title
+        
+        
+        guard let placeId = event.placeId else {
+            address.text = event.locationSlug
+                return
+            }
+        
+        loadPlace(placeId: placeId) { [weak self] place in
+                DispatchQueue.main.async {
+                    if let place = place {
+                        self?.address.text = (event.locationSlug ?? "") + ", " + (place.address ?? "")
+                    } else {
+                        self?.address.text = event.locationSlug
+                    }
+                }
+            }
+        
+        
+        if let urlToImage = event.images {
+            image.setImage(url: urlToImage)
+        } else {
+            image.image = UIImage(named: "hands")
+        }
     }
+    
+    private func MMMDayPair(date: Int?) -> (String, String) {
+           
+       guard let date = date else {
+               return ("", "")
+           }
+           
+           let timeInterval = TimeInterval(date)
+           
+           let dateObject = Date(timeIntervalSince1970: timeInterval)
+           
+            let dateFormatterMMM = DateFormatter()
+            dateFormatterMMM.dateFormat = "MMM"
+            
+            let dateFormatterDay = DateFormatter()
+            dateFormatterDay.dateFormat = "d"
+        
+           return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from: dateObject))
+   }
     
     private lazy var dateView : UIView = {
         let element = UIView(frame: CGRect(x: 17, y: 17, width: 45, height: 46.68))

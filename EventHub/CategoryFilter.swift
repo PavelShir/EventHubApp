@@ -58,3 +58,28 @@ enum Category: String, Codable, CaseIterable {
         }
 }
 
+func chooseCategory(for string: String) -> Category {
+    switch string {
+    case "Sports":
+        return .sports
+    case "Music":
+        return .music
+    case "Art":
+        return .art
+    case "Business":
+        return .business
+    case "Cinema":
+        return .cinema
+    case "Fashion":
+        return .fashionAndStyle
+    case "Kids":
+        return .kids
+    case "Parties":
+        return .parties
+    case "Other":
+        return .other
+    default:
+        return .cinema
+    }
+}
+

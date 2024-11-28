@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol FilterDelegate: AnyObject {
+    func didApplyFilters(_ eventFilters: EventFilter)
+}
+
 class FilterViewController: UIViewController {
     
+    weak var delegate: FilterDelegate?
     let currentTime = Date().timeIntervalSince1970
     
     private let headerLabel: UILabel = {
@@ -54,9 +59,9 @@ class FilterViewController: UIViewController {
     
     
     private var cityPicker: UIPickerView!
-    var selectedCity: String!
+    
     private var datePicker: UIDatePicker!
-    var selectedtDate: String!
+
     
     private let locationButton = createButton(title: "Choose city")
     
@@ -82,6 +87,9 @@ class FilterViewController: UIViewController {
     private let applyButton = createButton(title: "APPLY")
     
     var eventFilters = EventFilter()
+    var selectedCity: City?
+    var selectedtDate: String!
+    var selectedCategory: Category?
     
     // MARK: - Lifecycle
     
@@ -100,10 +108,15 @@ class FilterViewController: UIViewController {
         tomorrowButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
         thisWeekButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
         calendarButton.addTarget(self, action: #selector(selectDate(sender:)), for: .touchUpInside)
+        
         resetButton.addTarget(self, action: #selector(resetTapped), for: .touchUpInside)
+        applyButton.addTarget(self, action: #selector(setFiltersApply), for: .touchUpInside)
         
         eventFilters.actualSince = String(currentTime)
         eventFilters.actualUntil = String(currentTime)
+        eventFilters.categories = nil
+        eventFilters.location = nil
+      
         
     }
     
@@ -279,31 +292,21 @@ class FilterViewController: UIViewController {
             todayButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
            
-//        case calendarButton:
-//            
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "dd MMM yyyy"
-//            dateFormatter.locale = Locale(identifier: "ru_RU")
-//
-//            if let date = dateFormatter.date(from: selectedtDate) {
-//                let timestamp = date.timeIntervalSince1970
-//                eventFilters.actualSince = String(timestamp)
-//            } else {
-//                eventFilters.actualSince = String(Date().timeIntervalSince1970)
-//            }
-//            todayButton.backgroundColor = .white
-//            tomorrowButton.backgroundColor = .white
-//            thisWeekButton.backgroundColor = .white
 
         default:
-            eventFilters.actualSince = String(Date().timeIntervalSince1970)
+            eventFilters.actualSince = String(currentTime)
         }
     }
     
-    func setFilters() {
+    @objc func setFiltersApply() {
 
-        eventFilters.location = City(rawValue: selectedCity)
-        
+        print(eventFilters)
+             
+            
+             delegate?.didApplyFilters(eventFilters)
+            
+             self.dismiss(animated: true) {
+             }
         
         }
     }
@@ -334,11 +337,11 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
             guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
                 return
             }
-            let selectedCategory = cell.titleLabel.text
-        
-     
-         
+        let selectedCategory = chooseCategory(for: cell.titleLabel.text ?? "Other")
+        print(selectedCategory)
+        eventFilters.categories = selectedCategory
         }
+    
 
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
             guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
@@ -376,6 +379,19 @@ extension FilterViewController {
         
         selectedtDate = dateFormatter.string(from: date)
         calendarButton.setTitle(selectedtDate, for: .normal)
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "dd MMM yyyy"
+        dateFormatter2.locale = Locale(identifier: "ru_RU")
+        
+        if let date = dateFormatter2.date(from: selectedtDate) {
+            let timestamp = date.timeIntervalSince1970
+            eventFilters.actualSince = String(timestamp)
+        } else {
+            eventFilters.actualSince = String(Int(currentTime))
+        }
+        
+        eventFilters.actualUntil = nil
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.datePicker.isHidden = true
@@ -422,11 +438,17 @@ extension FilterViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCity = City.allCases[row].fullName
-        locationButton.setTitle(selectedCity, for: .normal)
+        // выбираем город и устанавливаем в фильтр
+        
+        let cityChosen = City.allCases[row].fullName
+        locationButton.setTitle(cityChosen, for: .normal)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
-        }    }
+        }
+        selectedCity = chooseCity(for: cityChosen)
+        eventFilters.location = selectedCity
+    }
+    
 }
 
 //#Preview { FilterViewController() }

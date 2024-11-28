@@ -37,9 +37,15 @@ class TabBarViewController: UITabBarController {
 //        loadEvents()
         
         let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
-        let eventVC = EventsViewController()
-        eventVC.eventsDisplayed = loadEvents(with: filter)
-
+       
+        
+        loadEventsSuccess(with: filter) { events in
+            // Этот блок будет выполнен после того, как события будут загружены
+            DispatchQueue.main.async {
+                let eventVC = EventsViewController()
+                eventVC.eventsDisplayed = events
+            }
+        }
  
         
     }

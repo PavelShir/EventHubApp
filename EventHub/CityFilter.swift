@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum City: String, Codable {
+enum City: String, Codable, CaseIterable {
     case saintPetersburg = "spb"
     case moscow = "msk"
     case novosibirsk = "nsk"
@@ -56,6 +56,42 @@ enum City: String, Codable {
             }
         }
 }
+func chooseCity(for city: String) -> City {
+    switch city {
+    case "Saint Petersburg":
+        return .saintPetersburg
+    case "Moscow":
+        return .moscow
+    case "Novosibirsk":
+        return .novosibirsk
+    case "Yekaterinburg":
+        return .yekaterinburg
+    case "Nizhny Novgorod":
+        return .nizhnyNovgorod
+    case "Kazan":
+        return .kazan
+    case "Vyborg":
+        return .vyborg
+    case "Samara":
+        return .samara
+    case "Krasnodar":
+        return .krasnodar
+    case "Sochi":
+        return .sochi
+    case "Ufa":
+        return .ufa
+    case "Krasnoyarsk":
+        return .krasnoyarsk
+    case "Kyiv":
+        return .kyiv
+    case "New York":
+        return .newYork
+    default:
+        return .newYork
+    }
+}
+
+
 //
 //let city = City.moscow
 //print("City code: \(city.rawValue)") // Выводит "msk"

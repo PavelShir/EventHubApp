@@ -14,8 +14,8 @@ protocol FilterDelegate: AnyObject {
 class FilterViewController: UIViewController {
     
     weak var delegate: FilterDelegate?
-    let currentTime = Date().timeIntervalSince1970
-    
+    let currentTime = Int(Date().timeIntervalSince1970)
+
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Filter"
@@ -266,22 +266,18 @@ class FilterViewController: UIViewController {
         sender.isSelected = true
         sender.backgroundColor = sender.isSelected ? UIColor(named: Constants.allColors.primaryBlue) : .white
         
-        print(eventFilters.actualSince)
-        print(eventFilters.actualUntil)
-
-        
         switch sender {
         case todayButton: 
             
-            eventFilters.actualSince = String(Int(currentTime))
-            eventFilters.actualUntil = String(Int(currentTime + 86400))
+            eventFilters.actualSince = String(currentTime)
+            eventFilters.actualUntil = String((currentTime) + 86400)
             thisWeekButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
             
             
         case tomorrowButton:
-            eventFilters.actualSince = String(Int(currentTime + 86400))
-            eventFilters.actualUntil = String(Int(currentTime + 86400 * 2))
+            eventFilters.actualSince = String((currentTime) + 86400)
+            eventFilters.actualUntil = String((currentTime) + 86400 * 2)
             todayButton.backgroundColor = .white
             thisWeekButton.backgroundColor = .white
             
@@ -296,6 +292,9 @@ class FilterViewController: UIViewController {
         default:
             eventFilters.actualSince = String(currentTime)
         }
+        
+        print(eventFilters.actualSince)
+        print(eventFilters.actualUntil)
     }
     
     @objc func setFiltersApply() {
@@ -376,22 +375,19 @@ extension FilterViewController {
         let date = datePicker.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        
-        selectedtDate = dateFormatter.string(from: date)
-        calendarButton.setTitle(selectedtDate, for: .normal)
-        
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateFormat = "dd MMM yyyy"
-        dateFormatter2.locale = Locale(identifier: "ru_RU")
-        
-        if let date = dateFormatter2.date(from: selectedtDate) {
-            let timestamp = date.timeIntervalSince1970
-            eventFilters.actualSince = String(timestamp)
-        } else {
-            eventFilters.actualSince = String(Int(currentTime))
-        }
-        
+
+        // Преобразуем дату в строку для отображения в кнопке
+        let selectedDate = dateFormatter.string(from: date)
+        calendarButton.setTitle(selectedDate, for: .normal)
+
+        // Для сохранения значения в timestamp (Unix time)
+        let timestamp = date.timeIntervalSince1970
+
+        // Присваиваем значение actualSince и очищаем actualUntil
+        eventFilters.actualSince = String(timestamp)
         eventFilters.actualUntil = nil
+        
+      
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.datePicker.isHidden = true

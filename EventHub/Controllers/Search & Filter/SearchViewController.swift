@@ -13,16 +13,14 @@ class SearchViewController: UIViewController, FilterDelegate {
         filteredEvents = []
         print(eventFilters)
         
-        events = loadEvents(with: eventFilters)
-        setupShimmer()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            
-            self.tableView.reloadData()
+        loadEventsSuccess(with: eventFilters) { events in
+            // Этот блок будет выполнен после того, как события будут загружены
+            self.events = events
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            self.shimmerView.isHidden = true
-
-        }
+                          
         
     }
 

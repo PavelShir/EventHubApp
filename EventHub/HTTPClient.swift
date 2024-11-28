@@ -49,6 +49,7 @@ private func fetchEvent(with filters: EventFilter) async throws -> [Event] {
             throw URLError(.badURL)
         }
     
+    print("API URL is \(url)")
     let (data, response) = try await URLSession.shared.data(from: url)
     
     guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {

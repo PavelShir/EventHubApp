@@ -27,7 +27,7 @@ class EventsViewController: UIViewController {
      var eventsDisplayed: [Event] = []
     private var userCity: City = .moscow
     
-    let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
+    var filter = EventFilter()
      
     
     // MARK: Lifecycle
@@ -37,7 +37,7 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
 
-
+        filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         setupUI()
         
         setupShimmer()

@@ -12,7 +12,7 @@ class CategoryCircleCell: UICollectionViewCell {
     
     static let identifier = "CategoryCircleCell"
     
-     private let circleView: UIView = {
+      let circleView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 30
@@ -26,7 +26,7 @@ class CategoryCircleCell: UICollectionViewCell {
         return view
     }()
     
-    private let iconView: UIImageView = {
+      let iconView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false

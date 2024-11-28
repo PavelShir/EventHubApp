@@ -34,20 +34,20 @@ class TabBarViewController: UITabBarController {
         generateTabBar()
         setupCenterButton()
         addTabBarShadow()
-//        loadEvents()
+        //        loadEvents()
         
         let filter = EventFilter(location: .moscow, actualSince: String(1722076800) )  //3 мес назад
-       
         
-        loadEventsSuccess(with: filter) { events in
+        
+        loadEventsSuccess(with: filter) { (events: [Event]) in
             // Этот блок будет выполнен после того, как события будут загружены
             DispatchQueue.main.async {
                 let eventVC = EventsViewController()
                 eventVC.eventsDisplayed = events
+                let mapVC = MapViewController(cityName: filter.location?.rawValue ?? "Kazan")
             }
+            
         }
- 
-        
     }
     
     private func generateTabBar() {
@@ -58,7 +58,7 @@ class TabBarViewController: UITabBarController {
             
             generateVC(viewController: UINavigationController(rootViewController: FavoritesViewController()), image: UIImage(named: " "), title: String(localized: " ")),
             
-            generateVC(viewController: UINavigationController(rootViewController: MapViewController()), image: UIImage(named: "map"), title: String(localized: "Map")),
+            generateVC(viewController: UINavigationController(rootViewController: MapViewController(cityName: "Kazan")), image: UIImage(named: "map"), title: String(localized: "Map")),
             
 
             generateVC(viewController: UINavigationController(rootViewController: MyProfileViewController()), image: UIImage(named: "Profile"), title: String(localized: "Profile"))

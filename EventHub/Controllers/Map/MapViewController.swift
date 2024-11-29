@@ -118,8 +118,8 @@ class MapViewController: UIViewController {
         NSLayoutConstraint.activate([
                eventInfoTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                eventInfoTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-               eventInfoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-               eventInfoTableView.heightAnchor.constraint(equalToConstant: 150)
+               eventInfoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+               eventInfoTableView.heightAnchor.constraint(equalToConstant: 130)
            ])
         
     }
@@ -323,7 +323,7 @@ class MapViewController: UIViewController {
             
             if annotationView == nil {
                 annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                annotationView?.canShowCallout = true // Для отображения всплывающей информации
+//                annotationView?.canShowCallout = true // Для отображения всплывающей информации
             } else {
                 annotationView?.annotation = annotation
             }
@@ -392,6 +392,11 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         hideEventInfoTable()
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130
+    }
+    
 }
 
     #Preview {MapViewController(cityName: "kazan") }

@@ -13,11 +13,9 @@ enum Category: String, Codable, CaseIterable {
     case art = "exhibition"
     case business = "business-events"
     case cinema = "cinema"
-    case fashionAndStyle = "fashion"
     case kids = "kids"
     case parties = "party"
-    case other = "other"
-  
+ 
 
     var fullName: String {
            switch self {
@@ -31,14 +29,12 @@ enum Category: String, Codable, CaseIterable {
                return "Business"
            case .cinema:
                return "Cinema"
-           case .fashionAndStyle:
-               return "Fashion"
+
            case .kids:
                return "Kids"
            case .parties:
                return "Parties"
-           case .other:
-               return "Other"
+         
            }
        }
     
@@ -49,11 +45,20 @@ enum Category: String, Codable, CaseIterable {
             case .cinema: return "film"
             case .music: return "music.note"
             case .art: return "paintpalette"
-            case .fashionAndStyle: return "camera"
             case .kids: return "figure.2.and.child.holdinghands"
             case .parties: return "figure.dance"
-            case .other: return "binoculars"
-
+            }
+        }
+    
+    var iconAsset: String {
+            switch self {
+            case .sports: return "sports"
+            case .business: return "art"
+            case .cinema: return "art"
+            case .music: return "music"
+            case .art: return "art"
+            case .kids: return "sports"
+            case .parties: return "music"
             }
         }
 }
@@ -70,16 +75,13 @@ func chooseCategory(for string: String) -> Category {
         return .business
     case "Cinema":
         return .cinema
-    case "Fashion":
-        return .fashionAndStyle
     case "Kids":
         return .kids
     case "Parties":
         return .parties
-    case "Other":
-        return .other
+
     default:
-        return .cinema
+        return .art
     }
 }
 
@@ -89,4 +91,15 @@ func geticonName(for categoryName: String) -> String? {
         return category.iconName
     }
     return nil
+}
+
+func getIconForCategory(for categories: [String]) -> String {
+    for categoryName in categories {
+        if let category = Category.allCases.first(where: {
+            $0.fullName.caseInsensitiveCompare(categoryName) == .orderedSame
+        }) {
+            return category.iconAsset
+        }
+    }
+    return Category.art.iconAsset
 }

@@ -247,12 +247,15 @@ class MapViewController: UIViewController {
 
             guard let lat = place.coords?.lat, let lon = place.coords?.lon else { return }
 
+            let iconName = getIconForCategory(for: event.categories)
+            
+            
             // Создаем аннотацию для события
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             let eventAnnotation = EventAnnotation(
                 coordinate: coordinate,
                 title: event.title,
-                categoryIcon: UIImage(named: "map.fill")
+                categoryIcon: UIImage(named: iconName)
             )
 
             // Добавляем аннотацию на карту

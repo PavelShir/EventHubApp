@@ -28,9 +28,6 @@ class MapCollectionCell: CategoryCircleCell {
         circleView.layer.cornerRadius = 20
         circleView.layer.borderWidth = 0.5
 
-//        iconView.contentMode = .left
-//        titleLabel.contentMode = .right
-
         titleLabel.tintColor = UIColor.black
         iconView.tintColor = UIColor(named: randomColorName!)
         

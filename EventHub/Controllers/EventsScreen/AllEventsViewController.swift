@@ -31,6 +31,7 @@ class AllEventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
+        
     }
     
     

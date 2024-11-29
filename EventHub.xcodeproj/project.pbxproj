@@ -47,6 +47,7 @@
 		8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E52CEA3FEE00FC1364 /* AppDelegate.swift */; };
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
+		F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */; };
 		F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659262CF0DC3D00CA3DE7 /* FavCell.swift */; };
 		F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */; };
 		F336592D2CF12F3400CA3DE7 /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */; };
@@ -106,6 +107,7 @@
 		8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionCell.swift; sourceTree = "<group>"; };
 		F33659262CF0DC3D00CA3DE7 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
 		F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentControl.swift; sourceTree = "<group>"; };
@@ -244,7 +246,7 @@
 				8F8452DC2CEC76F0000AE3BD /* FavoritesViewController.swift */,
 				F33659262CF0DC3D00CA3DE7 /* FavCell.swift */,
 				F33659302CF1428500CA3DE7 /* Search & Filter */,
-				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
+				F323F7E02CF8D9A000FD6DFB /* Map */,
 				8F8452E22CEC76F0000AE3BD /* ProfileViewController.swift */,
 				F3C91D962CED00B0008E4707 /* OnboardingScreen */,
 				F3C91D8C2CEB7E93008E4707 /* EventsScreen */,
@@ -300,6 +302,15 @@
 				31DEEC3E2CEE71B80098E212 /* GoogleService-Info.plist */,
 			);
 			path = EventHub;
+			sourceTree = "<group>";
+		};
+		F323F7E02CF8D9A000FD6DFB /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				8F8452DF2CEC76F0000AE3BD /* MapViewController.swift */,
+				F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 		F33659302CF1428500CA3DE7 /* Search & Filter */ = {
@@ -448,6 +459,7 @@
 				F336593F2CF5F39100CA3DE7 /* ShimmerView.swift in Sources */,
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
 				F33659392CF51F5600CA3DE7 /* EventFilter.swift in Sources */,
+				F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,

@@ -386,7 +386,8 @@ private extension SingInController {
     func handleSignUpButton() {
         let registrationViewController = SingUpController()
         registrationViewController.modalPresentationStyle = .fullScreen
-        present(registrationViewController, animated: true, completion: nil)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.pushViewController(registrationViewController, animated: true)
     }
 
     func togglePasswordVisibility() {
@@ -406,15 +407,5 @@ extension SingInController {
     @objc
     private func hideKeyboard() {
         view.endEditing(true)
-    }
-}
-
-extension SingInController {
-    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-            completion?()
-        }))
-        present(alert, animated: true)
     }
 }

@@ -124,7 +124,7 @@ dsgeryertdggwrsrd
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 13, leading: 19, bottom: 12, trailing: 18)
         
         let element = UIButton(configuration: configuration)
-        element.addTarget(self, action: #selector(tapSignOutButton), for: .touchUpInside)
+        element.addTarget(self, action: #selector(signOutTapped), for: .touchUpInside)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -260,9 +260,24 @@ dsgeryertdggwrsrd
     }
     
     
-    @objc func tapSignOutButton() {
-        self.navigationController?.pushViewController(OnboardingViewController(), animated: true)
-    }
+    @objc func signOutTapped(_ sender: UIButton) {
+            guard
+                let windowScene = view.window?.windowScene,
+                let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                let window = sceneDelegate.window
+            else { return }
+
+            AuthManager.shared.logout { [weak self] result in
+                switch result {
+                case .success:
+                    let vc = OnboardingViewController()
+                    let nc = UINavigationController(rootViewController: vc)
+                    window.rootViewController = nc
+                case .failure(let error):
+                    self?.showAlert(title: "Ошибка", message: error.localizedDescription)
+                }
+            }
+        }
     
     @objc func tapEditButton() {
         self.navigationController?.pushViewController(EditProfileViewController(), animated: true)

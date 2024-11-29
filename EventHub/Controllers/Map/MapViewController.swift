@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
     var places: [Place] = []
     var placeCoordinates: [Coords] = []
     var eventFilter: EventFilter!
+    let cell = FavCell()
     
     private let eventInfoTableView: UITableView = {
         let tableView = UITableView()
@@ -72,7 +73,9 @@ class MapViewController: UIViewController {
         
         eventInfoTableView.delegate = self
         eventInfoTableView.dataSource = self
-        eventInfoTableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+        eventInfoTableView.register(FavCell.self, forCellReuseIdentifier: "FavCell")
+        
+        cell.bookmarkIcon.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
         //        var cityNamee = chooseCity(for: "Kazan")
         
@@ -123,6 +126,65 @@ class MapViewController: UIViewController {
            ])
         
     }
+    
+    @objc private func addBookmark() {
+        
+        if cell.bookmarkIcon.image(for: .normal) == UIImage(systemName: "bookmark") {
+            cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+               
+               var favorites = StorageManager.shared.loadFavorite()
+               
+            if favorites.contains(where: { $0.id == selectedEvent?.id }) {
+                showAlreadyInFavoritesAlert(for: selectedEvent!)
+               } else {
+                   favorites.append(selectedEvent!)
+                   StorageManager.shared.saveFavorites(favorites)
+                   showFavoriteAddedAlert(for: selectedEvent!)
+                   
+                   NotificationCenter.default.post(name: .favoriteEventAdded, object: selectedEvent!)
+               }
+           } else {
+               // Если иконка уже заполненная, это значит событие в избранном, убираем его
+               cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark"), for: .normal)
+               
+               var favorites = StorageManager.shared.loadFavorite()
+               
+               if let index = favorites.firstIndex(where: { $0.id == selectedEvent?.id }) {
+                   favorites.remove(at: index)
+                   StorageManager.shared.saveFavorites(favorites)
+                    
+               }
+           }
+       }
+    
+    private func showFavoriteAddedAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Added to Favorites",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    private func showAlreadyInFavoritesAlert(for event: Event) {
+        let alertController = UIAlertController(
+            title: "Already in Favorites!",
+            message: "\(event.title)",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
     
     func processEvents() {
         let dispatchGroup = DispatchGroup()
@@ -289,17 +351,14 @@ class MapViewController: UIViewController {
         
     }
     
+    // MARK: MapDelegate
     extension MapViewController: MKMapViewDelegate {
         
-        
-            
         func loadMapEvents() {
             // Пример загрузки событий (если события уже получены в массиве mapEvents)
             for event in mapEvents {
                    // Ищем место по placeId события
                    guard let place = places.first(where: { $0.id == event.placeId }) else { continue }
-
-                   // Получаем координаты места
                    guard let coords = place.coords else { continue }
 
                    // Создаем аннотацию для каждого события
@@ -381,7 +440,7 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as? EventCell,
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavCell", for: indexPath) as? FavCell,
               let event = selectedEvent else { return UITableViewCell() }
         
         cell.configure(with: event)
@@ -389,13 +448,22 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        hideEventInfoTable()
+        
+        // переход на Ивент + передать данные об ивенте
+        
+                let place = places[indexPath.row]
+                let eventVC = EventDetailsViewController()
+                eventVC.eventDetail = selectedEvent
+        
+                    navigationController?.pushViewController(eventVC, animated: true)
+                    tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }
+    
+    
     
 }
 

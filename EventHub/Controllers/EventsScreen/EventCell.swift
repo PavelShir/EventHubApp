@@ -10,7 +10,7 @@ import Kingfisher
 
 class EventCell: UITableViewCell {
     
-    private let containerView: UIView = {
+     let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
@@ -31,7 +31,7 @@ class EventCell: UITableViewCell {
         return icon
     }()
     
-    private let eventImageView: UIImageView = {
+      let eventImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
@@ -39,14 +39,14 @@ class EventCell: UITableViewCell {
         return imageView
     }()
     
-    private let dateLabel: UILabel = {
+      let dateLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "darkBlue")
         label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
     
-    private let titleLabel: UILabel = {
+      let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
@@ -54,7 +54,7 @@ class EventCell: UITableViewCell {
         return label
     }()
     
-    private let placeLabel: UILabel = {
+      let placeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 15)

@@ -27,13 +27,15 @@ struct Results: Codable {
     let price: String?
     let images: [Image]
     let favoritesCount: Int?
-    
+    let siteUrl: String?
+
     
     enum CodingKeys: String, CodingKey {
         case id, dates, title, slug, place, description
         case bodyText = "body_text"
         case location, categories, price, images
         case favoritesCount = "favorites_count"
+        case siteUrl = "site_url"
     }
 }
 

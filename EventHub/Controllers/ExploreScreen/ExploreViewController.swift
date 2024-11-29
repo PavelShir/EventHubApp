@@ -77,7 +77,12 @@ class ExploreViewController: UIViewController {
         
         return element
     }()
-   
+    
+    let listStackView = createHorizontalStackViewWithButtons()
+    let todayButton = createRoundedButton(title: "TODAY")
+    let filmsButton = createRoundedButton(title: "FILMS")
+    let listsButton = createRoundedButton(title: "LISTS")
+
     
     // MARK: - Variable
     
@@ -115,7 +120,12 @@ class ExploreViewController: UIViewController {
         view.addSubview(eventViewController)
        // view.addSubview(eventCardView)
         view.addSubview(nearbyStack)
-        view.addSubview(eventViewController2)
+        view.addSubview(listStackView)
+
+        upcomingStack.translatesAutoresizingMaskIntoConstraints = false
+        listStackView.addArrangedSubview(todayButton)
+        listStackView.addArrangedSubview(filmsButton)
+        listStackView.addArrangedSubview(listsButton)
     }
     
     // MARK: - Actions
@@ -133,6 +143,17 @@ extension ExploreViewController {
             
           
         ])
+    }
+    
+    private func setupConst(){
+        NSLayoutConstraint.activate([
+
+        listStackView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 10),
+        listStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+        listStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 15),
+        
+        upcomingStack.topAnchor.constraint(equalTo: listStackView.bottomAnchor, constant: 10)
+])
     }
 }
 

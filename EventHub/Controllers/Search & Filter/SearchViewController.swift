@@ -113,6 +113,7 @@ class SearchViewController: UIViewController, FilterDelegate {
     
     @objc private func filterPressed() {
         let filterVC = FilterViewController()
+        filterVC.source = .search
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
         

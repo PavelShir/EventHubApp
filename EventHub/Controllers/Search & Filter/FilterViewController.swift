@@ -13,6 +13,13 @@ protocol FilterDelegate: AnyObject {
 
 class FilterViewController: UIViewController {
     
+    enum SourceScreen {
+            case main
+            case search
+        }
+
+    var source: SourceScreen?
+    
     weak var delegate: FilterDelegate?
     let currentTime = Int(Date().timeIntervalSince1970)
 
@@ -219,6 +226,7 @@ class FilterViewController: UIViewController {
     
     @objc private func resetTapped() {
         self.dismiss(animated: true)
+        
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
@@ -298,17 +306,25 @@ class FilterViewController: UIViewController {
     }
     
     @objc func setFiltersApply() {
-
-        print(eventFilters)
-             
-            
-             delegate?.didApplyFilters(eventFilters)
-            
-             self.dismiss(animated: true) {
-             }
         
+        switch source {
+            
+        case .main:
+            let searchVC = SearchViewController()
+            searchVC.events = loadEvents(with: eventFilters)
+            present(searchVC, animated: true)
+            
+        case .search:
+            print(eventFilters)
+            delegate?.didApplyFilters(eventFilters)
+            self.dismiss(animated: true)
+            
+        case .none:
+            print("error with filterVC enum")
+            dismiss(animated: true)
         }
     }
+}
     
 
 

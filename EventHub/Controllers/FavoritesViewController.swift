@@ -9,6 +9,14 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
     
+    private let headerLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Filter"
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let date = Date()
@@ -30,9 +38,6 @@ class FavoritesViewController: UIViewController {
     private var bookmarks: [Event] = StorageManager.shared.loadFavorite()
     
     
-    
-    
-    
     // MARK: Lifecycle ViewDidLoad
     
     override func viewDidLoad() {
@@ -40,8 +45,12 @@ class FavoritesViewController: UIViewController {
         view.backgroundColor = .white
         self.hidesBottomBarWhenPushed = false
         
-        setupUI()
+        
         setupUIEmpty()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.setupUI()
+        }
         
         DispatchQueue.global(qos: .userInitiated).async {
             self.loadFavorites()
@@ -52,8 +61,7 @@ class FavoritesViewController: UIViewController {
         }
         
         
-        //в ТАббаре тоже появляется подпись,которой быть не должно
-        self.title = "Favorites"
+        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -77,15 +85,22 @@ class FavoritesViewController: UIViewController {
     
     private func setupUI() {
         
+        view.addSubview(headerLabel)
+       NSLayoutConstraint.activate([
+        headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
+           headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+       ])
+        
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
         view.addSubview(tableView)
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
         NSLayoutConstraint.activate([
             
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
@@ -236,14 +251,12 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         
         // переход на Ивент + передать данные об ивенте
         
-        //        let selectedEvent = eventData[indexPath.row]
-        //        let eventVC = Explore()
-        //        eventVC.event = selectedEvent
-        //
-        //            navigationController?.pushViewController(eventVC, animated: true)
-        //            tableView.deselectRow(at: indexPath, animated: true)
-        //        }
-        
+        let selectedEvent = bookmarks[indexPath.row]
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = selectedEvent
+
+            navigationController?.pushViewController(eventVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

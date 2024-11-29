@@ -138,7 +138,7 @@ class EventCell: UITableViewCell {
         loadPlace(placeId: placeId) { [weak self] place in
                 DispatchQueue.main.async {
                     if let place = place {
-                        self?.placeLabel.text = place.address ?? "No address available"
+                        self?.placeLabel.text = (event.locationSlug ?? "") + ", " + (place.address ?? "")
                     } else {
                         self?.placeLabel.text = event.locationSlug
                     }

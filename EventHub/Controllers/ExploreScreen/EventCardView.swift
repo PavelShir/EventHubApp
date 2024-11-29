@@ -21,7 +21,7 @@ class EventCardView: UIView {
     func configure(with event: Event){
         image.image = UIImage(named: event.images ?? "hands")
         titleLabel.text = event.title
-        address.text = "event.placeId"
+        
         
         
         let ( mmm, d ) = MMMDayPair(date: event.startDate)

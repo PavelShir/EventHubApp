@@ -125,10 +125,10 @@ class ExploreViewController: UIViewController {
         
     }
     
-    func goToDetail(with: Event){
+    func goToDetail(with event: Event){
         let eventVC = EventDetailsViewController()
-        //eventVC.eventDetail = selectedEvent
-        print("go to event details")
+        eventVC.eventDetail = event
+        //print("go to event details")
         
         navigationController?.pushViewController(eventVC, animated: true)
     }

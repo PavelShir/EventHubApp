@@ -84,7 +84,6 @@ class MapViewController: UIViewController {
         loadEventsSuccess(with: eventFilter) { (events: [Event]) in
             DispatchQueue.main.async {
                 self.mapEvents = events
-                print(self.mapEvents)
                 self.processEvents()
                 self.loadMapEvents()
             }
@@ -196,7 +195,7 @@ class MapViewController: UIViewController {
             
             loadPlace(placeId: placeId) { [weak self] place in
                 if let place = place, let coords = place.coords {
-                    print("координаты для места: \(place.title), lat: \(coords.lat ?? 0), lon: \(coords.lon ?? 0)")
+//                    print("координаты для места: \(place.title), lat: \(coords.lat ?? 0), lon: \(coords.lon ?? 0)")
                     
                     // Добавляем место в массив places
                     self?.places.append(place)
@@ -307,43 +306,41 @@ class MapViewController: UIViewController {
     
     // MARK: - UICollectionView Delegate & DataSource
     
-    extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return Category.allCases.count
+extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Category.allCases.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: MapCollectionCell.mapIdentifier,
+            for: indexPath
+        ) as? MapCollectionCell else {
+            return UICollectionViewCell()
         }
         
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: MapCollectionCell.mapIdentifier,
-                for: indexPath
-            ) as? MapCollectionCell else {
-                return UICollectionViewCell()
-            }
-            
-            let category = Category.allCases[indexPath.item]
-            cell.configure(with: category)
-            return cell
+        let category = Category.allCases[indexPath.item]
+        cell.configure(with: category)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? MapCollectionCell else {
+            return
         }
+        let selectedCategory = Category.allCases[indexPath.item]
         
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? MapCollectionCell else {
-                return
-            }
-            let selectedCategory = chooseCategory(for: cell.titleLabel.text ?? "Other")
-            print(selectedCategory)
-            //        eventFilters.categories = selectedCategory
-        }
+        // Создаем фильтр, запрашиваем события
+        eventFilter = EventFilter(location: .moscow, categories: selectedCategory,actualSince: String(currentDate))
         
-        
-        func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
-                return
-            }
-            
-            if let category = cell.titleLabel.text {
-                //                eventFilters.categories = nil
+        loadEventsSuccess(with: eventFilter) { events in
+            DispatchQueue.main.async {
+                self.mapEvents = events
+                self.processEvents()
+                self.loadMapEvents()
             }
         }
+    }
     }
 
     
@@ -358,17 +355,20 @@ class MapViewController: UIViewController {
     extension MapViewController: MKMapViewDelegate {
         
         func loadMapEvents() {
-            // Пример загрузки событий (если события уже получены в массиве mapEvents)
+//(сначала удалить старые пины с карты)
+            mapView.removeAnnotations(mapView.annotations)
+
             for event in mapEvents {
                    // Ищем место по placeId события
                    guard let place = places.first(where: { $0.id == event.placeId }) else { continue }
                    guard let coords = place.coords else { continue }
 
+                let iconName = getIconForCategory(for: event.categories)
                    // Создаем аннотацию для каждого события
                    let eventAnnotation = EventAnnotation(
                        coordinate: CLLocationCoordinate2D(latitude: coords.lat ?? 0, longitude: coords.lon ?? 0),
                        title: event.title,
-                       categoryIcon: UIImage(named: "map.fill")
+                       categoryIcon: UIImage(named: iconName)
                    )
 
                    // Добавляем аннотацию на карту

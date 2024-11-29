@@ -470,4 +470,4 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-    #Preview {MapViewController(cityName: "kazan") }
+//    #Preview {MapViewController(cityName: "kazan") }

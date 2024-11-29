@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import GoogleSignIn
 
 
 final class SingInController: UIViewController {
 
+    let googleButton = GIDSignInButton()
+    
     // MARK: - Outlets
 
     private let titleImageView: UIImageView = {
@@ -40,7 +44,7 @@ final class SingInController: UIViewController {
             placeholder: Constants.Authorization.placeholderEmail,
             icon: UIImage(named: "iconEmail")!
         )
-        textField.text = "user@example.com"
+        textField.text = "testMail@mail.com"
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -58,7 +62,7 @@ final class SingInController: UIViewController {
             for: .editingChanged
         )
         textField.autocapitalizationType = .none
-        textField.text = "123456" // TODO: Use temporary data for development. Remove this line before production.
+        textField.text = "11223344" // TODO: Use temporary data for development. Remove this line before production.
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -202,7 +206,44 @@ final class SingInController: UIViewController {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
     }
+    
+    func signInWithGoogleTapped(_ sender: Any) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: self
+        ) { [unowned self] result, error in
+            guard error == nil else {
+                print("Google Sign-In Error:")
+                return
+            }
+            
+            guard let user = result?.user,
+                let idToken = user.idToken?.tokenString
+            else {
+                print("Failed to get ID token")
+                return
+            }
+            
+            _ = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                             accessToken: user.accessToken.tokenString)
+        }
+    }
 
+    private func firebaseSignIn(with credential: AuthCredential) {
+        Auth.auth().signIn(with: credential) { authResult, error in
+            if let error = error {
+                print("Firebase Sign-In Error: \(error.localizedDescription)")
+                return
+            }
+            print("User is signed in with Google: \(authResult?.user.email ?? "No email")")
+            // Переход на следующий экран
+        }
+    }
+    
     // MARK: - Setups
 
     private func setupView() {
@@ -220,6 +261,7 @@ final class SingInController: UIViewController {
             passwordTextField,
             togglePasswordButton,
             signInButton,
+            googleButton,
             stackView,
             stackViewPass
         ].forEach { view.addSubview($0) }
@@ -235,6 +277,9 @@ final class SingInController: UIViewController {
     }
 
     private func setupLayout() {
+        googleButton.translatesAutoresizingMaskIntoConstraints = false
+        googleButton.layer.cornerRadius = Constants.Authorization.cornerRadiusSignButton
+        
         NSLayoutConstraint.activate([
             titleImageView.topAnchor.constraint(
                 equalTo: view.topAnchor,
@@ -332,6 +377,21 @@ final class SingInController: UIViewController {
                 constant: -Constants.Authorization.horizontalMarginSingInButton
             ),
             signInButton.heightAnchor.constraint(
+                equalToConstant:  Constants.Authorization.heightSignButton
+            ),
+            googleButton.topAnchor.constraint(
+                equalTo: signInButton.bottomAnchor,
+                constant: 50
+            ),
+            googleButton.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: Constants.Authorization.horizontalMarginSingInButton
+            ),
+            googleButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Constants.Authorization.horizontalMarginSingInButton
+            ),
+            googleButton.heightAnchor.constraint(
                 equalToConstant:  Constants.Authorization.heightSignButton
             ),
             stackView.centerXAnchor.constraint(

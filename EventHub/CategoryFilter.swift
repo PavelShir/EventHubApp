@@ -83,3 +83,10 @@ func chooseCategory(for string: String) -> Category {
     }
 }
 
+//получаем иконку соответвующую названию
+func geticonName(for categoryName: String) -> String? {
+     if let category = Category.allCases.first(where: { $0.fullName.lowercased() == categoryName.lowercased() }) {
+        return category.iconName
+    }
+    return nil
+}

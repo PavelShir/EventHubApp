@@ -16,6 +16,22 @@ class MapViewController: UIViewController {
     var placeCoordinates: [Coords] = []
     var eventFilter: EventFilter!
     
+    private let eventInfoTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.isScrollEnabled = false
+        tableView.layer.cornerRadius = 10
+        tableView.layer.shadowColor = UIColor.black.cgColor
+        tableView.layer.shadowOpacity = 0.2
+        tableView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        tableView.layer.shadowRadius = 5
+        tableView.isHidden = true
+        return tableView
+    }()
+
+    private let currentDate = Int(Date().timeIntervalSince1970)
+    private var selectedEvent: Event?
+    
     private let categoryCircleView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -28,16 +44,16 @@ class MapViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-
-    init(cityName: String) {
-           self.cityName = cityName
-           super.init(nibName: nil, bundle: nil)
-       }
-    required init?(coder: NSCoder) {
-           fatalError("init(coder:) has not been implemented")
-       }
     
-    private let mapView: MKMapView = {
+    init(cityName: String) {
+        self.cityName = cityName
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    let mapView: MKMapView = {
         let map = MKMapView()
         map.translatesAutoresizingMaskIntoConstraints = false
         return map
@@ -53,22 +69,24 @@ class MapViewController: UIViewController {
         categoryCircleView.delegate = self
         categoryCircleView.dataSource = self
         categoryCircleView.register(MapCollectionCell.self, forCellWithReuseIdentifier: MapCollectionCell.mapIdentifier)
-
-//        var cityNamee = chooseCity(for: "Kazan")
         
-            //делаем фильтр и загржаем события
-        eventFilter = EventFilter(location: .moscow)
+        eventInfoTableView.delegate = self
+        eventInfoTableView.dataSource = self
+        eventInfoTableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
+        
+        //        var cityNamee = chooseCity(for: "Kazan")
+        
+        //делаем фильтр и загржаем события
+        eventFilter = EventFilter(location: .moscow, actualSince: String(currentDate))
         loadEventsSuccess(with: eventFilter) { (events: [Event]) in
             DispatchQueue.main.async {
                 self.mapEvents = events
                 print(self.mapEvents)
                 self.processEvents()
-
+                self.loadMapEvents()
             }
         }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-//            
-//        }
+
         
         
     }
@@ -76,6 +94,10 @@ class MapViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(mapView)
+        view.addSubview(eventInfoTableView)
+        
+        
+        eventInfoTableView.translatesAutoresizingMaskIntoConstraints = false
         categoryCircleView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -93,87 +115,91 @@ class MapViewController: UIViewController {
             categoryCircleView.heightAnchor.constraint(equalToConstant: 90)
         ])
         
+        NSLayoutConstraint.activate([
+               eventInfoTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+               eventInfoTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+               eventInfoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+               eventInfoTableView.heightAnchor.constraint(equalToConstant: 150)
+           ])
+        
     }
     
     func processEvents() {
+        let dispatchGroup = DispatchGroup()
         
-            let dispatchGroup = DispatchGroup()
+        for event in mapEvents {
+            guard let placeId = event.placeId else { continue }
             
-            // Перебираем все события
-            for event in mapEvents {
-                guard let placeId = event.placeId else { continue }  // Проверяем, есть ли placeId
-                
-                dispatchGroup.enter()  // Входим в группу для текущего события
-                
-                // Загружаем место по placeId
-                loadPlace(placeId: placeId) { [weak self] place in
-                    if let place = place, let coords = place.coords {
-                        // Логируем координаты
-                        print("Получены координаты для места: \(place.title), lat: \(coords.lat ?? 0), lon: \(coords.lon ?? 0)")
-
-                        // Добавляем координаты в массив
-                        self?.placeCoordinates.append(coords)
-                        
-                        // Добавляем пин на карту
-                        self?.addPinForPlace(coords)
-                    } else {
-                        print("Ошибка: Нет координат для места с placeId: \(placeId)")
-                    }
-                    dispatchGroup.leave()  // Покидаем группу после завершения загрузки места
-                }
-            }
+            dispatchGroup.enter()
             
-            // Ожидаем, пока все запросы завершатся
-            dispatchGroup.notify(queue: .main) {
-                print("Все места загружены и пины добавлены на карту")
-            }
-        }
-        
-    
-    private func setupMap() {
-        guard let cityName = cityName else {
-            print("Нет данных о городе")
-            return
-        }
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(cityName) { placemarks, error in
-            if let error = error {
-                print(error.localizedDescription)
-                
-            } else {
-                
-                if let placemark = placemarks?.first, let location = placemark.location {
-                    let coordinate = location.coordinate
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = coordinate
-                    annotation.title = self.cityName
-                    self.mapView.addAnnotation(annotation)
+            loadPlace(placeId: placeId) { [weak self] place in
+                if let place = place, let coords = place.coords {
+                    print("координаты для места: \(place.title), lat: \(coords.lat ?? 0), lon: \(coords.lon ?? 0)")
                     
-                    self.setMapRegion(center: location, radius: 10000)
+                    // Добавляем место в массив places
+                    self?.places.append(place)
+                    
+                    // Добавляем координаты в массив
+                    self?.placeCoordinates.append(coords)
+                    
+                    // Добавляем пин для события
+                    self?.addPinForEvent(event)
+                } else {
+                    print("Ошибка: Нет координат для места с placeId: \(placeId)")
                 }
+                dispatchGroup.leave()
             }
         }
     }
+        
+        
+        func setupMap() {
+            guard let cityName = cityName else {
+                print("Нет данных о городе")
+                return
+            }
+            let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(cityName) { placemarks, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    
+                } else {
+                    
+                    if let placemark = placemarks?.first, let location = placemark.location {
+                        let coordinate = location.coordinate
+                        let annotation = MKPointAnnotation()
+                        annotation.coordinate = coordinate
+                        annotation.title = self.cityName
+                        self.mapView.addAnnotation(annotation)
+                        
+                        self.setMapRegion(center: location, radius: 10000)
+                    }
+                }
+            }
+        
+    }
     
-    func addPinForPlace(_ coords: Coords) {
-        guard let lat = coords.lat, let lon = coords.lon else { return }
+        func addPinForEvent(_ event: Event) {
+            // Находим место по placeId
+            guard let place = places.first(where: { $0.id == event.placeId }) else { return }
 
-           let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-           let annotation = MKPointAnnotation()
-           annotation.coordinate = coordinate
-           annotation.title = "Место"
+            guard let lat = place.coords?.lat, let lon = place.coords?.lon else { return }
 
-           
-           let markerView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "marker")
-           markerView.markerTintColor = .systemBlue
-           markerView.glyphImage = UIImage(systemName: "star.fill")
+            // Создаем аннотацию для события
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            let eventAnnotation = EventAnnotation(
+                coordinate: coordinate,
+                title: event.title,
+                categoryIcon: UIImage(named: "map.fill")
+            )
 
-           mapView.addAnnotation(annotation)
+            // Добавляем аннотацию на карту
+            mapView.addAnnotation(eventAnnotation)
         }
-
     
     
-    private func setMapRegion(center: CLLocation, radius: CLLocationDistance) {
+    
+      func setMapRegion(center: CLLocation, radius: CLLocationDistance) {
         let coordinateRegion = MKCoordinateRegion(
             center: center.coordinate,
             latitudinalMeters: radius,
@@ -181,94 +207,191 @@ class MapViewController: UIViewController {
         )
         mapView.setRegion(coordinateRegion, animated: true)
     }
-}
-
-//extension MapViewController: CLLocationManagerDelegate {
-//
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        if let location = locations.last {
-//            locationManager.stopUpdatingLocation()
-//            let lat = location.coordinate.latitude
-//            let lon = location.coordinate.longitude
-//
-//            weatherManager.fetchWeather(latitude: lat, longitude: lon)
-//        }
-//    }
-//
-//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        print(error)
-//    }
-//}
-
-// MARK: - UICollectionView Delegate & DataSource
-
-extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Category.allCases.count
+    
+    
+    
+    private func showEventInfoTable() {
+        eventInfoTableView.isHidden = false
+        eventInfoTableView.alpha = 0
+        
+        UIView.animate(withDuration: 0.3) {
+            self.eventInfoTableView.alpha = 1
+        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: MapCollectionCell.mapIdentifier,
-            for: indexPath
-        ) as? MapCollectionCell else {
-            return UICollectionViewCell()
+}
+    
+    
+    
+    //extension MapViewController: CLLocationManagerDelegate {
+    //
+    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    //        if let location = locations.last {
+    //            locationManager.stopUpdatingLocation()
+    //            let lat = location.coordinate.latitude
+    //            let lon = location.coordinate.longitude
+    //
+    //            weatherManager.fetchWeather(latitude: lat, longitude: lon)
+    //        }
+    //    }
+    //
+    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    //        print(error)
+    //    }
+    //}
+    
+    // MARK: - UICollectionView Delegate & DataSource
+    
+    extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return Category.allCases.count
         }
         
-        let category = Category.allCases[indexPath.item]
-        cell.configure(with: category)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: MapCollectionCell.mapIdentifier,
+                for: indexPath
+            ) as? MapCollectionCell else {
+                return UICollectionViewCell()
+            }
+            
+            let category = Category.allCases[indexPath.item]
+            cell.configure(with: category)
+            return cell
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             guard let cell = collectionView.cellForItem(at: indexPath) as? MapCollectionCell else {
                 return
             }
-        let selectedCategory = chooseCategory(for: cell.titleLabel.text ?? "Other")
-        print(selectedCategory)
-//        eventFilters.categories = selectedCategory
+            let selectedCategory = chooseCategory(for: cell.titleLabel.text ?? "Other")
+            print(selectedCategory)
+            //        eventFilters.categories = selectedCategory
         }
-    
-
+        
+        
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
             guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCircleCell else {
                 return
             }
-
+            
             if let category = cell.titleLabel.text {
-//                eventFilters.categories = nil
+                //                eventFilters.categories = nil
             }
         }
-}
-
-extension MapViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 220, height: 50)
     }
 
-    }
-
-extension MapViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKPointAnnotation {
-            // Create an instance of MKMarkerAnnotationView
-            let markerView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "marker")
-            
-            // Customize the marker
-            markerView.markerTintColor = .systemBlue  // Set the color of the marker
-            markerView.glyphImage = UIImage(systemName: "star.fill") // Set an icon (optional)
-            markerView.titleVisibility = .adaptive // Automatically show/hide title
-            markerView.subtitleVisibility = .adaptive // Automatically show/hide subtitle
-            
-            return markerView
+    
+    extension MapViewController: UICollectionViewDelegateFlowLayout {
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            return CGSize(width: 220, height: 50)
         }
         
-        return nil
+    }
+    
+    extension MapViewController: MKMapViewDelegate {
+        
+        
+            
+        func loadMapEvents() {
+            // Пример загрузки событий (если события уже получены в массиве mapEvents)
+            for event in mapEvents {
+                   // Ищем место по placeId события
+                   guard let place = places.first(where: { $0.id == event.placeId }) else { continue }
+
+                   // Получаем координаты места
+                   guard let coords = place.coords else { continue }
+
+                   // Создаем аннотацию для каждого события
+                   let eventAnnotation = EventAnnotation(
+                       coordinate: CLLocationCoordinate2D(latitude: coords.lat ?? 0, longitude: coords.lon ?? 0),
+                       title: event.title,
+                       categoryIcon: UIImage(named: "map.fill")
+                   )
+
+                   // Добавляем аннотацию на карту
+                   mapView.addAnnotation(eventAnnotation)
+               }
+           }
+        
+        
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            guard let eventAnnotation = annotation as? EventAnnotation else { return nil }
+            
+            let identifier = "EventAnnotation"
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            
+            if annotationView == nil {
+                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView?.canShowCallout = true // Для отображения всплывающей информации
+            } else {
+                annotationView?.annotation = annotation
+            }
+            
+            annotationView?.image = eventAnnotation.categoryIcon
+            
+            return annotationView
+        }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            guard let eventAnnotation = view.annotation as? EventAnnotation else { return }
+                    
+                    if let eventTitle = eventAnnotation.title,
+                       let event = mapEvents.first(where: { $0.title == eventAnnotation.title }) {
+                        selectedEvent = event
+                        print(selectedEvent)
+                        eventInfoTableView.reloadData()
+                        showEventInfoTable() } else {
+                            print("Event not found for title: \(eventAnnotation.title ?? title)")
+                        }
+                    
+        }
+        
+        func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+            hideEventInfoTable()
+        }
+
+        private func hideEventInfoTable() {
+           
+                self.eventInfoTableView.alpha = 0
+                self.eventInfoTableView.isHidden = true
+                self.selectedEvent = nil
+            }
     }
     
     
+    // MARK: - Custom Annotation Class
+    class EventAnnotation: NSObject, MKAnnotation {
+        var coordinate: CLLocationCoordinate2D
+        var title: String?
+        var categoryIcon: UIImage?
+        
+        init(coordinate: CLLocationCoordinate2D, title: String?, categoryIcon: UIImage?) {
+            self.coordinate = coordinate
+            self.title = title
+            self.categoryIcon = categoryIcon
+        }
+    }
+    
+    //MARK: Tableview delegate,datasourse
+
+extension MapViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return selectedEvent == nil ? 0 : 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as? EventCell,
+              let event = selectedEvent else { return UITableViewCell() }
+        
+        cell.configure(with: event)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        hideEventInfoTable()
+    }
 }
 
-
-
-#Preview {MapViewController(cityName: "kazan") }
+    #Preview {MapViewController(cityName: "kazan") }

@@ -13,8 +13,6 @@ import GoogleSignIn
 
 
 final class SingInController: UIViewController {
-
-    let googleButton = GIDSignInButton()
     
     // MARK: - Outlets
 
@@ -139,6 +137,11 @@ final class SingInController: UIViewController {
         return button
     }()
     
+    private lazy var googleButton: UIButton = {
+        return GoogleAuthManager.shared.createGoogleButton(target: self, action: #selector(googleButtonTapped))
+       
+    }()
+    
     private let stackViewPass: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -187,6 +190,7 @@ final class SingInController: UIViewController {
     }()
 
     // MARK: - Lifecycle
+    
     override func viewWillAppear(_ animated: Bool){
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -194,12 +198,12 @@ final class SingInController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupPasswordObservers()
+        
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -207,29 +211,17 @@ final class SingInController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    func signInWithGoogleTapped(_ sender: Any) {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        let config = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = config
-        
-        GIDSignIn.sharedInstance.signIn(
-            withPresenting: self
-        ) { [unowned self] result, error in
-            guard error == nil else {
-                print("Google Sign-In Error:")
-                return
+    
+    @objc private func googleButtonTapped() {
+        Task {
+            await GoogleAuthManager.shared.signInWithGoogle(presentingViewController: self) { result in
+                switch result {
+                case .success(let user):
+                    print("User signed in: \(user.email ?? "No email")")
+                case .failure(let error):
+                    print("Sign-in failed: \(error.localizedDescription)")
+                }
             }
-            
-            guard let user = result?.user,
-                let idToken = user.idToken?.tokenString
-            else {
-                print("Failed to get ID token")
-                return
-            }
-            
-            _ = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                             accessToken: user.accessToken.tokenString)
         }
     }
 
@@ -240,7 +232,6 @@ final class SingInController: UIViewController {
                 return
             }
             print("User is signed in with Google: \(authResult?.user.email ?? "No email")")
-            // Переход на следующий экран
         }
     }
     
@@ -277,8 +268,6 @@ final class SingInController: UIViewController {
     }
 
     private func setupLayout() {
-        googleButton.translatesAutoresizingMaskIntoConstraints = false
-        googleButton.layer.cornerRadius = Constants.Authorization.cornerRadiusSignButton
         
         NSLayoutConstraint.activate([
             titleImageView.topAnchor.constraint(
@@ -413,6 +402,7 @@ final class SingInController: UIViewController {
     }
 }
 
+
 // MARK: - Actions
 
 private extension SingInController {
@@ -464,8 +454,7 @@ private extension SingInController {
 // MARK: - Keyboard
 
 extension SingInController {
-    @objc
-    private func hideKeyboard() {
+    @objc private func hideKeyboard() {
         view.endEditing(true)
     }
 }

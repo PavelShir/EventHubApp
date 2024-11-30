@@ -10,6 +10,8 @@ import UIKit
 class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     private var user: UserModel?
+    private var aboutMeTextHeightConstraint: NSLayoutConstraint!
+    private var isExpanded = false
     
     var isGuestUser: Bool {
         return AuthManager.shared.currentUser == nil
@@ -23,11 +25,9 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     var imageUser = "user"
     var nameUser = "Ashfak Sayem"
     var aboutMeContext = """
-dspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdksdspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdksdspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdksdspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdks
-+++++++++
-+++++++
-dsgeryertdggwrsrd
-"""
+        Enjoy your favorite dishes and a lovely time with your friends and family. \
+        Food from local food trucks will be available for purchase.
+        """
     
     private let scrollView: UIScrollView = {
         let element = UIScrollView()
@@ -81,15 +81,14 @@ dsgeryertdggwrsrd
     }()
     
     
-    private lazy var aboutMeText: UITextView = {
+    private lazy var aboutMeTextView: UITextView = {
         let textField = UITextView()
         textField.text = aboutMeContext
         textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
-        textField.font = UIFont(name: "Inter-Regular", size: 14)
-        //textField.sizeThatFits(CGSize(width: 120, height: 40))
-        textField.backgroundColor = .white
-        textField.isEditable = true
-        textField.isScrollEnabled = true
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.backgroundColor = .clear
+        textField.isEditable = false
+        textField.isScrollEnabled = false
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -134,6 +133,7 @@ dsgeryertdggwrsrd
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
+    
     private lazy var signInButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.title = "Sign In"
@@ -171,34 +171,16 @@ dsgeryertdggwrsrd
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
-  
-    var heightConstraint = NSLayoutConstraint()
     
-    private lazy var button: UIButton = {
-        let element = UIButton()
-        var config = UIButton.Configuration.plain()
-        config.title = "Read More"
-        config.baseForegroundColor = .blue
-        
-        config.titleAlignment = .trailing
-//        config.indicator = .none
-        element.configuration = config
-        element.addTarget(self, action: #selector(actionButton), for: .touchUpInside)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    @objc func actionButton() {
-        let isNormal = heightConstraint.constant
-        if isNormal  == 80 {
-            heightConstraint.constant = aboutMeText.contentSize.height
-            print("открываем. \(aboutMeText.contentSize.height)")
-        } else {
-            heightConstraint.constant = 80
-            print("закрыывеем, \(aboutMeText.contentSize.height)")
-        }
-    }
-    
-    
+    private lazy var readMoreButton: UIButton = {
+            let button = UIButton(type: .system)
+            button.setTitle("Read More", for: .normal)
+            button.setTitleColor(.blue, for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            button.addTarget(self, action: #selector(toggleReadMore), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+        }()
     
     //     MARK: - Lifecycle Methods
     
@@ -218,6 +200,26 @@ dsgeryertdggwrsrd
         }
     }
     
+    @objc private func toggleReadMore() {
+        aboutMeTextView.layoutIfNeeded()
+        isExpanded.toggle()
+        
+        let targetHeight: CGFloat
+            if isExpanded {
+                targetHeight = aboutMeTextView.contentSize.height
+            } else {
+                targetHeight = 50
+            }
+            aboutMeTextHeightConstraint.constant = targetHeight
+        
+        let buttonTitle = isExpanded ? "Read Less" : "Read More"
+        readMoreButton.setTitle(buttonTitle, for: .normal)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
     func loadProfileData() {
         
         if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
@@ -230,7 +232,7 @@ dsgeryertdggwrsrd
         }
         
         if let storedAddress = UserDefaults.standard.string(forKey: "profileAddress") {
-            aboutMeText.text = storedAddress
+            aboutMeTextView.text = storedAddress
         }
     }
     
@@ -244,9 +246,12 @@ dsgeryertdggwrsrd
         scrollView.addSubview(aboutMeStackView)
         aboutMeStackView.addArrangedSubview(aboutMeLabel)
         nameStackView.addArrangedSubview(nameLabel)
-        scrollView.addSubview(aboutMeText)
-        scrollView.addSubview(button)
+        scrollView.addSubview(aboutMeTextView)
+        scrollView.addSubview(readMoreButton)
         scrollView.addSubview(signOutButton)
+        
+        aboutMeTextHeightConstraint = aboutMeTextView.heightAnchor.constraint(equalToConstant: 50)
+        aboutMeTextHeightConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -271,15 +276,12 @@ dsgeryertdggwrsrd
             aboutMeStackView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 143),
             aboutMeStackView.heightAnchor.constraint(equalToConstant: 22),
             
-            aboutMeText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
-            aboutMeText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            aboutMeText.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
-            aboutMeText.heightAnchor.constraint(equalToConstant: 80),
+            aboutMeTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
+            aboutMeTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
+            aboutMeTextView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
             
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            button.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
-            button.heightAnchor.constraint(equalToConstant: 80),
+            readMoreButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            readMoreButton.topAnchor.constraint(equalTo: aboutMeTextView.bottomAnchor, constant: 10),
             
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49),

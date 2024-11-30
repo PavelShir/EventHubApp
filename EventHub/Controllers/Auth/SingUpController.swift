@@ -57,16 +57,15 @@ final class SingUpController: UIViewController {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         button.tintColor = .gray
-        button.addAction(
-            UIAction { [weak self] _ in
-                self?.togglePasswordVisibility()
-            },
-            for: .touchUpInside
-        )
+        button.addTarget(self, action: #selector(PasswordVisibility), for: .touchUpInside)
         button.isHidden = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    @objc private func PasswordVisibility() {
+        togglePasswordVisibility(for: passwordTextField, button: togglePasswordButton1)
+    }
 
     private let repeatPasswordTextField: UITextField = {
         let textField = UITextField.create(
@@ -83,16 +82,15 @@ final class SingUpController: UIViewController {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         button.tintColor = .gray
-        button.addAction(
-            UIAction { [weak self] _ in
-                self?.togglePasswordVisibility()
-            },
-            for: .touchUpInside
-        )
+        button.addTarget(self, action: #selector(toggleRepeatPasswordVisibility), for: .touchUpInside)
         button.isHidden = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    @objc private func toggleRepeatPasswordVisibility() {
+        togglePasswordVisibility(for: repeatPasswordTextField, button: togglePasswordButton2)
+    }
 
     private lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
@@ -177,11 +175,11 @@ final class SingUpController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    func togglePasswordVisibility() {
-        passwordTextField.isSecureTextEntry.toggle()
-        let image = passwordTextField.isSecureTextEntry ? "eye.slash": "eye"
-        togglePasswordButton1.setImage(UIImage(systemName: image), for: .normal)
-        togglePasswordButton2.setImage(UIImage(systemName: image), for: .normal)
+    func togglePasswordVisibility(for textField: UITextField, button: UIButton) {
+        
+        textField.isSecureTextEntry.toggle()
+        let image = textField.isSecureTextEntry ? "eye.slash": "eye"
+        button.setImage(UIImage(systemName: image), for: .normal)
     }
     
     private func setupView() {

@@ -140,7 +140,7 @@ class HeaderExploreView: UIView {
         return element
     }()
     
-    private lazy var filterButton : UIButton = {
+     var filterButton : UIButton = {
         let element = UIButton(type: .custom)
         element.backgroundColor = UIColor(named: "primaryBlue")
         let image = UIImage(systemName: "line.3.horizontal.decrease")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -148,7 +148,6 @@ class HeaderExploreView: UIView {
         element.titleLabel?.font = .systemFont(ofSize: 12)
         element.layer.cornerRadius = 10
         element.setImage(image, for: .normal)
-        element.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -189,7 +188,6 @@ class HeaderExploreView: UIView {
     // MARK: - Actions
     
     @objc func notificationButtonPressed(){
-        
     }
 
 }

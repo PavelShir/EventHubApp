@@ -50,6 +50,8 @@
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
 		F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */; };
+		F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7F42CFB447C00FD6DFB /* PresentationController.swift */; };
+		F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */; };
 		F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659262CF0DC3D00CA3DE7 /* FavCell.swift */; };
 		F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */; };
 		F336592D2CF12F3400CA3DE7 /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */; };
@@ -110,6 +112,8 @@
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionCell.swift; sourceTree = "<group>"; };
+		F323F7F42CFB447C00FD6DFB /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
+		F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F33659262CF0DC3D00CA3DE7 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
 		F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentControl.swift; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 			children = (
 				79FE3CBC2CF72A7B001A4367 /* EventDetailHeader.swift */,
 				79FE3CBD2CF72A7B001A4367 /* EventDetailsViewController.swift */,
+				F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */,
+				F323F7F42CFB447C00FD6DFB /* PresentationController.swift */,
 			);
 			path = EventDetails;
 			sourceTree = "<group>";
@@ -457,6 +463,7 @@
 				79FE3CC22CF72AF9001A4367 /* UIStackView + Ext.swift in Sources */,
 				79FE3CBB2CF72A47001A4367 /* EventCollectionView.swift in Sources */,
 				79FE3CBF2CF72A7B001A4367 /* EventDetailsViewController.swift in Sources */,
+				F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */,
 				79FE3CC02CF72A7B001A4367 /* EventDetailHeader.swift in Sources */,
 				8F8452E82CEC76F0000AE3BD /* MapViewController.swift in Sources */,
 				F336592D2CF12F3400CA3DE7 /* CustomSegmentControl.swift in Sources */,
@@ -467,6 +474,7 @@
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
 				F33659392CF51F5600CA3DE7 /* EventFilter.swift in Sources */,
 				F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */,
+				F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */,
 				8F8EA6E62CEA3FEE00FC1364 /* AppDelegate.swift in Sources */,
 				F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */,
 				8F8452EB2CEC76F0000AE3BD /* ProfileViewController.swift in Sources */,
@@ -631,7 +639,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.00;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -662,7 +670,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.00;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

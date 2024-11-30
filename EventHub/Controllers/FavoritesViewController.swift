@@ -11,7 +11,7 @@ class FavoritesViewController: UIViewController {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Filter"
+        label.text = "Favorites"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

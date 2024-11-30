@@ -13,11 +13,12 @@ class EventCardView: UIView {
    
     
     private lazy var image : UIImageView = {
-        let element = UIImageView(frame: CGRect(x: 9, y: 10, width: 218, height: 131))
+//        let element = UIImageView(frame: CGRect(x: 9, y: 10, width: 218, height: 131))
+        let element = UIImageView()
         element.layer.cornerRadius = 10
         element.clipsToBounds = true
         element.contentMode = .scaleAspectFill
-        //element.translatesAutoresizingMaskIntoConstraints = false
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
         
@@ -213,10 +214,11 @@ class EventCardView: UIView {
         NSLayoutConstraint.activate([
             dayLabel.centerXAnchor.constraint(equalTo: dateView.centerXAnchor),
           
-          /*  image.topAnchor.constraint(equalTo: self.topAnchor, constant: 9),
+            image.topAnchor.constraint(equalTo: self.topAnchor, constant: 9),
             image.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 9),
             image.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),            
-            image.heightAnchor.constraint(equalToConstant: 131),*/
+            image.heightAnchor.constraint(equalToConstant: 131),
+            image.widthAnchor.constraint(equalToConstant: 218),
         ])
     }
     

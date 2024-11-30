@@ -4,7 +4,7 @@ import SwiftUI
 class CategoryCollectionView: UIView{
     
     let categoryList = [
-        CategoryModel(label: "Sport", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
+        CategoryModel(label: "Sports", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
         CategoryModel(label: "Music", imageName: "music.note", color: UIColor(named: "primaryOrange")!),
         CategoryModel(label: "Food", imageName: "fork.knife", color: UIColor(named: "primaryGreen")!),
         CategoryModel(label: "Art", imageName: "paintpalette.fill", color: UIColor(named: "primaryLightBlue")!),

@@ -28,36 +28,48 @@ class ExploreViewController: UIViewController, FilterDelegate {
     }
     
     
+    var buttonStack = createHorizontalStackViewWithButtons()
+    
+    
+    
     
     // MARK: - UI
+    
+   
     
     private var cityPicker: UIPickerView!
    
     lazy var categoryCollectionView: CategoryCollectionView = {
-        let element =  CategoryCollectionView(frame: CGRect(x: 0, y: 190, width: 402, height: 39))
+//        let element =  CategoryCollectionView(frame: CGRect(x: 0, y: 190, width: 402, height: 39))
+        let element =  CategoryCollectionView()
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var eventViewController :EventCollectionView = {
-        let element = EventCollectionView(frame: CGRect(x: 20, y: 290, width: 402, height: 255))
-        
+        let element = EventCollectionView()
+//        let element = EventCollectionView(frame: CGRect(x: 20, y: 290, width: 402, height: 255))
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var eventViewController2 :EventCollectionView = {
-        let element = EventCollectionView(frame: CGRect(x: 20, y: 595, width: 402, height: 255))
-        
+        let element = EventCollectionView()
+//        let element = EventCollectionView(frame: CGRect(x: 20, y: 595, width: 402, height: 255))
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     lazy var headerCustomView: HeaderExploreView = {
-        let element =  HeaderExploreView(frame: CGRect(x: 0, y: 0, width: 402, height: 210))
+        let element =  HeaderExploreView()
+//        let element =  HeaderExploreView(frame: CGRect(x: 0, y: 0, width: 402, height: 210))
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var upcomingStack : UIStackView = {
-        let element = UIStackView(frame: CGRect(x: 20, y: 250, width: 362, height: 30))
-        
+//        let element = UIStackView(frame: CGRect(x: 20, y: 250, width: 362, height: 30))
+        let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .equalSpacing
         
@@ -76,13 +88,13 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
-        
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var nearbyStack : UIStackView = {
-        let element = UIStackView(frame: CGRect(x: 20, y: 560, width: 362, height: 30))
-        
+//        let element = UIStackView(frame: CGRect(x: 20, y: 560, width: 362, height: 30))
+        let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .equalSpacing
         
@@ -99,8 +111,14 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
-        
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
+    }()
+    
+    let scrollView: UIScrollView = {
+        let v = UIScrollView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
     }()
    
     
@@ -128,8 +146,12 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
+        
+        
         loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
-            
+           
+        headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        
         }
     
     func loadSuccess(e: [Event]) {
@@ -137,17 +159,27 @@ class ExploreViewController: UIViewController, FilterDelegate {
     }
     
     private func setView(){
-        view.backgroundColor =  .white
+        view.backgroundColor =  .gray.withAlphaComponent(0.05)
         headerCustomView.delegate = self
         // view.addSubview(headerView)
         //headerView.addSubview(headerStack)
         view.addSubview(headerCustomView)
         view.addSubview(categoryCollectionView)
-        view.addSubview(upcomingStack)
-        view.addSubview(eventViewController)
-       // view.addSubview(eventCardView)
-        view.addSubview(nearbyStack)
-        view.addSubview(eventViewController2)
+        view.addSubview(buttonStack)
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(upcomingStack)
+        scrollView.addSubview(eventViewController)
+        scrollView.addSubview(nearbyStack)
+        scrollView.addSubview(eventViewController2)
+        
+        
+
+//        view.addSubview(upcomingStack)
+//        view.addSubview(eventViewController)
+//       // view.addSubview(eventCardView)
+//        view.addSubview(nearbyStack)
+//        view.addSubview(eventViewController2)
         
         setupCityPicker()
     }
@@ -168,6 +200,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
     }
     
+
     @objc func filterPressed() {
         
         print("pressed Explore")
@@ -175,6 +208,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
         
+
         present(filterVC, animated: true)
     }
     
@@ -193,7 +227,54 @@ extension ExploreViewController {
     private func setupConstrains(){
         NSLayoutConstraint.activate([
             
-          
+            headerCustomView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            headerCustomView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            headerCustomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            headerCustomView.heightAnchor.constraint(equalToConstant: 179),
+            
+            categoryCollectionView.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: -20),
+            categoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            categoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            categoryCollectionView.heightAnchor.constraint(equalToConstant: 40),
+            
+            //buttonStack
+            buttonStack.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 28.32),
+            buttonStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            buttonStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            buttonStack.heightAnchor.constraint(equalToConstant: 40),
+            
+            //scrollView
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8.0),
+            scrollView.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.0),
+                    scrollView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                    
+            
+//            upcomingStack
+            upcomingStack.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.84),
+            upcomingStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            upcomingStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            upcomingStack.heightAnchor.constraint(equalToConstant: 40),
+            
+            
+//            eventViewController
+            eventViewController.topAnchor.constraint(equalTo: upcomingStack.bottomAnchor, constant: 10),
+            eventViewController.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            eventViewController.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            eventViewController.heightAnchor.constraint(equalToConstant: 255),
+//            nearbyStack
+            nearbyStack.topAnchor.constraint(equalTo: eventViewController.bottomAnchor, constant: 10),
+            nearbyStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            nearbyStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            nearbyStack.heightAnchor.constraint(equalToConstant: 40),
+//            eventViewController2
+            eventViewController2.topAnchor.constraint(equalTo: nearbyStack.bottomAnchor, constant: 0),
+            eventViewController2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            eventViewController2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+//            eventViewController2.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            eventViewController2.heightAnchor.constraint(equalToConstant: 255),
+            
+            
         ])
     }
 }
@@ -241,40 +322,68 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         let cityChosen = City.allCases[row].fullName
 //        locationButton.setTitle(cityChosen, for: .normal)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.cityPicker.isHidden = true
-        }
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+      //      self.cityPicker.isHidden = true
+       // }
 //        selectedCity = chooseCity(for: cityChosen)
 //        eventFilters.location = selectedCity
     }
     
 }
 
-//struct ViewControllerProvider: PreviewProvider {
-//    static var previews: some View {
-//        ExploreViewController().showPreview()
-//    }
-//}
-//
-//
-//extension UIViewController {
-//    private struct Preview : UIViewControllerRepresentable {
-//        let viewController: UIViewController
-//        
-//        
-//        
-//        func makeUIViewController(context: Context) -> some UIViewController {
-//            viewController
-//        }
-//        
-//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-//            
-//        }
-//    }
-//    
-//    func showPreview() -> some View {
-//        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-//    }
-//    
-//}
+func createHorizontalStackViewWithButtons() -> UIStackView {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 16
+    stackView.alignment = .center
+    stackView.distribution = .fillEqually
+    
+    stackView.addArrangedSubview(createRoundedButton(title: "TODAY"))
+    stackView.addArrangedSubview(createRoundedButton(title: "FILMS"))
+    stackView.addArrangedSubview(createRoundedButton(title: "LISTS"))
+    
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    
+    return stackView
+}
+
+ func createRoundedButton(title: String) -> UIButton {
+    let button = UIButton(type: .system)
+    button.setTitle(title, for: .normal)
+    button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 18)
+    button.setTitleColor(.white, for: .normal)
+     button.backgroundColor = UIColor(named: "primaryBlue")
+    button.layer.cornerRadius = 20
+    button.translatesAutoresizingMaskIntoConstraints = false
+    button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    return button
+}
+
+struct ViewControllerProvider: PreviewProvider {
+    static var previews: some View {
+        ExploreViewController().showPreview()
+    }
+}
+
+
+extension UIViewController {
+    private struct Preview : UIViewControllerRepresentable {
+        let viewController: UIViewController
+        
+        
+        
+        func makeUIViewController(context: Context) -> some UIViewController {
+            viewController
+        }
+        
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+            
+        }
+    }
+    
+    func showPreview() -> some View {
+        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+    }
+    
+}
 

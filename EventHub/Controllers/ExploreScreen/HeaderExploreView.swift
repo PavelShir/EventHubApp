@@ -25,7 +25,11 @@ class HeaderExploreView: UIView {
     
     private let searchBar: UISearchBar = {
         let search = UISearchBar()
-        search.placeholder = "Search..."
+        
+        let placeholderText = NSAttributedString(string: "Search...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        search.searchTextField.attributedPlaceholder = placeholderText
+        
+        //search.tintColor
         search.translatesAutoresizingMaskIntoConstraints = false
         search.backgroundColor = UIColor(named: "darkBlue")
         
@@ -132,7 +136,9 @@ class HeaderExploreView: UIView {
         return element
     }()
     
-    private lazy var filterButton : UIButton = {
+
+     var filterButton : UIButton = {
+
         let element = UIButton(type: .custom)
         element.backgroundColor = UIColor(named: "primaryBlue")
         let image = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -141,7 +147,9 @@ class HeaderExploreView: UIView {
         
         element.layer.cornerRadius = 15
         element.setImage(image, for: .normal)
+
         element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -194,7 +202,6 @@ class HeaderExploreView: UIView {
     }
     
     @objc func notificationButtonPressed(){
-        
     }
 
 }
@@ -214,9 +221,9 @@ extension HeaderExploreView {
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            headerView.heightAnchor.constraint(equalToConstant: 210),
+            headerView.heightAnchor.constraint(equalToConstant: 179),
             
-            locationRow.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 70),
+            locationRow.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 60),
             locationRow.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10),
             locationRow.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -30),
             

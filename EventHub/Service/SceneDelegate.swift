@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navigationController: UINavigationController
         
-        let onboardingController = ExploreViewController()
+        let onboardingController = TabBarViewController()
 //        let onboardingController = SingInController()
         navigationController = UINavigationController(rootViewController: onboardingController)
         

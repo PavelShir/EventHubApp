@@ -269,7 +269,7 @@ class FilterViewController: UIViewController {
         todayButton.isSelected = false
         tomorrowButton.isSelected = false
         thisWeekButton.isSelected = false
-      
+        calendarButton.isSelected = false
         
         sender.isSelected = true
         sender.backgroundColor = sender.isSelected ? UIColor(named: Constants.allColors.primaryBlue) : .white
@@ -281,21 +281,23 @@ class FilterViewController: UIViewController {
             eventFilters.actualUntil = String((currentTime) + 86400)
             thisWeekButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
-            
+            calendarButton.backgroundColor = .white
             
         case tomorrowButton:
             eventFilters.actualSince = String((currentTime) + 86400)
             eventFilters.actualUntil = String((currentTime) + 86400 * 2)
             todayButton.backgroundColor = .white
             thisWeekButton.backgroundColor = .white
-            
+            calendarButton.backgroundColor = .white
+
             
         case thisWeekButton:
             eventFilters.actualSince = String(Int(currentTime))
             eventFilters.actualUntil = String(Int(currentTime + 86400 * 7))
             todayButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
-           
+            calendarButton.backgroundColor = .white
+
 
         default:
             eventFilters.actualSince = String(currentTime)

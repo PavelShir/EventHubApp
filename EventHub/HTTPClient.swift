@@ -20,7 +20,7 @@ func createURL(with filters: EventFilter,
       var components = URLComponents(string: "https://kudago.com/public-api/v1.4/events/")
       
       components?.queryItems = [
-          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images,favorites_count"),
+          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images,favorites_count,participants"),
           URLQueryItem(name: "text_format", value: "text"),
           URLQueryItem(name: "page_size", value: "35") //максимальное число объектов в массиве
       ]
@@ -131,6 +131,7 @@ struct Event: Codable, Equatable {
     let endDate: Int?
     let locationSlug: String?
     let placeId: Int?
+    let participants: [Participant]
 
     init(from result: Results) {
         self.id = result.id
@@ -152,7 +153,26 @@ struct Event: Codable, Equatable {
 
         self.locationSlug = result.location.slug?.rawValue ?? ""
         self.placeId = result.place?.id
+        self.participants = result.participants
     }
+    
+        //это нужно для протокола equatable
+    static func ==(lhs: Event, rhs: Event) -> Bool {
+           return lhs.id == rhs.id
+               && lhs.title == rhs.title
+               && lhs.description == rhs.description
+               && lhs.bodyText == rhs.bodyText
+               && lhs.categories == rhs.categories
+               && lhs.price == rhs.price
+               && lhs.images == rhs.images
+               && lhs.favoritesCount == rhs.favoritesCount
+               && lhs.startDate == rhs.startDate
+               && lhs.endDate == rhs.endDate
+               && lhs.locationSlug == rhs.locationSlug
+               && lhs.placeId == rhs.placeId
+               && lhs.participants == rhs.participants
+       }
+    
 }
 
 // функция для обработки массива дат. Получаем 1 дату из массива

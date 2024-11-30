@@ -13,7 +13,7 @@ class ListCell: EventCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(named: "primaryBlue")
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         return view
     }()
     
@@ -56,28 +56,33 @@ class ListCell: EventCell {
     private func setupCustomViews() {
         
         containerView.addSubview(titleLabel)
+        containerView.addSubview(purpleView)
+        purpleView.addSubview(stackView)
         eventImageView.removeFromSuperview()
         dateLabel.removeFromSuperview()
         bookmarkIcon.removeFromSuperview()
+        stackView.addArrangedSubview(label)  
+               stackView.addArrangedSubview(arrowButton)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             
-            titleLabel.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            
-            purpleView.widthAnchor.constraint(equalToConstant: 70),
-            purpleView.heightAnchor.constraint(equalToConstant: 20),
+
+            // Ограничения для purpleView
+            purpleView.widthAnchor.constraint(equalToConstant: 100),
+            purpleView.heightAnchor.constraint(equalToConstant: 30),
             purpleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
-            purpleView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 15),
-            
-            
+            purpleView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -15),
+
+            // Ограничения для stackView внутри purpleView
             stackView.leadingAnchor.constraint(equalTo: purpleView.leadingAnchor, constant: 8),
             stackView.trailingAnchor.constraint(equalTo: purpleView.trailingAnchor, constant: -8),
             stackView.topAnchor.constraint(equalTo: purpleView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: purpleView.bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: purpleView.bottomAnchor)
             
         ])
 

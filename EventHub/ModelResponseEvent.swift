@@ -28,6 +28,7 @@ struct Results: Codable {
     let images: [Image]
     let favoritesCount: Int?
     let siteUrl: String?
+    let participants: [Participant]
 
     
     enum CodingKeys: String, CodingKey {
@@ -36,7 +37,10 @@ struct Results: Codable {
         case location, categories, price, images
         case favoritesCount = "favorites_count"
         case siteUrl = "site_url"
+        case participants
     }
+    
+ 
 }
 
 // MARK: - DateElement
@@ -153,4 +157,13 @@ struct Place: Codable {
 struct Coords: Codable {
     let lat: Double?
     let lon: Double?
+}
+
+    //Agent
+struct Participant: Codable, Equatable {
+    let agent: Agent
+}
+
+struct Agent: Codable,Equatable {
+    let title: String
 }

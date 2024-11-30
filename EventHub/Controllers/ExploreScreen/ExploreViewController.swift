@@ -12,30 +12,24 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     
     func didApplyFilters(_ eventFilters: EventFilter) {
-       // events = []
-      //  filteredEvents = []
+        events = []
+        filteredEvents = []
         print("eventFilters")
         
-//        loadEventsSuccess(with: eventFilters) { events in
-//            // Этот блок будет выполнен после того, как события будут загружены
-//            self.events = events
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
+        loadEventsSuccess(with: eventFilters) { events in
+            // Этот блок будет выполнен после того, как события будут загружены
+            self.events = events
+            DispatchQueue.main.async {
+                self.eventViewController.reloadCollectionView()
+            }
+        }
                           
         
     }
     
-    
-    var buttonStack = createHorizontalStackViewWithButtons()
-    
-    
-    
-    
     // MARK: - UI
     
-   
+    private var buttonStack = createHorizontalStackViewWithButtons()
     
     private var cityPicker: UIPickerView!
    
@@ -123,6 +117,14 @@ class ExploreViewController: UIViewController, FilterDelegate {
    
     
     // MARK: - Variable
+    let currentTime = Int(Date().timeIntervalSince1970)
+    var eventFilters = EventFilter()
+    var selectedCity: City?
+    var selectedtDate: String!
+    var selectedCategory: Category?
+    
+    var filteredEvents: [Event] = []
+    var isSearching: Bool = false
     
     private var events: [Event] = []
     {
@@ -166,7 +168,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         view.addSubview(headerCustomView)
         view.addSubview(categoryCollectionView)
         view.addSubview(buttonStack)
-        scrollView.showsVerticalScrollIndicator = true
+        scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
         scrollView.addSubview(upcomingStack)
         scrollView.addSubview(eventViewController)
@@ -324,11 +326,12 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         let cityChosen = City.allCases[row].fullName
 //        locationButton.setTitle(cityChosen, for: .normal)
-        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-      //      self.cityPicker.isHidden = true
-       // }
-//        selectedCity = chooseCity(for: cityChosen)
-//        eventFilters.location = selectedCity
+        headerCustomView.locationLabel.text = cityChosen
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.cityPicker.isHidden = true
+        }
+        selectedCity = chooseCity(for: cityChosen)
+        eventFilters.location = selectedCity
     }
     
 }

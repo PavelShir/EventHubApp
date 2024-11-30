@@ -214,9 +214,9 @@ class EventCardView: UIView {
         NSLayoutConstraint.activate([
             dayLabel.centerXAnchor.constraint(equalTo: dateView.centerXAnchor),
           
-            image.topAnchor.constraint(equalTo: self.topAnchor, constant: 9),
-            image.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 9),
-            image.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),            
+            image.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 9),
+            image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),            
             image.heightAnchor.constraint(equalToConstant: 131),
             image.widthAnchor.constraint(equalToConstant: 218),
         ])

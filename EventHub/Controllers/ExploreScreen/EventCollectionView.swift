@@ -92,7 +92,7 @@ extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = mainCollectionView.frame.width / 1.7
+        let size = mainCollectionView.frame.width / 1.58
         return CGSize(width: size, height: 255)
     }
     

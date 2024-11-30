@@ -27,9 +27,10 @@ class HeaderExploreView: UIView {
         let search = UISearchBar()
         
         let placeholderText = NSAttributedString(string: "Search...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+      
         search.searchTextField.attributedPlaceholder = placeholderText
+        search.searchTextField.textColor = .white
         
-        //search.tintColor
         search.translatesAutoresizingMaskIntoConstraints = false
         search.backgroundColor = UIColor(named: "darkBlue")
         
@@ -80,9 +81,9 @@ class HeaderExploreView: UIView {
         return element
     }()
     
-    private lazy var locationLabel : UILabel = {
+    var locationLabel : UILabel = {
         let element = UILabel()
-        element.text = "New York, USA"
+        element.text = "Moscow"
         element.textColor = .white
         element.font = .systemFont(ofSize: 13)
         element.translatesAutoresizingMaskIntoConstraints = false

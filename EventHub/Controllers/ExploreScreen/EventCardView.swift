@@ -14,6 +14,9 @@ class EventCardView: UIView {
     
     private lazy var image : UIImageView = {
         let element = UIImageView(frame: CGRect(x: 9, y: 10, width: 218, height: 131))
+        element.layer.cornerRadius = 10
+        element.clipsToBounds = true
+        element.contentMode = .scaleAspectFill
         //element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()

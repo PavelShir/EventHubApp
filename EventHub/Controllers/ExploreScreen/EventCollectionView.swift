@@ -58,6 +58,9 @@ class EventCollectionView: UIView {
        
     }
     
+   
+    
+    
     private func setupView() {
         addSubview(mainCollectionView)
         
@@ -128,6 +131,8 @@ class EventCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 10
         eventCardView.configure(with: event)
     }
+    
+    
    
     private func setupView() {
         

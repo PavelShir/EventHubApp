@@ -5,14 +5,33 @@
 //  Created by Дмирий Зядик on 18.11.2024.
 //
 
-import Foundation
 import UIKit
 import SwiftUI
 
-class ExploreViewController: UIViewController {
+class ExploreViewController: UIViewController, FilterDelegate {
+    
+    
+    func didApplyFilters(_ eventFilters: EventFilter) {
+       // events = []
+      //  filteredEvents = []
+        print("eventFilters")
+        
+//        loadEventsSuccess(with: eventFilters) { events in
+//            // Этот блок будет выполнен после того, как события будут загружены
+//            self.events = events
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+                          
+        
+    }
+    
     
     
     // MARK: - UI
+    
+    private var cityPicker: UIPickerView!
    
     lazy var categoryCollectionView: CategoryCollectionView = {
         let element =  CategoryCollectionView(frame: CGRect(x: 0, y: 190, width: 402, height: 39))
@@ -51,6 +70,10 @@ class ExploreViewController: UIViewController {
         text2.font = .systemFont(ofSize: 14)
         text2.textColor = .gray
         
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+        text2.addGestureRecognizer(gesture)
+        
+        
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
         
@@ -71,6 +94,8 @@ class ExploreViewController: UIViewController {
         text2.text = "SeeAll"
         text2.font = .systemFont(ofSize: 14)
         text2.textColor = .gray
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+        text2.addGestureRecognizer(gesture)
         
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
@@ -91,12 +116,17 @@ class ExploreViewController: UIViewController {
             }
     }
     
+    var filter = EventFilter()
+    private var userCity: City = .moscow
+    
     // MARK: - Life Cicle
     
     override func viewDidLoad()  {
-            super.viewDidLoad()
-            setView()
-            setupConstrains()
+        super.viewDidLoad()
+        setView()
+        setupConstrains()
+        
+        filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
         loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
             
@@ -108,6 +138,7 @@ class ExploreViewController: UIViewController {
     
     private func setView(){
         view.backgroundColor =  .white
+        headerCustomView.delegate = self
         // view.addSubview(headerView)
         //headerView.addSubview(headerStack)
         view.addSubview(headerCustomView)
@@ -117,12 +148,34 @@ class ExploreViewController: UIViewController {
        // view.addSubview(eventCardView)
         view.addSubview(nearbyStack)
         view.addSubview(eventViewController2)
+        
+        setupCityPicker()
     }
     
     // MARK: - Actions
     
+    @objc private func exploreButtonTapped() {
+        
+        let allEventsVC = AllEventsViewController()
+        
+       
+        allEventsVC.events = loadEvents(with: filter)
+        allEventsVC.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(allEventsVC, animated: true)
+    }
+    
     @objc func notificationButtonPressed(){
         
+    }
+    
+    @objc func filterPressed() {
+        
+        print("pressed Explore")
+        let filterVC = FilterViewController()
+        filterVC.delegate = self
+        filterVC.modalPresentationStyle = .popover
+        
+        present(filterVC, animated: true)
     }
     
     func goToDetail(with event: Event){
@@ -145,11 +198,83 @@ extension ExploreViewController {
     }
 }
 
+// MARK: City UIPicker
 
+extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func setupCityPicker() {
+        print("setupCityPicker")
+        cityPicker = UIPickerView()
+        cityPicker.delegate = self
+        cityPicker.dataSource = self
+        cityPicker.backgroundColor = .white
+        cityPicker.translatesAutoresizingMaskIntoConstraints = false
+        cityPicker.isHidden = true
+        view.addSubview(cityPicker)
+        
+        NSLayoutConstraint.activate([
+            cityPicker.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cityPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cityPicker.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            cityPicker.heightAnchor.constraint(equalToConstant: 250)
+        ])
+    }
+    
+    @objc func showCityPicker() {
+        cityPicker.isHidden = false
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return City.allCases.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return City.allCases[row].fullName
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // выбираем город и устанавливаем в фильтр
+        
+        let cityChosen = City.allCases[row].fullName
+//        locationButton.setTitle(cityChosen, for: .normal)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.cityPicker.isHidden = true
+        }
+//        selectedCity = chooseCity(for: cityChosen)
+//        eventFilters.location = selectedCity
+    }
+    
+}
 
 //struct ViewControllerProvider: PreviewProvider {
 //    static var previews: some View {
 //        ExploreViewController().showPreview()
 //    }
 //}
-    
+//
+//
+//extension UIViewController {
+//    private struct Preview : UIViewControllerRepresentable {
+//        let viewController: UIViewController
+//        
+//        
+//        
+//        func makeUIViewController(context: Context) -> some UIViewController {
+//            viewController
+//        }
+//        
+//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//            
+//        }
+//    }
+//    
+//    func showPreview() -> some View {
+//        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+//    }
+//    
+//}
+

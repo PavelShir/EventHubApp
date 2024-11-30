@@ -14,7 +14,7 @@ import GoogleSignIn
 
 final class SingInController: UIViewController {
 
-    let googleButton = GIDSignInButton()
+    private let googleButton = GIDSignInButton()
     
     // MARK: - Outlets
 
@@ -194,12 +194,13 @@ final class SingInController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupPasswordObservers()
+        
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        googleButton.addTarget(self, action: #selector(signInWithGoogleTapped), for: .touchUpInside)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -207,31 +208,34 @@ final class SingInController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    func signInWithGoogleTapped(_ sender: Any) {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+    @objc private func signInWithGoogleTapped(_ sender: Any) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            print("Error: Firebase clientID not found.")
+            return
+        }
         
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
-        GIDSignIn.sharedInstance.signIn(
-            withPresenting: self
-        ) { [unowned self] result, error in
-            guard error == nil else {
-                print("Google Sign-In Error:")
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+            if let error = error {
+                print("Google Sign-In Error: \(error.localizedDescription)")
                 return
             }
             
             guard let user = result?.user,
-                let idToken = user.idToken?.tokenString
-            else {
-                print("Failed to get ID token")
+                  let idToken = user.idToken?.tokenString else {
+                print("Error: Failed to get ID token or user information.")
                 return
             }
             
-            _ = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                             accessToken: user.accessToken.tokenString)
+            let accessToken = user.accessToken.tokenString
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+            
+            self.firebaseSignIn(with: credential)
         }
     }
+
 
     private func firebaseSignIn(with credential: AuthCredential) {
         Auth.auth().signIn(with: credential) { authResult, error in

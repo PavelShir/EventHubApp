@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		31A6E9E02CEFEBA9006DB793 /* UIButton + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A6E9DF2CEFEBA9006DB793 /* UIButton + Ext.swift */; };
+		31CA34F32CFB6BD100A2A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31CA34F22CFB6BD100A2A485 /* GoogleService-Info.plist */; };
 		31DEEC2E2CEE6B800098E212 /* SingInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEEC2D2CEE6B800098E212 /* SingInController.swift */; };
 		31DEEC302CEE6B9B0098E212 /* SingUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEEC2F2CEE6B9B0098E212 /* SingUpController.swift */; };
-		31DEEC3F2CEE71B80098E212 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31DEEC3E2CEE71B80098E212 /* GoogleService-Info.plist */; };
 		31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECB82CEE77490098E212 /* AuthManager.swift */; };
 		31DEECBD2CEE78960098E212 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECBC2CEE78960098E212 /* Constants.swift */; };
 		31DEECC02CEE7F560098E212 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECBF2CEE7F560098E212 /* UserModel.swift */; };
@@ -77,9 +77,9 @@
 
 /* Begin PBXFileReference section */
 		31A6E9DF2CEFEBA9006DB793 /* UIButton + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Ext.swift"; sourceTree = "<group>"; };
+		31CA34F22CFB6BD100A2A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31DEEC2D2CEE6B800098E212 /* SingInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingInController.swift; sourceTree = "<group>"; };
 		31DEEC2F2CEE6B9B0098E212 /* SingUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingUpController.swift; sourceTree = "<group>"; };
-		31DEEC3E2CEE71B80098E212 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31DEECB82CEE77490098E212 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		31DEECBC2CEE78960098E212 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		31DEECBF2CEE7F560098E212 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -303,7 +303,7 @@
 				F3C91D8F2CEC1382008E4707 /* Font */,
 				8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */,
 				8F8EA6F32CEA3FF100FC1364 /* Info.plist */,
-				31DEEC3E2CEE71B80098E212 /* GoogleService-Info.plist */,
+				31CA34F22CFB6BD100A2A485 /* GoogleService-Info.plist */,
 			);
 			path = EventHub;
 			sourceTree = "<group>";
@@ -435,7 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3C91D912CEC145A008E4707 /* AirbnbCereal.otf in Resources */,
-				31DEEC3F2CEE71B80098E212 /* GoogleService-Info.plist in Resources */,
+				31CA34F32CFB6BD100A2A485 /* GoogleService-Info.plist in Resources */,
 				8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -625,6 +625,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 72WF57A54C;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EventHub/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -656,6 +657,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 72WF57A54C;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EventHub/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

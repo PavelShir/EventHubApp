@@ -215,7 +215,7 @@ class EventsViewController: UIViewController {
     private func loadItemsInSegment() {
         
         self.allEvents = loadEvents(with: filter)
-        self.tableView.reloadData()
+//        self.tableView.reloadData()
 
         let index = segmentedControl.selectedSegmentIndex
         
@@ -275,13 +275,15 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return eventsDisplayed.count < 5 ? eventsDisplayed.count : 5
+        return min(eventsDisplayed.count, 5)
         
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
+        
+        
         let event = eventsDisplayed[indexPath.row]
         cell.configure(with: event)
         return cell

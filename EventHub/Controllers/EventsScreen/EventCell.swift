@@ -23,12 +23,12 @@ class EventCell: UITableViewCell {
         return view
     }()
     
-    var bookmarkIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.image = UIImage(systemName: "bookmark.fill")
-        icon.tintColor = UIColor(named: "primaryRed")
-        icon.isHidden = true
-        return icon
+    var bookmarkIcon: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        button.tintColor = UIColor(named: "primaryRed")
+        button.isHidden = true
+        return button
     }()
     
       let eventImageView: UIImageView = {
@@ -135,7 +135,7 @@ class EventCell: UITableViewCell {
                 return
             }
         
-        loadPlace(placeId: placeId) { [weak self] place in
+        loadPlaceFast(placeId: placeId) { [weak self] place in
                 DispatchQueue.main.async {
                     if let place = place {
                         self?.placeLabel.text = (event.locationSlug ?? "") + ", " + (place.address ?? "")

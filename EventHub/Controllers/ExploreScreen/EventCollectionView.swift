@@ -1,12 +1,12 @@
 import UIKit
 import SwiftUI
 
-class EventCollectionView: UIView{
+class EventCollectionView: UIView {
     
     
     private var events: [Event] = []
     
-    
+    private var goToDetail: ((Event)->Void)?
     
         //            EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "39 Santa Cruz, CA", imageName: "hands"),
 //            EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "foots"),
@@ -44,9 +44,10 @@ class EventCollectionView: UIView{
          fatalError("init(coder:) has not been implemented")
      }
     
-    func configure(e: [Event])
+    func configure(e: [Event], toDetail: @escaping ((Event)->Void))
     {
         events = e
+        goToDetail = toDetail
         reloadCollectionView()
         
     }
@@ -67,6 +68,8 @@ class EventCollectionView: UIView{
             mainCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
+    
+    
 }
 
 extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -88,6 +91,13 @@ extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = mainCollectionView.frame.width / 1.7
         return CGSize(width: size, height: 255)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print("go to event details")
+        
+        goToDetail?(events[indexPath.row])
     }
    
 }
@@ -116,7 +126,7 @@ class EventCollectionViewCell: UICollectionViewCell {
  
         backgroundColor = .white
         layer.cornerRadius = 10
-        eventCardView.configure(event: event)
+        eventCardView.configure(with: event)
     }
    
     private func setupView() {
@@ -130,3 +140,5 @@ class EventCollectionViewCell: UICollectionViewCell {
         ])
     }
 }
+
+//#Preview { EventCollectionView()}

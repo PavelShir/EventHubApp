@@ -232,6 +232,7 @@ class EventDetailsViewController: UIViewController {
         return element
     }()
     
+
     
    // let exploreDetailRow = ExploreDetailRow()
     var bookmark : UIButton = {
@@ -241,7 +242,7 @@ class EventDetailsViewController: UIViewController {
             button.translatesAutoresizingMaskIntoConstraints = false
             return button
     }()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setView()
@@ -252,6 +253,7 @@ class EventDetailsViewController: UIViewController {
         getPlaceData()
         
         bookmark.addTarget(self, action: #selector(toggleBookmark), for: .touchUpInside)
+        headerView.shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
 
     }
     
@@ -285,10 +287,10 @@ class EventDetailsViewController: UIViewController {
         view.addSubview(headerView)
         view.addSubview(bookmark)
         view.bringSubviewToFront(bookmark)
-
-        
+ 
     }
     
+ 
     func getImageData() {
         
         let image = headerView.imageHeader
@@ -332,7 +334,6 @@ class EventDetailsViewController: UIViewController {
     }
     
     @objc private func toggleBookmark() {
-        
         
         if bookmark.image(for: .normal) == UIImage(systemName: "bookmark") {
             bookmark.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
@@ -390,6 +391,13 @@ class EventDetailsViewController: UIViewController {
         }
     }
     
+    @objc private func shareButtonTapped() {
+         
+        let slideVC = ShareViewController()
+                slideVC.modalPresentationStyle = .custom
+                slideVC.transitioningDelegate = self
+                present(slideVC, animated: true, completion: nil)
+    }
     
     private func convertDate(date: Int?) -> String {
         
@@ -493,5 +501,11 @@ extension EventDetailsViewController {
             bookmark.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
           
         ])
+    }
+}
+
+extension EventDetailsViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }

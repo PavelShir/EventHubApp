@@ -90,7 +90,8 @@ class ExploreViewController: UIViewController {
     {
         
         didSet {
-            eventViewController.configure(e: events)
+            eventViewController.configure(e: events, toDetail: goToDetail)
+            eventViewController2.configure(e: events, toDetail: goToDetail)
             
             }
     }
@@ -102,8 +103,12 @@ class ExploreViewController: UIViewController {
             setView()
             setupConstrains()
         
+        
+        
         loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
-            
+           
+        headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        
         }
     
     func loadSuccess(e: [Event]) {
@@ -132,6 +137,21 @@ class ExploreViewController: UIViewController {
     
     @objc func notificationButtonPressed(){
         
+    }
+    
+    @objc private func filterPressed() {
+        let filterVC = FilterViewController()
+        filterVC.source = .main
+        filterVC.modalPresentationStyle = .popover
+        present(filterVC, animated: true)
+    }
+    
+    func goToDetail(with event: Event){
+        let eventVC = EventDetailsViewController()
+        eventVC.eventDetail = event
+        //print("go to event details")
+        
+        navigationController?.pushViewController(eventVC, animated: true)
     }
 
 }

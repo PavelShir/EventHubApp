@@ -166,7 +166,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         view.addSubview(headerCustomView)
         view.addSubview(categoryCollectionView)
         view.addSubview(buttonStack)
-        
+        scrollView.showsVerticalScrollIndicator = true
         view.addSubview(scrollView)
         scrollView.addSubview(upcomingStack)
         scrollView.addSubview(eventViewController)
@@ -244,33 +244,35 @@ extension ExploreViewController {
             buttonStack.heightAnchor.constraint(equalToConstant: 40),
             
             //scrollView
-            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8.0),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             scrollView.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.0),
-                    scrollView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                    
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
                     
             
 //            upcomingStack
-            upcomingStack.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.84),
-            upcomingStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            upcomingStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            upcomingStack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 8.84),
+            upcomingStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            upcomingStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            upcomingStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30),
             upcomingStack.heightAnchor.constraint(equalToConstant: 40),
             
             
 //            eventViewController
             eventViewController.topAnchor.constraint(equalTo: upcomingStack.bottomAnchor, constant: 10),
-            eventViewController.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            eventViewController.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            eventViewController.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 24),
+            eventViewController.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
             eventViewController.heightAnchor.constraint(equalToConstant: 255),
 //            nearbyStack
             nearbyStack.topAnchor.constraint(equalTo: eventViewController.bottomAnchor, constant: 10),
-            nearbyStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            nearbyStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            nearbyStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            nearbyStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
             nearbyStack.heightAnchor.constraint(equalToConstant: 40),
 //            eventViewController2
             eventViewController2.topAnchor.constraint(equalTo: nearbyStack.bottomAnchor, constant: 0),
-            eventViewController2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            eventViewController2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            eventViewController2.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 24),
+            eventViewController2.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
 //            eventViewController2.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             eventViewController2.heightAnchor.constraint(equalToConstant: 255),
             

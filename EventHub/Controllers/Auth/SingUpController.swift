@@ -112,6 +112,19 @@ final class SingUpController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let orLabel: UILabel = {
+        let label = UILabel()
+        label.text = "OR"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var googleButton: UIButton = {
+        return GoogleAuthManager.shared.createGoogleButton(target: self, action: #selector(googleButtonTapped))
+    }()
 
     private let stackView: UIStackView = {
         let view = UIStackView()
@@ -175,6 +188,19 @@ final class SingUpController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func googleButtonTapped() {
+        Task {
+            await GoogleAuthManager.shared.signInWithGoogle(presentingViewController: self) { result in
+                switch result {
+                case .success(let user):
+                    print("User signed in: \(user.email ?? "No email")")
+                case .failure(let error):
+                    print("Sign-in failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     func togglePasswordVisibility(for textField: UITextField, button: UIButton) {
         
         textField.isSecureTextEntry.toggle()
@@ -198,6 +224,8 @@ final class SingUpController: UIViewController {
             togglePasswordButton1,
             togglePasswordButton2,
             signUpButton,
+            orLabel,
+            googleButton,
             stackView
         ].forEach { view.addSubview($0) }
         [
@@ -313,6 +341,24 @@ final class SingUpController: UIViewController {
                 constant: -Constants.Authorization.horizontalMarginTwenty
             ),
             signUpButton.heightAnchor.constraint(
+                equalToConstant:  Constants.Authorization.heightSignButton
+            ),
+            orLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 30),
+            orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            googleButton.topAnchor.constraint(
+                equalTo: orLabel.bottomAnchor,
+                constant: 30
+            ),
+            googleButton.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: Constants.Authorization.horizontalMarginSingInButton
+            ),
+            googleButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Constants.Authorization.horizontalMarginSingInButton
+            ),
+            googleButton.heightAnchor.constraint(
                 equalToConstant:  Constants.Authorization.heightSignButton
             ),
             stackView.centerXAnchor.constraint(

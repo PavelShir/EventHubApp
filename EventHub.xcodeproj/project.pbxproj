@@ -11,6 +11,7 @@
 		31CA34F32CFB6BD100A2A485 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31CA34F22CFB6BD100A2A485 /* GoogleService-Info.plist */; };
 		31CA34F52CFB98C400A2A485 /* GoogleAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CA34F42CFB98C400A2A485 /* GoogleAuthManager.swift */; };
 		31CA34F72CFC9DA500A2A485 /* PasswordResetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CA34F62CFC9DA500A2A485 /* PasswordResetManager.swift */; };
+		31CA34F92CFCB4CA00A2A485 /* ForgotPasswordControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CA34F82CFCB4CA00A2A485 /* ForgotPasswordControler.swift */; };
 		31DEEC2E2CEE6B800098E212 /* SingInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEEC2D2CEE6B800098E212 /* SingInController.swift */; };
 		31DEEC302CEE6B9B0098E212 /* SingUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEEC2F2CEE6B9B0098E212 /* SingUpController.swift */; };
 		31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECB82CEE77490098E212 /* AuthManager.swift */; };
@@ -82,6 +83,7 @@
 		31CA34F22CFB6BD100A2A485 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31CA34F42CFB98C400A2A485 /* GoogleAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthManager.swift; sourceTree = "<group>"; };
 		31CA34F62CFC9DA500A2A485 /* PasswordResetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetManager.swift; sourceTree = "<group>"; };
+		31CA34F82CFCB4CA00A2A485 /* ForgotPasswordControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordControler.swift; sourceTree = "<group>"; };
 		31DEEC2D2CEE6B800098E212 /* SingInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingInController.swift; sourceTree = "<group>"; };
 		31DEEC2F2CEE6B9B0098E212 /* SingUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingUpController.swift; sourceTree = "<group>"; };
 		31DEECB82CEE77490098E212 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			children = (
 				31DEEC2D2CEE6B800098E212 /* SingInController.swift */,
 				31DEEC2F2CEE6B9B0098E212 /* SingUpController.swift */,
+				31CA34F82CFCB4CA00A2A485 /* ForgotPasswordControler.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				F3C91D9A2CED1658008E4707 /* CarouselSection.swift in Sources */,
 				8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */,
 				F3C91D8E2CEB7F58008E4707 /* EventModel.swift in Sources */,
+				31CA34F92CFCB4CA00A2A485 /* ForgotPasswordControler.swift in Sources */,
 				F336593D2CF521D300CA3DE7 /* CategoryFilter.swift in Sources */,
 				F33659462CF762AC00CA3DE7 /* CategoryCircleCell.swift in Sources */,
 				31DEEC2E2CEE6B800098E212 /* SingInController.swift in Sources */,

@@ -20,7 +20,7 @@ func createURL(with filters: EventFilter,
       var components = URLComponents(string: "https://kudago.com/public-api/v1.4/events/")
       
       components?.queryItems = [
-          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images,favorites_count,participants"),
+          URLQueryItem(name: "fields", value: "id,dates,title,slug,place,description,location,categories,images,site_url,favorites_count,participants"),
           URLQueryItem(name: "text_format", value: "text"),
           URLQueryItem(name: "page_size", value: "35") //максимальное число объектов в массиве
       ]
@@ -124,7 +124,6 @@ struct Event: Codable, Equatable {
     let description: String
     let bodyText: String
     let categories: [String]
-    let price: String
     let images: String?
     let favoritesCount: Int
     let startDate: Int?
@@ -132,46 +131,47 @@ struct Event: Codable, Equatable {
     let locationSlug: String?
     let placeId: Int?
     let participants: [Participant]
+    let siteUrl: String?
 
     init(from result: Results) {
         self.id = result.id
         self.title = result.title ?? "Default title"
         self.description = result.description ?? "Default description"
         self.bodyText = result.bodyText ?? "Default bodyText"
-        self.categories = result.categories
-        self.price = result.price ?? ""
+        self.categories = result.categories ?? []
         
         //берем юрл первую картинку из массива
-        self.images = result.images.first?.image ?? ""
+        self.images = result.images?.first?.image ?? ""
         
         self.favoritesCount = result.favoritesCount ?? 0
 
         // выбираем дату из массива
-        let processedDates = processDates(dates: result.dates, currentTimestamp: currentTimestamp)
+        let processedDates = processDates(dates: result.dates ?? [], currentTimestamp: currentTimestamp)
         self.startDate = processedDates.startDate
         self.endDate = processedDates.endDate
 
-        self.locationSlug = result.location.slug?.rawValue ?? ""
+        self.locationSlug = result.location?.slug?.rawValue ?? ""
         self.placeId = result.place?.id
-        self.participants = result.participants
+        self.participants = result.participants ?? []
+        self.siteUrl = result.siteUrl
     }
     
         //это нужно для протокола equatable
     static func ==(lhs: Event, rhs: Event) -> Bool {
-           return lhs.id == rhs.id
-               && lhs.title == rhs.title
-               && lhs.description == rhs.description
-               && lhs.bodyText == rhs.bodyText
-               && lhs.categories == rhs.categories
-               && lhs.price == rhs.price
-               && lhs.images == rhs.images
-               && lhs.favoritesCount == rhs.favoritesCount
-               && lhs.startDate == rhs.startDate
-               && lhs.endDate == rhs.endDate
-               && lhs.locationSlug == rhs.locationSlug
-               && lhs.placeId == rhs.placeId
-               && lhs.participants == rhs.participants
-       }
+        return lhs.id == rhs.id
+        && lhs.title == rhs.title
+        && lhs.description == rhs.description
+        && lhs.bodyText == rhs.bodyText
+        && lhs.categories == rhs.categories
+        && lhs.images == rhs.images
+        && lhs.favoritesCount == rhs.favoritesCount
+        && lhs.startDate == rhs.startDate
+        && lhs.endDate == rhs.endDate
+        && lhs.locationSlug == rhs.locationSlug
+        && lhs.placeId == rhs.placeId
+        && lhs.participants == rhs.participants
+        && lhs.siteUrl == rhs.siteUrl
+    }
     
 }
 
@@ -255,7 +255,7 @@ func fetchPlace(placeId: Int, completion: @escaping (Result<Place, Error>) -> Vo
     task.resume()
 }
 
-func fetchPlaceWithRetry(placeId: Int, retryCount: Int = 7, completion: @escaping (Result<Place, Error>) -> Void) {
+func fetchPlaceWithRetry(placeId: Int, retryCount: Int = 5, completion: @escaping (Result<Place, Error>) -> Void) {
     fetchPlace(placeId: placeId) { result in
         switch result {
         case .success(let place):
@@ -353,3 +353,74 @@ func loadPlaceFast (placeId: Int, completion: @escaping (Place?) -> Void) {
 }
 
     // MARK: Загрузка Подборок 
+
+enum ListURL {
+    case today
+    case films
+    case lists
+}
+
+extension ListURL {
+    var urlString: String {
+        switch self {
+        case .today:
+            return "https://kudago.com/public-api/v1.4/events/?fields=id,dates,title,slug,place,description,location,categories,images,favorites_count,site_url,participants&text_format=text&page_size=35&location=\(City.moscow.rawValue)&actual_since=\(currentTimestamp)&actual_until=\(currentTimestamp)"
+        case .films:
+            return "https://kudago.com/public-api/v1.4/movies/?actual_since=\(currentTimestamp)"
+        case .lists:
+            return "https://kudago.com/public-api/v1.2/lists/"
+        }
+    }
+}
+
+
+func loadLists(from urlString: String, success: (([Event]) -> Void)? = nil)  {
+    Task {
+        do {
+            events = try await fetchEvent(with: urlString)
+            success?(events)
+         } catch {
+            print("Error fetching events: \(error.localizedDescription)")
+        }
+    }
+    }
+
+private func fetchEvent(with urlString: String) async throws -> [Event] {
+    print("API URL is \(urlString)")
+    
+    guard let url = URL(string: urlString) else {
+        throw URLError(.badURL)
+    }
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+        throw URLError(.badServerResponse)
+    }
+    
+    print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
+
+    let decoder = JSONDecoder()
+    
+    do {
+         let eventResponse = try decoder.decode(ResponseEvent.self, from: data)
+        for result in eventResponse.results {
+            print("Result siteUrl: \(result.siteUrl ?? "nil")")
+        }
+
+         return eventResponse.results.map { Event(from: $0) }
+        
+        
+    } catch let decodingError as DecodingError {
+         print("Decoding error: \(decodingError.localizedDescription)")
+        
+         if case .keyNotFound(let key, let context) = decodingError {
+            print("Key not found: \(key), context: \(context.debugDescription)")
+        }
+        
+        throw decodingError
+    } catch {
+         print("Unknown error: \(error.localizedDescription)")
+        throw error
+    }
+}

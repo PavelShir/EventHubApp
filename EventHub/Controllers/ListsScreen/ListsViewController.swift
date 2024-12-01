@@ -10,11 +10,7 @@ import WebKit
 
 class ListsViewController: UIViewController {
     
-    var itemsList: [ItemList] = [
-        ItemList(title: "kjdsjjdjdjdjdjjdjdjdjdjjdjdjdjjd dhdhhdhdhd djhjdjdjdjjdjdjd rdsj", siteUrl: "ncxbcs"),
-        ItemList(title: "kjdsjdsj", siteUrl: "ncxbcs"),
-        ItemList(title: "kjdsjdsj", siteUrl: "ncxbcs")
-    ]
+    var itemsList: [Event] = []
     
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -74,8 +70,10 @@ class ListsViewController: UIViewController {
             // переход на Ивент + передать данные об ивенте
             // Web View
             
+            let item = itemsList[indexPath.row]
+            print(item.siteUrl)
             let webViewController = WebViewController()
-            webViewController.url = URL(string: "https://www.example.com") // передаем URL
+            webViewController.url = URL(string: item.siteUrl ?? "https://kudago.com/404")
             navigationController?.pushViewController(webViewController, animated: true)
             
         }
@@ -85,7 +83,3 @@ class ListsViewController: UIViewController {
 #Preview { ListsViewController() }
 
 
-struct ItemList: Codable {
-    let title: String
-    let siteUrl: String
-    }

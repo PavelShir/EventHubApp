@@ -268,8 +268,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let eventVC = EventDetailsViewController()
         eventVC.eventDetail = selectedEvent
 
-            navigationController?.pushViewController(eventVC, animated: true)
-            tableView.deselectRow(at: indexPath, animated: true)
+present(eventVC, animated: true)
+//            navigationController?.pushViewController(eventVC, animated: true)
+//            tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

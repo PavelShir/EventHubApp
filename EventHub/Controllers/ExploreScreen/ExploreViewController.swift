@@ -109,6 +109,13 @@ class ExploreViewController: UIViewController {
            
         headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
         
+        todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+        filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+        listsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+        todayButton.tag = 1
+        filmsButton.tag = 2
+        listsButton.tag = 3
+        
         }
     
     func loadSuccess(e: [Event]) {
@@ -136,6 +143,39 @@ class ExploreViewController: UIViewController {
     // MARK: - Actions
     
     @objc func notificationButtonPressed(){
+    }
+    
+        // Функции подборок
+    @objc private func showList(sender: UIButton) {
+        
+        let urlString: String
+           
+           switch sender.tag {
+           case 1:
+               urlString = ListURL.today.urlString
+           case 2:
+               urlString = ListURL.films.urlString
+           case 3:
+               urlString = ListURL.lists.urlString
+           default:
+               urlString = ListURL.today.urlString // ошибка с кнопкой, загрузка событий за сегодня
+           }
+        
+         let listVC = ListsViewController()
+        
+        loadLists(from: urlString) { events in
+            
+            print("API is \(ListURL.today.urlString)" )
+            listVC.itemsList = events
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(listVC, animated: true)
+            }
+        }
+    }
+    
+    @objc func showFilms(){
+        
         
     }
     

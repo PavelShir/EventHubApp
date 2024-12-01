@@ -38,6 +38,7 @@ class ListCell: EventCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.right.circle.fill"), for: .normal)
         button.tintColor = .white
+        button.isUserInteractionEnabled = false
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
@@ -88,7 +89,7 @@ class ListCell: EventCell {
 
     }
 
-      func setCell (with item: ItemList) {
+      func setCell (with item: Event) {
 
            titleLabel.text = item.title
        }

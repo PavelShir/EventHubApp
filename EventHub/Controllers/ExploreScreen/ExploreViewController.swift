@@ -17,9 +17,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         print("eventFilters")
         
         loadEventsSuccess(with: eventFilters) { events in
-                     
+            
             self.eventsUpcoming = events
-           
+            
             DispatchQueue.main.async {
                 self.eventViewController.reloadCollectionView()
             }
@@ -31,16 +31,45 @@ class ExploreViewController: UIViewController, FilterDelegate {
                 self.eventViewController2.reloadCollectionView()
             }
         }
-                          
+        
         
     }
     
     // MARK: - UI
     
+    private let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.placeholder = "Search..."
+        search.translatesAutoresizingMaskIntoConstraints = false
+        search.backgroundColor = .clear
+        
+        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        search.searchTextField.backgroundColor = .white
+        search.layer.cornerRadius = 10
+        search.clipsToBounds = true
+        
+        let customImageView = UIImageView(image: UIImage(named: "search"))
+        customImageView.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+        customImageView.contentMode = .scaleAspectFit
+        search.searchTextField.leftView = customImageView
+        search.searchTextField.leftViewMode = .always
+        
+        return search
+    }()
+    
+    let listStackView = createHorizontalStackViewWithButtons()
+    let todayButton = createRoundedButton(title: "TODAY")
+    let filmsButton = createRoundedButton(title: "FILMS")
+    let listsButton = createRoundedButton(title: "LISTS")
+    
+    private var scrollView: UIScrollView!
+    private var contentView: UIView!
+    
     private var buttonStack = createHorizontalStackViewWithButtons()
     
     private var cityPicker: UIPickerView!
-   
+    
+    
     lazy var categoryCollectionView: CategoryCollectionView = {
         let element =  CategoryCollectionView()
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -66,20 +95,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
-    private lazy  var currentLocationLabel : UILabel = {
-        let element = UILabel()
-        element.isUserInteractionEnabled = true
-        element.text = "Current Location"
-        element.textColor = .gray
-        
-        element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .green
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
-        
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
+    
     
     private lazy  var currentLocationLabelNotInScroll : UILabel = {
         let element = UILabel()
@@ -121,8 +137,23 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
+    var currentLocationButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Current Location", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .black
+        button.titleLabel?.font = UIFont(name: "Arial", size: 14)
+        button.setImage(UIImage(named: "Down"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.semanticContentAttribute = .forceRightToLeft
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
+        return button
+    }()
+    
+    
     private lazy var nearbyStack : UIStackView = {
-//        let element = UIStackView(frame: CGRect(x: 20, y: 560, width: 362, height: 30))
+        //        let element = UIStackView(frame: CGRect(x: 20, y: 560, width: 362, height: 30))
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .equalSpacing
@@ -146,12 +177,8 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
-    let scrollView: UIScrollView = {
-        let v = UIScrollView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
-    }()
-   
+    
+    
     
     // MARK: - Variable
     let currentTime = Int(Date().timeIntervalSince1970)
@@ -167,7 +194,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     {
         didSet {
             eventViewController.configure(e: events, toDetail: goToDetail)
-           
+            
         }
     }
     
@@ -186,55 +213,156 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     override func viewDidLoad()  {
         super.viewDidLoad()
-       // self.navigationController?.isToolbarHidden = true
-      //  self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.navigationBar.backgroundColor = .red
-        navigationController?.toolbar.backgroundColor = .yellow
+        
+ 
         setView()
-        setupConstrains()
+        setupScrollView()
+        setupContentView()
+        setupUIElements()
+        view.backgroundColor = .white
+        
+        currentLocationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
+
         
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
         loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
         
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
-           
-       // headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
         
-        }
+        
+    }
+    
+    //скрывает нав бар
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    private func setupScrollView() {
+        scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.bounces = true
+        view.addSubview(scrollView)
+        
+        
+        // Устанавливаем ограничения для scrollView
+        NSLayoutConstraint.activate([
+            
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            
+            
+        ])
+    }
+    private func setupContentView() {
+        contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(contentView)
+        
+        
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: -65),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+    }
+    
+    private func setupUIElements() {
+        
+        contentView.addSubview(headerCustomView)
+        
+        contentView.addSubview(currentLocationLabelNotInScroll)
+        contentView.addSubview(currentLocationButton)
+        contentView.addSubview(searchBar)
+        contentView.addSubview(categoryCollectionView)
+        contentView.addSubview(listStackView)
+        contentView.addSubview(upcomingStack)
+        
+        contentView.addSubview(eventViewController)
+        contentView.addSubview(nearbyStack)
+        
+        contentView.addSubview(eventViewController2)
+        
+        
+        NSLayoutConstraint.activate([
+            headerCustomView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            headerCustomView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            headerCustomView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            headerCustomView.heightAnchor.constraint(equalToConstant: 240),
+            
+            // Current Location Label
+            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 10),
+            currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
+            
+            // Current Location Button
+            currentLocationButton.topAnchor.constraint(equalTo: currentLocationLabelNotInScroll.bottomAnchor, constant: 10),
+            currentLocationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            // Search Bar
+            searchBar.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 20),
+            searchBar.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            searchBar.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            
+            // Category Collection View
+            categoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
+            categoryCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            categoryCollectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            categoryCollectionView.heightAnchor.constraint(equalToConstant: 40),
+            
+            // List Stack View
+            listStackView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
+            listStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            listStackView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            
+            // Upcoming Stack
+            upcomingStack.topAnchor.constraint(equalTo: listStackView.bottomAnchor, constant: 20),
+            upcomingStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            upcomingStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            
+            // Event View Controller
+            eventViewController.topAnchor.constraint(equalTo: upcomingStack.bottomAnchor, constant: 20),
+            eventViewController.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            eventViewController.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            eventViewController.heightAnchor.constraint(equalToConstant: 255),
+            
+            // Nearby Stack
+            nearbyStack.topAnchor.constraint(equalTo: eventViewController.bottomAnchor, constant: 20),
+            nearbyStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nearbyStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            
+            // Event View Controller 2
+            eventViewController2.topAnchor.constraint(equalTo: nearbyStack.bottomAnchor, constant: 20),
+            eventViewController2.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            eventViewController2.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            eventViewController2.heightAnchor.constraint(equalToConstant: 255),
+            eventViewController2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
+        ])
+        
+    }
     
     func loadSuccessUpcoming(e: [Event]) {
-//        events = e
+        //        events = e
         eventsUpcoming = e
     }
     
     func loadSuccessNearby(e: [Event]) {
-//        events = e
+        //        events = e
         eventsNearby = e
     }
     
     private func setView(){
         view.backgroundColor =  .gray.withAlphaComponent(0.05)
         headerCustomView.delegate = self
-       // view.addSubview(headerCustomView)
-        
-        
-        scrollView.alwaysBounceVertical = true
-        
-        view.addSubview(scrollView)
-        scrollView.addSubview(headerCustomView)
-        
-        scrollView.addSubview(currentLocationLabel)
-        scrollView.addSubview(categoryCollectionView)
-        scrollView.addSubview(buttonStack)
-        scrollView.addSubview(upcomingStack)
-        scrollView.addSubview(eventViewController)
-        scrollView.addSubview(nearbyStack)
-        scrollView.addSubview(eventViewController2)
-        view.addSubview(currentLocationLabelNotInScroll)
         
         setupCityPicker()
     }
+    
     
     // MARK: - Actions
     
@@ -246,13 +374,13 @@ class ExploreViewController: UIViewController, FilterDelegate {
         navigationController?.pushViewController(allEventsVC, animated: true)
     }
     
-  
+    
     
     @objc func notificationButtonPressed(){
         
     }
     
-
+    
     @objc func filterPressed() {
         
         print("pressed Explore")
@@ -260,7 +388,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
         
-
+        
         present(filterVC, animated: true)
     }
     
@@ -285,74 +413,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         return formatter.string(from: date)
     }
-
-}
-
-extension ExploreViewController {
     
-    private func setupConstrains(){
-        NSLayoutConstraint.activate([
-            
-            headerCustomView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            headerCustomView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            headerCustomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            headerCustomView.heightAnchor.constraint(equalToConstant: 179),
-            
-            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: view.topAnchor, constant: 98),
-            currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-            
-            currentLocationLabel.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 18),
-            currentLocationLabel.leadingAnchor.constraint(equalTo: headerCustomView.leadingAnchor, constant: 25),
-           // currentLocationLabel.heightAnchor.constraint(equalToConstant: 30),
-           // currentLocationLabel.widthAnchor.constraint(equalToConstant: 200),
-            
-            categoryCollectionView.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: -20),
-            categoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            categoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            categoryCollectionView.heightAnchor.constraint(equalToConstant: 40),
-            
-            //buttonStack
-            buttonStack.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 28.32),
-            buttonStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            buttonStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            buttonStack.heightAnchor.constraint(equalToConstant: 40),
-            
-            //scrollView
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-                    
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-                    
-            
-//            upcomingStack
-            upcomingStack.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.84),
-            upcomingStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            upcomingStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
-            upcomingStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30),
-            upcomingStack.heightAnchor.constraint(equalToConstant: 40),
-            
-//            eventViewController
-            eventViewController.topAnchor.constraint(equalTo: upcomingStack.bottomAnchor, constant: 10),
-            eventViewController.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 24),
-            eventViewController.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
-            eventViewController.heightAnchor.constraint(equalToConstant: 255),
-//            nearbyStack
-            nearbyStack.topAnchor.constraint(equalTo: eventViewController.bottomAnchor, constant: 10),
-            nearbyStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            nearbyStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
-            nearbyStack.heightAnchor.constraint(equalToConstant: 40),
-//            eventViewController2
-            eventViewController2.topAnchor.constraint(equalTo: nearbyStack.bottomAnchor, constant: 0),
-            eventViewController2.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 24),
-            eventViewController2.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
-//            eventViewController2.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-            eventViewController2.heightAnchor.constraint(equalToConstant: 255),
-            
-            
-        ])
-    }
 }
+
 
 // MARK: City UIPicker
 
@@ -377,6 +440,7 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     @objc func showCityPicker() {
+        print("tapped")
         cityPicker.isHidden = false
     }
     
@@ -396,8 +460,8 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         // выбираем город и устанавливаем в фильтр
         
         let cityChosen = City.allCases[row].fullName
-//        locationButton.setTitle(cityChosen, for: .normal)
-      //  headerCustomView.locationLabel.text = cityChosen
+        currentLocationButton.setTitle(cityChosen, for: .normal)
+        //  headerCustomView.locationLabel.text = cityChosen
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
         }
@@ -423,12 +487,12 @@ func createHorizontalStackViewWithButtons() -> UIStackView {
     return stackView
 }
 
- func createRoundedButton(title: String) -> UIButton {
+func createRoundedButton(title: String) -> UIButton {
     let button = UIButton(type: .system)
     button.setTitle(title, for: .normal)
     button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 18)
     button.setTitleColor(.white, for: .normal)
-     button.backgroundColor = UIColor(named: "primaryBlue")
+    button.backgroundColor = UIColor(named: "primaryBlue")
     button.layer.cornerRadius = 20
     button.translatesAutoresizingMaskIntoConstraints = false
     button.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -441,12 +505,12 @@ extension ExploreViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // Если строка поиска пуста, показываем все события
-                if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
-                    isSearching = false
-                    filteredEvents = events
-                   
-                    return
-                }
+        if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+            isSearching = false
+            filteredEvents = events
+            
+            return
+        }
         
         filteredEvents.removeAll()
         
@@ -457,30 +521,30 @@ extension ExploreViewController: UISearchBarDelegate {
         
         
         let lowercasedSearchText = searchText.lowercased()
-          filteredEvents = events.filter { event in
-              event.title.lowercased().contains(lowercasedSearchText) ||
-              convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
-          }
-          
-          isSearching = true
-       // updateUI()
-      }
-
+        filteredEvents = events.filter { event in
+            event.title.lowercased().contains(lowercasedSearchText) ||
+            convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
+        }
         
+        isSearching = true
+        // updateUI()
+    }
+    
+    
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-          searchBar.resignFirstResponder()
-      }
-      
-      func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-          isSearching = false
-             searchBar.text = ""
-             filteredEvents = events
-             searchBar.resignFirstResponder()
-            // updateUI()
-      }
-        
+        searchBar.resignFirstResponder()
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearching = false
+        searchBar.text = ""
+        filteredEvents = events
+        searchBar.resignFirstResponder()
+        // updateUI()
+    }
+    
+}
 
 struct ViewControllerProvider: PreviewProvider {
     static var previews: some View {

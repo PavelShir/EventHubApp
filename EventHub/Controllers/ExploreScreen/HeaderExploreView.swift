@@ -23,20 +23,20 @@ class HeaderExploreView: UIView {
         return element
     }()
     
-    private lazy  var currentLocationLabel : UILabel = {
-        let element = UILabel()
-        element.isUserInteractionEnabled = true
-        element.text = "Current Location in Header"
-        element.textColor = .gray
-        
-        element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .yellow
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
-        
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
+//    private lazy  var currentLocationLabel : UILabel = {
+//        let element = UILabel()
+//        element.isUserInteractionEnabled = true
+//        element.text = "Current Location in Header"
+//        element.textColor = .gray
+//        
+//        element.font = .systemFont(ofSize: 12)
+//        element.backgroundColor = .yellow
+//        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+//        element.addGestureRecognizer(gesture)
+//        
+//        element.translatesAutoresizingMaskIntoConstraints = false
+//        return element
+//    }()
     
 //    private let searchBar: UISearchBar = {
 //        let search = UISearchBar()
@@ -203,7 +203,7 @@ class HeaderExploreView: UIView {
     private func setView(){
         
         addSubview(headerView)
-        addSubview(currentLocationLabel)
+//        addSubview(currentLocationLabel)
         
 //        addSubview(headerView)
      //   headerView.addSubview(headerStack)
@@ -239,8 +239,8 @@ extension HeaderExploreView {
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             headerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 68),
-            currentLocationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+//            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 68),
+//            currentLocationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
             
 //            headerStack.topAnchor.constraint(equalTo: headerView.topAnchor),
 //            headerStack.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),

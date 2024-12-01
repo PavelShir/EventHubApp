@@ -17,7 +17,43 @@ class MapViewController: UIViewController {
     var placeCoordinates: [Coords] = []
     var eventFilter: EventFilter!
     let cell = FavCell()
+    private let locationManager = CLLocationManager()
     
+    private let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.placeholder = "Search for places..."
+        search.translatesAutoresizingMaskIntoConstraints = false
+        search.backgroundColor = .clear
+        search.searchTextField.backgroundColor = .white
+        search.layer.cornerRadius = 10
+        search.clipsToBounds = true
+        return search
+    }()
+    
+    private let geoButton: UIButton = {
+        let button = UIButton()
+        
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseForegroundColor = UIColor(named: "primaryBlue")
+        
+        // Устанавливаем иконку
+        configuration.image = UIImage(systemName: "scope")
+        configuration.imagePlacement = .top
+        configuration.imagePadding = 8
+        configuration.baseBackgroundColor = .white
+        button.configuration = configuration
+        
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = false
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        
+        return button
+    }()
+
     private let eventInfoTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,6 +101,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupMap()
+        setupLocationManager()
+
         
         mapView.delegate = self
         
@@ -98,8 +136,13 @@ class MapViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(mapView)
         view.addSubview(eventInfoTableView)
+        view.addSubview(searchBar)
+        view.addSubview(geoButton)
+        view.addSubview(categoryCircleView)
         
-        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        geoButton.translatesAutoresizingMaskIntoConstraints = false
+
         eventInfoTableView.translatesAutoresizingMaskIntoConstraints = false
         categoryCircleView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -110,15 +153,23 @@ class MapViewController: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        view.addSubview(categoryCircleView)
         NSLayoutConstraint.activate([
-            categoryCircleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
-            categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 1),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 7),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            searchBar.trailingAnchor.constraint(equalTo: geoButton.leadingAnchor, constant: -10),
+
+            
+            geoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            geoButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            geoButton.heightAnchor.constraint(equalToConstant: 50),
+            geoButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            categoryCircleView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: -15),
+            categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 7),
             categoryCircleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -1),
-            categoryCircleView.heightAnchor.constraint(equalToConstant: 90)
-        ])
-        
-        NSLayoutConstraint.activate([
+            categoryCircleView.heightAnchor.constraint(equalToConstant: 90),
+
                eventInfoTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                eventInfoTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                eventInfoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
@@ -295,22 +346,19 @@ class MapViewController: UIViewController {
     
     
     
-    //extension MapViewController: CLLocationManagerDelegate {
-    //
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //        if let location = locations.last {
-    //            locationManager.stopUpdatingLocation()
-    //            let lat = location.coordinate.latitude
-    //            let lon = location.coordinate.longitude
-    //
-    //            weatherManager.fetchWeather(latitude: lat, longitude: lon)
-    //        }
-    //    }
-    //
-    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    //        print(error)
-    //    }
-    //}
+    extension MapViewController: CLLocationManagerDelegate {
+    
+        private func setupLocationManager() {
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                locationManager.requestWhenInUseAuthorization()
+                locationManager.startUpdatingLocation()
+            }
+    
+        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+            print(error)
+        }
+    }
     
     // MARK: - UICollectionView Delegate & DataSource
     

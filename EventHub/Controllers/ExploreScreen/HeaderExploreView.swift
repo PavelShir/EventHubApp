@@ -202,7 +202,7 @@ extension HeaderExploreView {
             headerStack.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
             headerStack.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
             headerStack.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-          
+            
             headerView.topAnchor.constraint(equalTo: topAnchor),
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),

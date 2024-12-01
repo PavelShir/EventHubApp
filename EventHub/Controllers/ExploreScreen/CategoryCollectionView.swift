@@ -94,7 +94,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         let element = UILabel()
         element.text = "label"
         element.textColor = .white
-        element.font = UIFont.boldSystemFont(ofSize: 15)
+        //element.font = UIFont.boldSystemFont(ofSize: 15)
+        element.font = UIFont(name: "AirbnbCerealApp", size: 15)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -111,9 +112,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     
     private lazy var button : UIButton = {
-        let element = UIButton(type: .custom)
+        let element = UIButton(type: .system)
         element.backgroundColor = .red
         element.layer.cornerRadius = 20
+        
         element.translatesAutoresizingMaskIntoConstraints = false
         element.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
 //            self.addTarget(button, action: #selector(buttonTouchedDown), for: .touchDown)
@@ -121,6 +123,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         element.addSubview(stackView)
         return element
     }()
+    
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -92,7 +92,7 @@ extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = mainCollectionView.frame.width / 1.58
+        let size = 237//mainCollectionView.frame.width / 1.58
         return CGSize(width: size, height: 255)
     }
     
@@ -139,8 +139,8 @@ class EventCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(eventCardView)
         NSLayoutConstraint.activate([
             eventCardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            eventCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            eventCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            eventCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            eventCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             eventCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),           
         ])
     }

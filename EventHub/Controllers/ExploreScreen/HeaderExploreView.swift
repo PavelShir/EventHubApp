@@ -58,8 +58,8 @@ class HeaderExploreView: UIView {
         label.textColor = .gray
         label.font = .systemFont(ofSize: 12)
         
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
+      //  let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+     //   element.addGestureRecognizer(gesture)
         
         let gap = UIView()
         gap.widthAnchor.constraint(equalToConstant: 5).isActive = true

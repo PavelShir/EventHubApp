@@ -34,7 +34,6 @@ class ExploreViewController: UIViewController, FilterDelegate {
     private var cityPicker: UIPickerView!
    
     lazy var categoryCollectionView: CategoryCollectionView = {
-//        let element =  CategoryCollectionView(frame: CGRect(x: 0, y: 190, width: 402, height: 39))
         let element =  CategoryCollectionView()
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -42,27 +41,23 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     private lazy var eventViewController :EventCollectionView = {
         let element = EventCollectionView()
-//        let element = EventCollectionView(frame: CGRect(x: 20, y: 290, width: 402, height: 255))
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var eventViewController2 :EventCollectionView = {
         let element = EventCollectionView()
-//        let element = EventCollectionView(frame: CGRect(x: 20, y: 595, width: 402, height: 255))
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     lazy var headerCustomView: HeaderExploreView = {
         let element =  HeaderExploreView()
-//        let element =  HeaderExploreView(frame: CGRect(x: 0, y: 0, width: 402, height: 210))
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     private lazy var upcomingStack : UIStackView = {
-//        let element = UIStackView(frame: CGRect(x: 20, y: 250, width: 362, height: 30))
         let element = UIStackView()
         element.axis = .horizontal
         element.distribution = .equalSpacing
@@ -76,8 +71,8 @@ class ExploreViewController: UIViewController, FilterDelegate {
         text2.font = .systemFont(ofSize: 14)
         text2.textColor = .gray
         
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
-        text2.addGestureRecognizer(gesture)
+      //  let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+      //  text2.addGestureRecognizer(gesture)
         
         
         element.addArrangedSubview(text1)
@@ -96,12 +91,13 @@ class ExploreViewController: UIViewController, FilterDelegate {
         text1.text = "Nearby You"
         text1.font = .systemFont(ofSize: 18)
         
-        let text2 = UILabel()
-        text2.text = "SeeAll"
-        text2.font = .systemFont(ofSize: 14)
-        text2.textColor = .gray
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
-        text2.addGestureRecognizer(gesture)
+        let text2 = UIButton()
+        text2.setTitle("SeeAll", for: .normal) // text = "SeeAll"
+        text2.titleLabel?.font = .systemFont(ofSize: 14)
+        text2.titleLabel?.textColor = .gray
+        text2.translatesAutoresizingMaskIntoConstraints = false
+      //  let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+     //   text2.addGestureRecognizer(gesture)
         
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
@@ -165,8 +161,6 @@ class ExploreViewController: UIViewController, FilterDelegate {
     private func setView(){
         view.backgroundColor =  .gray.withAlphaComponent(0.05)
         headerCustomView.delegate = self
-        // view.addSubview(headerView)
-        //headerView.addSubview(headerStack)
         view.addSubview(headerCustomView)
         view.addSubview(categoryCollectionView)
         view.addSubview(buttonStack)
@@ -176,14 +170,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         scrollView.addSubview(eventViewController)
         scrollView.addSubview(nearbyStack)
         scrollView.addSubview(eventViewController2)
-        
-        
-
-//        view.addSubview(upcomingStack)
-//        view.addSubview(eventViewController)
-//       // view.addSubview(eventCardView)
-//        view.addSubview(nearbyStack)
-//        view.addSubview(eventViewController2)
+  
         
         setupCityPicker()
     }
@@ -222,6 +209,20 @@ class ExploreViewController: UIViewController, FilterDelegate {
         //print("go to event details")
         
         navigationController?.pushViewController(eventVC, animated: true)
+    }
+    
+    fileprivate func convertDate(date: String) -> String {
+        
+        guard let timeInterval = Double(date) else {
+            return "error invalid Date"
+        }
+        
+        let date = Date(timeIntervalSince1970: timeInterval)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE, MMM d • h:mm a"
+        
+        return formatter.string(from: date)
     }
 
 }
@@ -366,6 +367,53 @@ func createHorizontalStackViewWithButtons() -> UIStackView {
     return button
 }
 
+
+// MARK: SearchBar Delegate methods
+extension ExploreViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Если строка поиска пуста, показываем все события
+                if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+                    isSearching = false
+                    filteredEvents = events
+                   
+                    return
+                }
+        
+        filteredEvents.removeAll()
+        
+        guard searchText != "" || searchText != " " else {
+            print("empty search")
+            return
+        }
+        
+        
+        let lowercasedSearchText = searchText.lowercased()
+          filteredEvents = events.filter { event in
+              event.title.lowercased().contains(lowercasedSearchText) ||
+              convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
+          }
+          
+          isSearching = true
+       // updateUI()
+      }
+
+        
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.resignFirstResponder()
+      }
+      
+      func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+          isSearching = false
+             searchBar.text = ""
+             filteredEvents = events
+             searchBar.resignFirstResponder()
+            // updateUI()
+      }
+        
+    }
+
 struct ViewControllerProvider: PreviewProvider {
     static var previews: some View {
         ExploreViewController().showPreview()
@@ -376,7 +424,6 @@ struct ViewControllerProvider: PreviewProvider {
 extension UIViewController {
     private struct Preview : UIViewControllerRepresentable {
         let viewController: UIViewController
-        
         
         
         func makeUIViewController(context: Context) -> some UIViewController {

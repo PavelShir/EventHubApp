@@ -155,6 +155,7 @@ class ExploreViewController: UIViewController {
                urlString = ListURL.today.urlString
            case 2:
                urlString = ListURL.films.urlString
+               print("в фильмах юрл отсутствует в апи. ссылка ведет на постер")
            case 3:
                urlString = ListURL.lists.urlString
            default:
@@ -165,7 +166,7 @@ class ExploreViewController: UIViewController {
         
         loadLists(from: urlString) { events in
             
-            print("API is \(ListURL.today.urlString)" )
+            print("API is \(urlString)" )
             listVC.itemsList = events
             
             DispatchQueue.main.async {
@@ -174,10 +175,7 @@ class ExploreViewController: UIViewController {
         }
     }
     
-    @objc func showFilms(){
-        
-        
-    }
+  
     
     @objc private func filterPressed() {
         let filterVC = FilterViewController()

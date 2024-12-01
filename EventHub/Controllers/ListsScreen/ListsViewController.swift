@@ -67,16 +67,16 @@ class ListsViewController: UIViewController {
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             
-            // переход на Ивент + передать данные об ивенте
-            // Web View
-            
             let item = itemsList[indexPath.row]
             print(item.siteUrl)
             let webViewController = WebViewController()
             webViewController.url = URL(string: item.siteUrl ?? "https://kudago.com/404")
             navigationController?.pushViewController(webViewController, animated: true)
             
+            tableView.deselectRow(at: indexPath, animated: true)
         }
+        
+        
     }
 
 

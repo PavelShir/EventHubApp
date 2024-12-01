@@ -17,10 +17,18 @@ class ExploreViewController: UIViewController, FilterDelegate {
         print("eventFilters")
         
         loadEventsSuccess(with: eventFilters) { events in
-            // Этот блок будет выполнен после того, как события будут загружены
-            self.events = events
+                     
+            self.eventsUpcoming = events
+           
             DispatchQueue.main.async {
                 self.eventViewController.reloadCollectionView()
+            }
+        }
+        
+        loadEventsSuccess(with: eventFilters) { events in
+            self.eventsNearby = events
+            DispatchQueue.main.async {
+                self.eventViewController2.reloadCollectionView()
             }
         }
                           
@@ -53,6 +61,37 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     lazy var headerCustomView: HeaderExploreView = {
         let element =  HeaderExploreView()
+        //element.isUserInteractionEnabled = true
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
+    private lazy  var currentLocationLabel : UILabel = {
+        let element = UILabel()
+        element.isUserInteractionEnabled = true
+        element.text = "Current Location"
+        element.textColor = .gray
+        
+        element.font = .systemFont(ofSize: 12)
+        element.backgroundColor = .green
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+        element.addGestureRecognizer(gesture)
+        
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
+    private lazy  var currentLocationLabelNotInScroll : UILabel = {
+        let element = UILabel()
+        element.isUserInteractionEnabled = true
+        element.text = "Current Location Not in Scroll"
+        element.textColor = .gray
+        
+        element.font = .systemFont(ofSize: 12)
+        element.backgroundColor = .red
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+        element.addGestureRecognizer(gesture)
+        
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -67,12 +106,13 @@ class ExploreViewController: UIViewController, FilterDelegate {
         text1.font = .systemFont(ofSize: 18)
         
         let text2 = UILabel()
+        text2.isUserInteractionEnabled = true
         text2.text = "SeeAll"
         text2.font = .systemFont(ofSize: 14)
         text2.textColor = .gray
         
-      //  let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
-      //  text2.addGestureRecognizer(gesture)
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+        text2.addGestureRecognizer(gesture)
         
         
         element.addArrangedSubview(text1)
@@ -91,13 +131,14 @@ class ExploreViewController: UIViewController, FilterDelegate {
         text1.text = "Nearby You"
         text1.font = .systemFont(ofSize: 18)
         
-        let text2 = UIButton()
-        text2.setTitle("SeeAll", for: .normal) // text = "SeeAll"
-        text2.titleLabel?.font = .systemFont(ofSize: 14)
-        text2.titleLabel?.textColor = .gray
-        text2.translatesAutoresizingMaskIntoConstraints = false
-      //  let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
-     //   text2.addGestureRecognizer(gesture)
+        let text2 = UILabel()
+        text2.isUserInteractionEnabled = true
+        text2.text = "SeeAll"
+        text2.font = .systemFont(ofSize: 14)
+        text2.textColor = .gray
+        
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(exploreButtonTapped))
+        text2.addGestureRecognizer(gesture)
         
         element.addArrangedSubview(text1)
         element.addArrangedSubview(text2)
@@ -122,14 +163,20 @@ class ExploreViewController: UIViewController, FilterDelegate {
     var filteredEvents: [Event] = []
     var isSearching: Bool = false
     
-    private var events: [Event] = []
+    private var eventsUpcoming: [Event] = []
     {
-        
         didSet {
             eventViewController.configure(e: events, toDetail: goToDetail)
-            eventViewController2.configure(e: events, toDetail: goToDetail)
+           
+        }
+    }
+    
+    private var eventsNearby: [Event] = []
+    {
+        didSet {
             
-            }
+            eventViewController2.configure(e: eventsNearby, toDetail: goToDetail)
+        }
     }
     
     var filter = EventFilter()
@@ -144,33 +191,43 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
+        loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
         
-        
-        
-        
-        loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
+        loadEventsSuccess(with: filter, success: loadSuccessNearby)
            
-        headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+       // headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
         
         }
     
-    func loadSuccess(e: [Event]) {
-        events = e
+    func loadSuccessUpcoming(e: [Event]) {
+//        events = e
+        eventsUpcoming = e
+    }
+    
+    func loadSuccessNearby(e: [Event]) {
+//        events = e
+        eventsNearby = e
     }
     
     private func setView(){
         view.backgroundColor =  .gray.withAlphaComponent(0.05)
-        headerCustomView.delegate = self
-        view.addSubview(headerCustomView)
-        view.addSubview(categoryCollectionView)
-        view.addSubview(buttonStack)
+      //  headerCustomView.delegate = self
+       // view.addSubview(headerCustomView)
+        
+        
         scrollView.alwaysBounceVertical = true
+        
         view.addSubview(scrollView)
+        scrollView.addSubview(headerCustomView)
+        
+        scrollView.addSubview(currentLocationLabel)
+        scrollView.addSubview(categoryCollectionView)
+        scrollView.addSubview(buttonStack)
         scrollView.addSubview(upcomingStack)
         scrollView.addSubview(eventViewController)
         scrollView.addSubview(nearbyStack)
         scrollView.addSubview(eventViewController2)
-  
+        view.addSubview(currentLocationLabelNotInScroll)
         
         setupCityPicker()
     }
@@ -178,14 +235,14 @@ class ExploreViewController: UIViewController, FilterDelegate {
     // MARK: - Actions
     
     @objc private func exploreButtonTapped() {
-        
+        print("to all events")
         let allEventsVC = AllEventsViewController()
-        
-       
         allEventsVC.events = loadEvents(with: filter)
         allEventsVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(allEventsVC, animated: true)
     }
+    
+  
     
     @objc func notificationButtonPressed(){
         
@@ -237,6 +294,14 @@ extension ExploreViewController {
             headerCustomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             headerCustomView.heightAnchor.constraint(equalToConstant: 179),
             
+            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: view.topAnchor, constant: 68),
+            currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            
+            currentLocationLabel.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 18),
+            currentLocationLabel.leadingAnchor.constraint(equalTo: headerCustomView.leadingAnchor, constant: 25),
+           // currentLocationLabel.heightAnchor.constraint(equalToConstant: 30),
+           // currentLocationLabel.widthAnchor.constraint(equalToConstant: 200),
+            
             categoryCollectionView.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: -20),
             categoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             categoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
@@ -251,18 +316,17 @@ extension ExploreViewController {
             //scrollView
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            scrollView.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.0),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
                     
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
                     
             
 //            upcomingStack
-            upcomingStack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 8.84),
+            upcomingStack.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.84),
             upcomingStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
             upcomingStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
             upcomingStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30),
             upcomingStack.heightAnchor.constraint(equalToConstant: 40),
-            
             
 //            eventViewController
             eventViewController.topAnchor.constraint(equalTo: upcomingStack.bottomAnchor, constant: 10),
@@ -329,7 +393,7 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         let cityChosen = City.allCases[row].fullName
 //        locationButton.setTitle(cityChosen, for: .normal)
-        headerCustomView.locationLabel.text = cityChosen
+      //  headerCustomView.locationLabel.text = cityChosen
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
         }

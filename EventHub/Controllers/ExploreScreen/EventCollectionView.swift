@@ -37,7 +37,7 @@ class EventCollectionView: UIView {
     override init(frame: CGRect) {
             super.init(frame: frame)
         
-           // events = loadEvents(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)))
+            events = loadEvents(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)))
             setupView()
         }
     required init?(coder: NSCoder) {

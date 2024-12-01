@@ -39,7 +39,7 @@ class EventCardView: UIView {
                 return
             }
         
-     /*   loadPlace(placeId: placeId) { [weak self] place in
+        loadPlace(placeId: placeId) { [weak self] place in
                 DispatchQueue.main.async {
                     if let place = place {
                         self?.address.text = (event.locationSlug ?? "") + ", " + (place.address ?? "")
@@ -48,33 +48,31 @@ class EventCardView: UIView {
                     }
                 }
             }
-        
-       */
+       
         if let urlToImage = event.images {
             eventImage.setImage(url: urlToImage)
         } else {
             eventImage.image = UIImage(named: "hands")
-            
         }
     }
     
     private func MMMDayPair(date: Int?) -> (String, String) {
            
-       guard let date = date else {
+        guard let date = date else {
                return ("", "")
            }
            
-           let timeInterval = TimeInterval(date)
-           
-           let dateObject = Date(timeIntervalSince1970: timeInterval)
-           
-            let dateFormatterMMM = DateFormatter()
-            dateFormatterMMM.dateFormat = "MMM"
-            
-            let dateFormatterDay = DateFormatter()
-            dateFormatterDay.dateFormat = "d"
-        
-           return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from: dateObject))
+        let timeInterval = TimeInterval(date)
+
+        let dateObject = Date(timeIntervalSince1970: timeInterval)
+       
+        let dateFormatterMMM = DateFormatter()
+        dateFormatterMMM.dateFormat = "MMM"
+
+        let dateFormatterDay = DateFormatter()
+        dateFormatterDay.dateFormat = "d"
+    
+return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from: dateObject))
    }
     
     private lazy var dateView : UIView = {
@@ -93,8 +91,8 @@ class EventCardView: UIView {
         let element = UILabel()
         
         element.text = ""
-//        element.font = .systemFont(ofSize: 17, weight: .bold)
-        element.font =  UIFont(name: "AirbnbCerealApp", size: 17)
+        element.font = .systemFont(ofSize: 17, weight: .bold)
+//        element.font =  UIFont(name: "AirbnbCerealApp", size: 17)
         
         element.textColor = UIColor(named: "primaryRed")
         element.textAlignment = .center
@@ -105,9 +103,9 @@ class EventCardView: UIView {
     private lazy var monthLabel : UILabel = {
         let element = UILabel()
         element.textColor = UIColor(named: "primaryRed")
-        element.text = "JUNE"
-//        element.font = .systemFont(ofSize: 11)
-        element.font = UIFont(name: "AirbnbCerealApp", size: 9)
+        element.text = ""
+        element.font = .systemFont(ofSize: 11)
+//        element.font = UIFont(name: "AirbnbCerealApp", size: 9)
         element.textAlignment = .center
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -135,10 +133,10 @@ class EventCardView: UIView {
     private lazy var titleLabel : UILabel = {
 //        let element = UILabel(frame: CGRect(x: 16, y: 154, width: 198, height: 30))
         let element = UILabel()
-        element.text = "International Band Music Concert"
+        element.text = ""
         element.textColor = .black
-//        element.font = .systemFont(ofSize: 18)
-        element.font =  UIFont(name: "AirbnbCerealApp", size: 18)
+        element.font = .systemFont(ofSize: 18)
+//        element.font =  UIFont(name: "AirbnbCerealApp", size: 18)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -169,8 +167,8 @@ class EventCardView: UIView {
 //        let element = UILabel(frame: CGRect(x: 82, y: 184, width: 79, height: 30))
         let element = UILabel()
         element.text = "+20 Going"
-//        element.font = .systemFont(ofSize: 12)
-        element.font =  UIFont(name: "AirbnbCerealApp", size: 12)
+        element.font = .systemFont(ofSize: 12)
+//        element.font =  UIFont(name: "AirbnbCerealApp", size: 12)
         element.textColor = UIColor(named: "primaryBlue")
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -179,9 +177,9 @@ class EventCardView: UIView {
     private lazy var address : UILabel = {
 //        let element = UILabel(frame: CGRect(x: 16, y: 221, width: 198, height: 30))
         let element = UILabel()
-        element.text = "36 Guild Street London, UK"
-//        element.font = .systemFont(ofSize: 13)
-        element.font =  UIFont(name: "AirbnbCerealApp", size: 13)
+        element.text = ""
+        element.font = .systemFont(ofSize: 13)
+//        element.font =  UIFont(name: "AirbnbCerealApp", size: 11)
         element.textColor = .gray
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -213,8 +211,9 @@ class EventCardView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
-        layer.cornerRadius = 10
+       // backgroundColor = .white
+        //layer.cornerRadius = 10
+       // clipsToBounds = true
         setupView()
     }
 
@@ -292,13 +291,13 @@ class EventCardView: UIView {
             
             mapPinImage.topAnchor.constraint(equalTo: user1.bottomAnchor, constant: 10),
             mapPinImage.leadingAnchor.constraint(equalTo: leadingAnchor , constant: 20),
-            mapPinImage.widthAnchor.constraint(equalToConstant: 16),
+            mapPinImage.widthAnchor.constraint(equalToConstant: 18),
             mapPinImage.heightAnchor.constraint(equalToConstant: 16),
             
             address.topAnchor.constraint(equalTo: user1.bottomAnchor, constant: 10),
-            address.leadingAnchor.constraint(equalTo: leadingAnchor , constant: 50),
+            address.leadingAnchor.constraint(equalTo: mapPinImage.trailingAnchor , constant: 5),
             address.widthAnchor.constraint(equalToConstant: 182),
-            address.heightAnchor.constraint(equalToConstant: 18),
+            address.heightAnchor.constraint(equalToConstant: 13),
         ])
     }
     

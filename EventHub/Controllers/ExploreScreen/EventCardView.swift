@@ -30,7 +30,7 @@ class EventCardView: UIView {
         monthLabel.text = mmm
         
         titleLabel.text = event.title
-        
+        userCount.text = String(event.favoritesCount) + " Going"
         
         guard let placeId = event.placeId else {
             address.text = event.locationSlug
@@ -113,12 +113,12 @@ class EventCardView: UIView {
         return element
     }()
     
-    private lazy var bookmarkImage : UIImageView = {
-        let element = UIImageView(frame: CGRect(x: 195, y: 25, width: 14.1, height: 14))
-        element.image = UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10))
-        element.tintColor = UIColor(named: "primaryRed")
-//        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+   var bookmarkImage: UIButton = {
+        let button = UIButton(type: .custom)  // Создаем кастомную кнопку
+        button.frame = CGRect(x: 195, y: 25, width: 14.1, height: 14)  // Устанавливаем фрейм
+        button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10)), for: .normal)  // Устанавливаем изображение для нормального состояния
+        button.tintColor = UIColor(named: "primaryRed")  // Устанавливаем цвет
+        return button
     }()
     
     private lazy var titleLabel : UILabel = {

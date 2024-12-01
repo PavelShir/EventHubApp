@@ -6,14 +6,12 @@ class CategoryCollectionView: UIView{
     let categoryList = [
         CategoryModel(label: "Sport", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
         CategoryModel(label: "Music", imageName: "music.note", color: UIColor(named: "primaryOrange")!),
-        CategoryModel(label: "Food", imageName: "fork.knife", color: UIColor(named: "primaryGreen")!),
         CategoryModel(label: "Art", imageName: "paintpalette.fill", color: UIColor(named: "primaryLightBlue")!),
         CategoryModel(label: "Business", imageName: "bubble.left.and.bubble.right", color: UIColor(named: "primaryRed")!),
         CategoryModel(label: "Cinema", imageName: "film", color: UIColor(named: "primaryOrange")!),
-        CategoryModel(label: "Fashion", imageName: "camera", color: UIColor(named: "primaryGreen")!),
         CategoryModel(label: "Kids", imageName: "figure.2.and.child.holdinghands", color: UIColor(named: "primaryLightBlue")!),
         CategoryModel(label: "Parties", imageName: "figure.dance", color: UIColor(named: "primaryRed")!),
-        CategoryModel(label: "Other", imageName: "binoculars", color: UIColor(named: "primaryOrange")!),
+       
     ]
     
     private lazy var mainCollectionView: UICollectionView = {

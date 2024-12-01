@@ -11,6 +11,7 @@ import SwiftUI
 
 class ExploreViewController: UIViewController {
     
+    private let eventCollectionView = EventCollectionView(frame: .zero)
     
     // MARK: - UI
    
@@ -100,6 +101,8 @@ class ExploreViewController: UIViewController {
         
         loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
             
+        eventViewController.parentViewController = self
+           eventViewController2.parentViewController = self
         }
     
     func loadSuccess(e: [Event]) {

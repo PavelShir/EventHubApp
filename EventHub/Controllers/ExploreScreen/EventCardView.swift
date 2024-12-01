@@ -10,7 +10,7 @@ import UIKit
 class EventCardView: UIView {
     
 //    var event: EventModel?
-   
+    var bookmarkAction: (() -> Void)?
     
     private lazy var image : UIImageView = {
         let element = UIImageView(frame: CGRect(x: 9, y: 10, width: 218, height: 131))
@@ -118,6 +118,7 @@ class EventCardView: UIView {
         button.frame = CGRect(x: 195, y: 25, width: 14.1, height: 14)  // Устанавливаем фрейм
         button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10)), for: .normal)  // Устанавливаем изображение для нормального состояния
         button.tintColor = UIColor(named: "primaryRed")  // Устанавливаем цвет
+ 
         return button
     }()
     
@@ -188,11 +189,18 @@ class EventCardView: UIView {
         backgroundColor = .white
         layer.cornerRadius = 10
         setupView()
+        
+        bookmarkImage.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    @objc private func bookmarkTapped() {
+           bookmarkAction?()  
+       }
     
     private func setupView() {
         

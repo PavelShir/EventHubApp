@@ -13,6 +13,13 @@ protocol FilterDelegate: AnyObject {
 
 class FilterViewController: UIViewController {
     
+    enum SourceScreen {
+            case main
+            case search
+        }
+
+    var source: SourceScreen?
+    
     weak var delegate: FilterDelegate?
     let currentTime = Int(Date().timeIntervalSince1970)
 
@@ -219,6 +226,7 @@ class FilterViewController: UIViewController {
     
     @objc private func resetTapped() {
         self.dismiss(animated: true)
+        
     }
     
     @objc private func sliderValueChanged(_ sender: UISlider) {
@@ -261,7 +269,7 @@ class FilterViewController: UIViewController {
         todayButton.isSelected = false
         tomorrowButton.isSelected = false
         thisWeekButton.isSelected = false
-      
+        calendarButton.isSelected = false
         
         sender.isSelected = true
         sender.backgroundColor = sender.isSelected ? UIColor(named: Constants.allColors.primaryBlue) : .white
@@ -273,21 +281,23 @@ class FilterViewController: UIViewController {
             eventFilters.actualUntil = String((currentTime) + 86400)
             thisWeekButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
-            
+            calendarButton.backgroundColor = .white
             
         case tomorrowButton:
             eventFilters.actualSince = String((currentTime) + 86400)
             eventFilters.actualUntil = String((currentTime) + 86400 * 2)
             todayButton.backgroundColor = .white
             thisWeekButton.backgroundColor = .white
-            
+            calendarButton.backgroundColor = .white
+
             
         case thisWeekButton:
             eventFilters.actualSince = String(Int(currentTime))
             eventFilters.actualUntil = String(Int(currentTime + 86400 * 7))
             todayButton.backgroundColor = .white
             tomorrowButton.backgroundColor = .white
-           
+            calendarButton.backgroundColor = .white
+
 
         default:
             eventFilters.actualSince = String(currentTime)
@@ -298,17 +308,25 @@ class FilterViewController: UIViewController {
     }
     
     @objc func setFiltersApply() {
-
-        print(eventFilters)
-             
-            
-             delegate?.didApplyFilters(eventFilters)
-            
-             self.dismiss(animated: true) {
-             }
         
+        switch source {
+            
+        case .main:
+            let searchVC = SearchViewController()
+            searchVC.events = loadEvents(with: eventFilters)
+            present(searchVC, animated: true)
+            
+        case .search:
+            print(eventFilters)
+            delegate?.didApplyFilters(eventFilters)
+            self.dismiss(animated: true)
+            
+        case .none:
+            print("error with filterVC enum")
+            dismiss(animated: true)
         }
     }
+}
     
 
 

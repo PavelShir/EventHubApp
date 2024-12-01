@@ -32,19 +32,22 @@ class EventDetailHeader: UIView {
     
     private lazy var shareView : UIView = {
         let element = UIView()
-        element.addSubview(shareImage)
+        element.addSubview(shareButton)
         element.backgroundColor = .white.withAlphaComponent(0.3)
         element.layer.cornerRadius = 10
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    private lazy var shareImage : UIImageView = {
-        let element = UIImageView()
-        element.image = UIImage(named: "share")
-        element.tintColor = .white
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+      var shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        button.setImage(UIImage(named: "share")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .white
+        
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - Life cycle
@@ -78,10 +81,10 @@ class EventDetailHeader: UIView {
             shareView.heightAnchor.constraint(equalToConstant: 36),
             shareView.widthAnchor.constraint(equalToConstant: 36),
             
-            shareImage.heightAnchor.constraint(equalToConstant: 24),
-            shareImage.widthAnchor.constraint(equalToConstant: 24),
-            shareImage.centerXAnchor.constraint(equalTo: shareView.centerXAnchor),
-            shareImage.centerYAnchor.constraint(equalTo: shareView.centerYAnchor),
+            shareButton.heightAnchor.constraint(equalToConstant: 24),
+            shareButton.widthAnchor.constraint(equalToConstant: 24),
+            shareButton.centerXAnchor.constraint(equalTo: shareView.centerXAnchor),
+            shareButton.centerYAnchor.constraint(equalTo: shareView.centerYAnchor),
             
             
             bookmarkView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),

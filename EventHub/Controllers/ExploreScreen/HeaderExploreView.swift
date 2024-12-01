@@ -239,7 +239,7 @@ extension HeaderExploreView {
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             headerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 48),
+            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 68),
             currentLocationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
             
 //            headerStack.topAnchor.constraint(equalTo: headerView.topAnchor),

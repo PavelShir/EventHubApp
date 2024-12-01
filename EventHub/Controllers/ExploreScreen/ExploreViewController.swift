@@ -186,6 +186,10 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     override func viewDidLoad()  {
         super.viewDidLoad()
+       // self.navigationController?.isToolbarHidden = true
+      //  self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.navigationBar.backgroundColor = .red
+        navigationController?.toolbar.backgroundColor = .yellow
         setView()
         setupConstrains()
         
@@ -211,7 +215,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     private func setView(){
         view.backgroundColor =  .gray.withAlphaComponent(0.05)
-      //  headerCustomView.delegate = self
+        headerCustomView.delegate = self
        // view.addSubview(headerCustomView)
         
         
@@ -294,7 +298,7 @@ extension ExploreViewController {
             headerCustomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             headerCustomView.heightAnchor.constraint(equalToConstant: 179),
             
-            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: view.topAnchor, constant: 68),
+            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: view.topAnchor, constant: 98),
             currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
             
             currentLocationLabel.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 18),

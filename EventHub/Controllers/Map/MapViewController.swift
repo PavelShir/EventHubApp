@@ -10,6 +10,7 @@ import MapKit
 
 class MapViewController: UIViewController {
     
+    
     var cityName: String?
     var mapEvents: [Event] = []
     var places: [Place] = []
@@ -111,7 +112,7 @@ class MapViewController: UIViewController {
         
         view.addSubview(categoryCircleView)
         NSLayoutConstraint.activate([
-            categoryCircleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            categoryCircleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
             categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 1),
             categoryCircleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -1),
             categoryCircleView.heightAnchor.constraint(equalToConstant: 90)
@@ -128,33 +129,40 @@ class MapViewController: UIViewController {
     
     @objc private func addBookmark() {
         
-        if cell.bookmarkIcon.image(for: .normal) == UIImage(systemName: "bookmark") {
-            cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-               
-               var favorites = StorageManager.shared.loadFavorite()
-               
-            if favorites.contains(where: { $0.id == selectedEvent?.id }) {
-                showAlreadyInFavoritesAlert(for: selectedEvent!)
-               } else {
-                   favorites.append(selectedEvent!)
-                   StorageManager.shared.saveFavorites(favorites)
-                   showFavoriteAddedAlert(for: selectedEvent!)
-                   
-                   NotificationCenter.default.post(name: .favoriteEventAdded, object: selectedEvent!)
-               }
-           } else {
-               // Если иконка уже заполненная, это значит событие в избранном, убираем его
-               cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark"), for: .normal)
-               
-               var favorites = StorageManager.shared.loadFavorite()
-               
-               if let index = favorites.firstIndex(where: { $0.id == selectedEvent?.id }) {
-                   favorites.remove(at: index)
-                   StorageManager.shared.saveFavorites(favorites)
-                    
-               }
-           }
-       }
+        print("bookmark")
+
+        var favorites = StorageManager.shared.loadFavorite()
+
+          if !favorites.contains(where: { $0.id == selectedEvent?.id }) {
+              // Если событие не в избранных, добавляем его
+              guard let selectedEvent = selectedEvent else { return }
+              
+              favorites.append(selectedEvent)
+              StorageManager.shared.saveFavorites(favorites)
+
+              // Обновляем иконку на заполненную
+              cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+
+              // Показываем уведомление
+              showFavoriteAddedAlert(for: selectedEvent)
+
+              // Отправляем уведомление, что событие добавлено в избранное
+              NotificationCenter.default.post(name: .favoriteEventAdded, object: selectedEvent)
+          } else {
+              // Если событие уже в избранном, удаляем его
+              showAlreadyInFavoritesAlert(for: selectedEvent!)
+
+              // Обновляем иконку на пустую
+              cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark"), for: .normal)
+
+              // Загружаем избранные, удаляем событие
+              var favorites = StorageManager.shared.loadFavorite()
+              if let index = favorites.firstIndex(where: { $0.id == selectedEvent?.id }) {
+                  favorites.remove(at: index)
+                  StorageManager.shared.saveFavorites(favorites)
+              }
+          }
+      }
     
     private func showFavoriteAddedAlert(for event: Event) {
         let alertController = UIAlertController(
@@ -172,7 +180,7 @@ class MapViewController: UIViewController {
     
     private func showAlreadyInFavoritesAlert(for event: Event) {
         let alertController = UIAlertController(
-            title: "Already in Favorites!",
+            title: "Removed from Favorites!",
             message: "\(event.title)",
             preferredStyle: .alert
         )
@@ -446,6 +454,8 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavCell", for: indexPath) as? FavCell,
               let event = selectedEvent else { return UITableViewCell() }
         
+        cell.bookmarkIcon.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+
         cell.configure(with: event)
         return cell
     }
@@ -470,4 +480,4 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-//    #Preview {MapViewController(cityName: "kazan") }
+    #Preview {MapViewController(cityName: "moscow") }

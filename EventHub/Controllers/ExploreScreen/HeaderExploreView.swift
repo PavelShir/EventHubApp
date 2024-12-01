@@ -10,7 +10,6 @@ import UIKit
 class HeaderExploreView: UIView {
     
     weak var delegate: ExploreViewController?
-    
     // MARK: - UI
     
     private lazy var headerView : UIView = {
@@ -26,11 +25,9 @@ class HeaderExploreView: UIView {
     private lazy  var currentLocationLabel : UILabel = {
         let element = UILabel()
         element.isUserInteractionEnabled = true
-        element.text = "Current Location in Header"
-        element.textColor = .gray
-        
+        element.text = "Current Location"
+        element.textColor = .white.withAlphaComponent(0.7)
         element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .yellow
         let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
         element.addGestureRecognizer(gesture)
         
@@ -38,156 +35,87 @@ class HeaderExploreView: UIView {
         return element
     }()
     
-//    private let searchBar: UISearchBar = {
-//        let search = UISearchBar()
-//        
-//        let placeholderText = NSAttributedString(string: "Search...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-//      
-//        search.searchTextField.attributedPlaceholder = placeholderText
-//        search.searchTextField.textColor = .white
-//        
-//        search.translatesAutoresizingMaskIntoConstraints = false
-//        search.backgroundColor = UIColor(named: "darkBlue")
-//        
-//        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-//        search.searchTextField.backgroundColor = UIColor(named: "darkBlue")
-//       
-//       
-//        //search.layer.cornerRadius = 10
-//        search.clipsToBounds = true
-//        
-//        let customImageView = UIImageView(image: UIImage(named: "searchExplore"))
-//        customImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 10)
-//        customImageView.contentMode = .scaleAspectFit
-//        
-//        search.searchTextField.leftView = customImageView
-//        search.searchTextField.leftViewMode = .always
-//        
-//        return search
-//    }()
+    private lazy var downIcon : UIImageView = {
+        let element = UIImageView()
+        element.isUserInteractionEnabled = true
+        element.image = UIImage(named: "down")
+        element.tintColor = .white
+        
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+        element.addGestureRecognizer(gesture)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
-//    private lazy var currentLocationRow : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .horizontal
-//        
-//        let label = UILabel()
-//        label.text = "Current Location"
-//        label.textColor = .gray
-//        label.font = .systemFont(ofSize: 12)
-//        
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-//        
-//        element.addGestureRecognizer(gesture)
-//        element.isUserInteractionEnabled = true
-//        
-//        let gap = UIView()
-//        gap.widthAnchor.constraint(equalToConstant: 5).isActive = true
-//        
-//        element.addArrangedSubview(label)
-//        element.addArrangedSubview(gap)
-//        element.addArrangedSubview(iconTriangle)
-//        element.addArrangedSubview(UIView())
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-//    
-//    private lazy var iconTriangle : UIImageView = {
-//        let element = UIImageView()
-//        element.image = UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12.0))
-//      //  element.image = UIImage(named: "down")
-//        element.tintColor = .white
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-//    
-//    var locationLabel : UILabel = {
-//        let element = UILabel()
-//        element.text = "Moscow"
-//        element.textColor = .white
-//        element.font = .systemFont(ofSize: 13)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-//    
-//    private lazy var locationCol : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .vertical
-//        element.addArrangedSubview(currentLocationRow)
-//        element.addArrangedSubview(locationLabel)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-//    
-//    private lazy var locationRow : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .horizontal
-//        element.distribution = .fillProportionally
-//        let gap = UIView()
-//        gap.widthAnchor.constraint(equalToConstant: 15).isActive = true
-//        element.addArrangedSubview(gap)
-//        element.addArrangedSubview(locationCol)
-//        element.addArrangedSubview(notificationButton)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-//    
-//    private lazy var notificationButton : UIButton = {
-//        let element = UIButton(type: .custom)
-//        element.backgroundColor = UIColor(named: "primaryBlue")
-//        element.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
-//        element.layer.cornerRadius = 0.5 * element.bounds.size.width
-//        element.clipsToBounds = true
-//        let image = UIImage(systemName: "bell.badge")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-//        element.setImage(image, for: .normal)
-//        element.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
+    var cityLabel : UILabel = {
+        let element = UILabel()
+        element.isUserInteractionEnabled = true
+        element.text = "Moscow"
+        
+        element.textColor = .white
+        element.font = .systemFont(ofSize: 13)
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
+        element.addGestureRecognizer(gesture)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
-//    private lazy var searchFilterRow : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .horizontal
-//        
-//        element.addArrangedSubview(searchBar)
-//        
-//       // element.addArrangedSubview(searchRow)
-//        element.addArrangedSubview(filterButton)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
+    private let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        
+        let placeholderText = NSAttributedString(string: "Search...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+      
+        search.searchTextField.attributedPlaceholder = placeholderText
+        search.searchTextField.textColor = .white
+        
+        search.translatesAutoresizingMaskIntoConstraints = false
+        search.backgroundColor = UIColor(named: "darkBlue")
+        
+        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        search.searchTextField.backgroundColor = UIColor(named: "darkBlue")
+        search.clipsToBounds = true
+        
+        let customImageView = UIImageView(image: UIImage(named: "searchExplore"))
+        customImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 10)
+        customImageView.contentMode = .scaleAspectFit
+        
+        search.searchTextField.leftView = customImageView
+        search.searchTextField.leftViewMode = .always
+        
+        search.translatesAutoresizingMaskIntoConstraints = false
+        
+        return search
+    }()
     
+    private lazy var notificationButton : UIButton = {
+        let element = UIButton(type: .custom)
+        element.backgroundColor = UIColor(named: "primaryBlue")
+        element.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
+        element.layer.cornerRadius = 0.5 * element.bounds.size.width
+        element.clipsToBounds = true
+        let image = UIImage(named: "bell")
+        element.setImage(image, for: .normal)
+        element.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
+     lazy var filterButton : UIButton = {
+        let element = UIButton(type: .custom)
+        element.backgroundColor = UIColor(named: "primaryBlue")
+        let imageFilter = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        element.setTitle("Filters", for: .normal)
+        element.titleLabel?.font = .systemFont(ofSize: 12)
 
-//     lazy var filterButton : UIButton = {
-//
-//        let element = UIButton(type: .custom)
-//        element.backgroundColor = UIColor(named: "primaryBlue")
-//        let imageFilter = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-//        element.setTitle("Filters", for: .normal)
-//        element.titleLabel?.font = .systemFont(ofSize: 12)
-//        
-//        element.layer.cornerRadius = 15
-//        element.setImage(imageFilter, for: .normal)
-//        
-//        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
-//        element.isUserInteractionEnabled = true
-//         
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-  
-    
-//    private lazy var headerStack : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .vertical
-//       // element.addArrangedSubview(locationRow)
-//        element.addArrangedSubview(searchFilterRow)
-//        element.addArrangedSubview(UIView())
-//       
-//    //    element.setCustomSpacing(15.83, after: locationRow)
-//        element.setCustomSpacing(5, after: searchFilterRow)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
+        element.layer.cornerRadius = 15
+        element.setImage(imageFilter, for: .normal)
+
+        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        element.isUserInteractionEnabled = true
+
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
     // MARK: - Life Cicle
     
@@ -204,7 +132,11 @@ class HeaderExploreView: UIView {
         
         addSubview(headerView)
         addSubview(currentLocationLabel)
-        
+        addSubview(downIcon)
+        addSubview(cityLabel)
+        addSubview(searchBar)
+        addSubview(notificationButton)
+        addSubview(filterButton)
 //        addSubview(headerView)
      //   headerView.addSubview(headerStack)
         //view.addSubview(customView)
@@ -239,37 +171,29 @@ extension HeaderExploreView {
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             headerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 68),
-            currentLocationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+            currentLocationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            currentLocationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            downIcon.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            downIcon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 117),
             
-//            headerStack.topAnchor.constraint(equalTo: headerView.topAnchor),
-//            headerStack.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-//            headerStack.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
-//            headerStack.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-//          
-
-//            
-//            headerView.heightAnchor.constraint(equalToConstant: 179),
-//            
-//            locationRow.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 60),
-//            locationRow.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10),
-//            locationRow.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -30),
-//            
-            //currentLocationRow.heightAnchor.constraint(equalToConstant: 10),
+            cityLabel.topAnchor.constraint(equalTo: topAnchor, constant: 25),
+            cityLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             
-//            notificationButton.widthAnchor.constraint(equalToConstant: 36),
-//            notificationButton.heightAnchor.constraint(equalToConstant: 36),
+            notificationButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            notificationButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            notificationButton.heightAnchor.constraint(equalToConstant: 36),
+            notificationButton.widthAnchor.constraint(equalToConstant: 36),
             
-            //searchIcon.widthAnchor.constraint(equalToConstant: 30),
-            //searchIcon.heightAnchor.constraint(equalToConstant: 24),
+            searchBar.topAnchor.constraint(equalTo: topAnchor, constant: 60),
+            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -100),
+            searchBar.heightAnchor.constraint(equalToConstant: 30),
             
-           // iconTriangle.widthAnchor.constraint(equalToConstant: 10),
-            //iconTriangle.heightAnchor.constraint(equalToConstant: 5),
+            filterButton.topAnchor.constraint(equalTo: topAnchor, constant: 60),
+            filterButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            filterButton.heightAnchor.constraint(equalToConstant: 30),
+            filterButton.widthAnchor.constraint(equalToConstant: 75),
             
-//            currentLocationRow.widthAnchor.constraint(equalToConstant: 10),
-            
-//            filterButton.widthAnchor.constraint(equalToConstant: 75), //75
-//            filterButton.heightAnchor.constraint(equalToConstant: 32.14),
         ])
     }
 }

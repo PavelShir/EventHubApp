@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SwiftUI
+//import SwiftUI
 
 class ExploreViewController: UIViewController, FilterDelegate {
     
@@ -31,8 +31,6 @@ class ExploreViewController: UIViewController, FilterDelegate {
                 self.eventViewController2.reloadCollectionView()
             }
         }
-                          
-        
     }
     
     // MARK: - UI
@@ -66,32 +64,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
-    private lazy  var currentLocationLabel : UILabel = {
-        let element = UILabel()
-        element.isUserInteractionEnabled = true
-        element.text = "Current Location"
-        element.textColor = .gray
-        
-        element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .green
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
-        
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    
-    private lazy  var currentLocationLabelNotInScroll : UILabel = {
-        let element = UILabel()
-        element.isUserInteractionEnabled = true
-        element.text = "Current Location Not in Scroll"
-        element.textColor = .gray
-        
-        element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .red
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
-        
+    private lazy var backgroundView : UIView = {
+        let element = UIView()
+        element.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -167,14 +142,12 @@ class ExploreViewController: UIViewController, FilterDelegate {
     {
         didSet {
             eventViewController.configure(e: events, toDetail: goToDetail)
-           
         }
     }
     
     private var eventsNearby: [Event] = []
     {
         didSet {
-            
             eventViewController2.configure(e: eventsNearby, toDetail: goToDetail)
         }
     }
@@ -186,10 +159,10 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     override func viewDidLoad()  {
         super.viewDidLoad()
-       // self.navigationController?.isToolbarHidden = true
-      //  self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.navigationBar.backgroundColor = .red
-        navigationController?.toolbar.backgroundColor = .yellow
+       
+        self.navigationController?.isNavigationBarHidden = true
+       //self.navigationController?.navigationBar.backgroundColor = .red
+    
         setView()
         setupConstrains()
         
@@ -214,25 +187,19 @@ class ExploreViewController: UIViewController, FilterDelegate {
     }
     
     private func setView(){
-        view.backgroundColor =  .gray.withAlphaComponent(0.05)
+        view.backgroundColor = UIColor(named: "darkBlue")//.gray
         headerCustomView.delegate = self
-       // view.addSubview(headerCustomView)
         
-        
-        scrollView.alwaysBounceVertical = true
-        
+        view.addSubview(backgroundView)
+        //scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
         scrollView.addSubview(headerCustomView)
-        
-        scrollView.addSubview(currentLocationLabel)
         scrollView.addSubview(categoryCollectionView)
         scrollView.addSubview(buttonStack)
         scrollView.addSubview(upcomingStack)
         scrollView.addSubview(eventViewController)
         scrollView.addSubview(nearbyStack)
         scrollView.addSubview(eventViewController2)
-        view.addSubview(currentLocationLabelNotInScroll)
-        
         setupCityPicker()
     }
     
@@ -246,12 +213,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         navigationController?.pushViewController(allEventsVC, animated: true)
     }
     
-  
-    
     @objc func notificationButtonPressed(){
         
     }
-    
 
     @objc func filterPressed() {
         
@@ -259,8 +223,6 @@ class ExploreViewController: UIViewController, FilterDelegate {
         let filterVC = FilterViewController()
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
-        
-
         present(filterVC, animated: true)
     }
     
@@ -293,19 +255,18 @@ extension ExploreViewController {
     private func setupConstrains(){
         NSLayoutConstraint.activate([
             
-            headerCustomView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            
+            
+            headerCustomView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             headerCustomView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             headerCustomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            headerCustomView.heightAnchor.constraint(equalToConstant: 179),
+            headerCustomView.heightAnchor.constraint(equalToConstant: 136),
             
-            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: view.topAnchor, constant: 98),
-            currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-            
-            currentLocationLabel.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 18),
-            currentLocationLabel.leadingAnchor.constraint(equalTo: headerCustomView.leadingAnchor, constant: 25),
-           // currentLocationLabel.heightAnchor.constraint(equalToConstant: 30),
-           // currentLocationLabel.widthAnchor.constraint(equalToConstant: 200),
-            
+            backgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+ 
             categoryCollectionView.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: -20),
             categoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             categoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
@@ -323,8 +284,6 @@ extension ExploreViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
                     
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-                    
-            
 //            upcomingStack
             upcomingStack.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 8.84),
             upcomingStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
@@ -348,7 +307,6 @@ extension ExploreViewController {
             eventViewController2.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
 //            eventViewController2.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             eventViewController2.heightAnchor.constraint(equalToConstant: 255),
-            
             
         ])
     }
@@ -397,7 +355,7 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         let cityChosen = City.allCases[row].fullName
 //        locationButton.setTitle(cityChosen, for: .normal)
-      //  headerCustomView.locationLabel.text = cityChosen
+        headerCustomView.cityLabel.text = cityChosen
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
         }
@@ -482,30 +440,30 @@ extension ExploreViewController: UISearchBarDelegate {
         
     }
 
-struct ViewControllerProvider: PreviewProvider {
-    static var previews: some View {
-        ExploreViewController().showPreview()
-    }
-}
-
-
-extension UIViewController {
-    private struct Preview : UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-    
-    func showPreview() -> some View {
-        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-    }
-    
-}
+//struct ViewControllerProvider: PreviewProvider {
+//    static var previews: some View {
+//        ExploreViewController().showPreview()
+//    }
+//}
+//
+//
+//extension UIViewController {
+//    private struct Preview : UIViewControllerRepresentable {
+//        let viewController: UIViewController
+//        
+//        
+//        func makeUIViewController(context: Context) -> some UIViewController {
+//            viewController
+//        }
+//        
+//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//            
+//        }
+//    }
+//    
+//    func showPreview() -> some View {
+//        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+//    }
+//    
+//}
 

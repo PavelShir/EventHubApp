@@ -9,6 +9,12 @@ import UIKit
 
 class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
+    private var user: UserModel?
+    private var isExpanded = false
+    
+    var isGuestUser: Bool {
+        return AuthManager.shared.currentUser == nil
+    }
     //    MARK: - UI Elements
     let titleEditProfile = "Edit Profile"
     let imageSignOutButton = "signout"
@@ -136,6 +142,29 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         return element
     }()
     
+    private lazy var signInButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.title = "Sign In"
+        configuration.attributedTitle?.font = UIFont(name: "Inter-SemiBold", size: 16)
+        configuration.titleAlignment = .leading
+        configuration.baseForegroundColor = .black
+        
+        configuration.image = UIImage(named: imageSignOutButton)
+        configuration.imagePadding = 16
+        
+        configuration.baseBackgroundColor = .white
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 13, leading: 19, bottom: 12, trailing: 18)
+        
+        let element = UIButton(configuration: configuration)
+        element.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
+    @objc func signInTapped(_ sender: UIButton) {
+        let vc = SingInController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     //     MARK: - Lifecycle Methods
     
@@ -146,11 +175,20 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = titleEditProfile
-        loadProfileData()
         configureUI()
         setupGestureRecognizer()
         setupTextFieldDelegates()
         
+        loadProfileData()
+        configureUI()
+        
+        // check user auth and configure wright button
+        
+        if isGuestUser {
+            setupSignInButton()
+        } else {
+            loadUserData()
+        }
     }
     
     @objc func backButtonTapped() {
@@ -212,39 +250,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         nameLabel.delegate = self
         aboutMeText.delegate = self
     }
-    //        func updateUIForEditMode() {
-    //            pictureUser.isUserInteractionEnabled = true
-    //            nameLabel.isEnabled = true
-    //            aboutMeText.isEnabled = true
-    ////
-    ////            if isEditMode {
-    ////                // Enable text fields for editing
-    ////                pictureUser.isUserInteractionEnabled = true
-    ////                nameLabel.isEnabled = true
-    ////                aboutMeText.isEnabled = true
-    ////
-    ////                // Change button title to "Save"
-    ////
-    ////
-    ////            } else {
-    ////                // Disable text fields
-    ////                pictureUser.isUserInteractionEnabled = false
-    ////                nameLabel.isEnabled = false
-    ////                aboutMeText.isEnabled = false
-    ////
-    ////            }
-    //        }
-    //
-    //        var changesMade = true
-    //        var isEditMode = true
-    //
-    //        @objc func toggleEditMode() {
-    //            if changesMade {
-    //                saveProfileData() // Save changes before toggling edit mode
-    //            }
-    //            isEditMode = !isEditMode
-    //            updateUIForEditMode()
-    //        }
     
     @objc func handleImageTap() {
         
@@ -324,26 +329,12 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @objc func cancelButton() {
-        
-        //        if #available(iOS 16.0, *) {
-        //            navigationItem.leftBarButtonItem?.isHidden
-        //        } else {
-        //            // Fallback on earlier versions
-        //        }
-        //
-        //        if #available(iOS 16.0, *) {
-        //            navigationItem.rightBarButtonItem?.isHidden
-        //        } else {
-        //            // Fallback on earlier versions
-        //        }
         navigationController?.popViewController(animated: true)
-        //        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
     }
     
     @objc func doneButton() {
         saveProfileData()
         navigationController?.popViewController(animated: true)
-        //        self.navigationController?.pushViewController(EditProfileViewController(), animated: true)
     }
     
     @objc func signOutTapped(_ sender: UIButton) {
@@ -365,7 +356,34 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             }
         }
     
-    
+    func setupSignInButton() {
+        scrollView.addSubview(signInButton)
+        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            signInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49)
+        ])
+    }
 }
 
+
+extension EditProfileViewController {
+    private func loadUserData() {
+        guard let user = AuthManager.shared.currentUser else { return }
+        
+        FirestoreManager.shared.getUserData(userID: user.uid) { [weak self] result in
+            switch result {
+            case .success(let userData):
+                if let username = userData["username"] as? String {
+                    self?.nameUser = username
+                    self?.nameLabel.text = username
+                }
+                
+            case .failure(let error):
+                self?.showAlert(title: "Ошибка", message: error.localizedDescription)
+            }
+        }
+    }
+}
 

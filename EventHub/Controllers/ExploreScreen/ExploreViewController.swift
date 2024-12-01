@@ -150,6 +150,8 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         
         
+        
+        
         loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccess)
            
         headerCustomView.filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)

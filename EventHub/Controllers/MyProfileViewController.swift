@@ -328,14 +328,17 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         ])
     }
 }
-    extension UIImage {
-        static func emtyImage(with size: CGSize) -> UIImage? {
-            UIGraphicsBeginImageContext(size)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return image
-        }
+
+
+extension UIImage {
+    static func emtyImage(with size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
+}
+
 
 extension MyProfileViewController {
     private func loadUserData() {

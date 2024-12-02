@@ -130,18 +130,42 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
-    private lazy  var currentLocationLabelNotInScroll : UILabel = {
-        let element = UILabel()
-        element.isUserInteractionEnabled = true
-        element.text = "Current Location"
-        element.textColor = .white
-        
-        element.font = .systemFont(ofSize: 12)
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
-        element.addGestureRecognizer(gesture)
-        
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private lazy var currentLocationLabelNotInScroll: UIView = {
+        // Основной контейнер, объединяющий текст и значок
+        let container = UIStackView()
+        container.axis = .horizontal
+        container.alignment = .center
+        container.spacing = 2
+        container.isUserInteractionEnabled = true
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        // Текст
+        let label = UILabel()
+        label.text = "Current Location"
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 12)
+        label.isUserInteractionEnabled = true
+
+        // Значок
+        let iconImageView = UIImageView()
+        iconImageView.image = UIImage(systemName: "chevron.down")
+        iconImageView.tintColor = .white
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            iconImageView.widthAnchor.constraint(equalToConstant: 14),
+            iconImageView.heightAnchor.constraint(equalToConstant: 14)
+        ])
+
+        // Добавление элементов в стек
+        container.addArrangedSubview(label)
+        container.addArrangedSubview(iconImageView)
+
+        // Жест на основной контейнер
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showCityPicker))
+        container.addGestureRecognizer(gesture)
+
+        return container
     }()
     
     private lazy var upcomingStack : UIStackView = {
@@ -346,17 +370,19 @@ class ExploreViewController: UIViewController, FilterDelegate {
             searchBar.heightAnchor.constraint(equalToConstant: 50),
 
             
-            searchFilterRow.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 20),
+            searchFilterRow.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 10),
             searchFilterRow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             searchFilterRow.widthAnchor.constraint(equalToConstant: 60),
-            searchFilterRow.heightAnchor.constraint(equalToConstant: 50),
+            searchFilterRow.heightAnchor.constraint(equalToConstant: 30),
             
         
             // Category Collection View
             categoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             categoryCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            categoryCollectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: 0),
+            categoryCollectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             categoryCollectionView.heightAnchor.constraint(equalToConstant: 40),
+            categoryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+
             
             // List Stack View
             listStackView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),

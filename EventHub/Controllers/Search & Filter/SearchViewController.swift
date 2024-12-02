@@ -93,7 +93,13 @@ class SearchViewController: UIViewController, FilterDelegate {
         configureSearchBar()
         setupTable()
                 
-        self.title = "Search"
+        setupBackButton(color: .black, action: #selector(backButtonTapped))
+        title = "Search"
+        let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 24, weight: .bold),
+                .foregroundColor: UIColor.black
+            ]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -109,6 +115,10 @@ class SearchViewController: UIViewController, FilterDelegate {
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func filterPressed() {

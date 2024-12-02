@@ -9,7 +9,7 @@ import UIKit
 
 extension UIViewController {
     
-    func setupBackButton(imageName: String = "back", action: Selector) {
+    func setupBackButton(color: UIColor, imageName: String = "back", action: Selector) {
         let backButton = UIButton()
         backButton.setImage(UIImage(named: imageName), for: .normal)
         backButton.translatesAutoresizingMaskIntoConstraints = false

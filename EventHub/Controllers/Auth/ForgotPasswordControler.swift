@@ -50,7 +50,7 @@ class ForgotPasswordController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        setupBackButton(action: #selector(backButtonTapped))
+        setupBackButton(color: .black, action: #selector(backButtonTapped))
         title = "Reset Password"
         let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 24, weight: .bold),

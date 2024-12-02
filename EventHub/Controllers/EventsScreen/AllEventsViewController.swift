@@ -12,17 +12,44 @@ class AllEventsViewController: UIViewController {
     private var tableView = UITableView()
     private let currentDate = Int(Date().timeIntervalSince1970)
     var favoritesViewController: FavoritesViewController?
-
+    
     
     var events: [Event] = []
     
     private var filteredEvents: [Event] = []
     
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Events"
+        titleLabel.textColor = .label
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        titleLabel.sizeToFit()
+        return titleLabel
+    }()
+        
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
+        
+        let containerView = UIView()
+        containerView.addSubview(titleLabel)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        navigationItem.titleView = containerView
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+            ])
+        
+            NSLayoutConstraint.activate([
+                containerView.widthAnchor.constraint(equalToConstant: 200),
+                containerView.heightAnchor.constraint(equalToConstant: 44)
+            ])
         
         filteredEvents = filterEvents()
         tableView.reloadData()
@@ -31,16 +58,21 @@ class AllEventsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(EventCell.self, forCellReuseIdentifier: "EventCell")
         
+        setupBackButton(color: .black, action: #selector(backButtonTapped))
         
     }
     
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
     
     private func setupUI() {
         
         view.backgroundColor = .white
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
-        
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchButton))
+        searchButton.tintColor = .black
+        navigationItem.rightBarButtonItem = searchButton
         
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false

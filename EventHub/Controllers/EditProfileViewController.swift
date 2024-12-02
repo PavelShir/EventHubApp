@@ -175,7 +175,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         
-        setupBackButton(action: #selector(backButtonTapped))
+        setupBackButton(color: .black, action: #selector(backButtonTapped))
         
         super.viewDidLoad()
         aboutMeText.delegate = self

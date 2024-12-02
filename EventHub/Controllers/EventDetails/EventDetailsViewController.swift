@@ -107,7 +107,6 @@ class EventDetailsViewController: UIViewController {
     private lazy var locationStackView : UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
-       // element.distribution = .fill
         element.spacing = 23
         [ locationView, colLocationStackView, UIView() ].forEach { v in
                     element.addArrangedSubview(v)
@@ -173,7 +172,6 @@ class EventDetailsViewController: UIViewController {
     private lazy var organizatorStackView : UIStackView = {
         let element = UIStackView()
         element.axis = .horizontal
-       // element.distribution = .fill
         element.spacing = 23
         [ organizatorImage, colOrganizatorStackView, UIView() ].forEach { v in
                     element.addArrangedSubview(v)
@@ -237,17 +235,25 @@ class EventDetailsViewController: UIViewController {
         return element
     }()
     
-
-    
-   // let exploreDetailRow = ExploreDetailRow()
     var bookmark : UIButton = {
         let button = UIButton(type: .system)
-            button.setImage(UIImage(systemName: "bookmark"), for: .normal)
-            button.tintColor = .white
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
+        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        return button
     }()
-        
+    
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Event Details"
+        titleLabel.textColor = .label
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        titleLabel.textColor = .white
+        titleLabel.sizeToFit()
+        return titleLabel
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setView()
@@ -257,23 +263,45 @@ class EventDetailsViewController: UIViewController {
         getData()
         getPlaceData()
         
+        let containerView = UIView()
+        containerView.addSubview(titleLabel)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        navigationItem.titleView = containerView
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+            ])
+        
+            NSLayoutConstraint.activate([
+                containerView.widthAnchor.constraint(equalToConstant: 200),
+                containerView.heightAnchor.constraint(equalToConstant: 44)
+            ])
+        
+        setupBackButton(color: .white, imageName: "arrowleft", action: #selector(backButtonTapped))
+       
+        let barButton = UIBarButtonItem(customView: bookmark)
+        navigationItem.rightBarButtonItem = barButton
         bookmark.addTarget(self, action: #selector(toggleBookmark), for: .touchUpInside)
         headerView.shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
 
     }
     
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     func setView(){
         bodyLabel.font = .systemFont(ofSize: 25)
         
-        //contentTextView.backgroundColor = .yellow
         contentTextView.font = .systemFont(ofSize: 20.0, weight: .light)
         
         stackView.axis = .vertical
         stackView.spacing = 21
         
-       // exploreDetailRow.translatesAutoresizingMaskIntoConstraints = false
-      //  exploreDetailRow.backgroundColor = .green
-       // exploreDetailRow.configure()
         configureCalendarRow()
         configureLocationRow()
         configureOrganizatorRow()
@@ -290,16 +318,14 @@ class EventDetailsViewController: UIViewController {
         
         view.backgroundColor = .white
         view.addSubview(headerView)
-        view.addSubview(bookmark)
+       // view.addSubview(bookmark)
         view.bringSubviewToFront(bookmark)
  
     }
-    
  
     func getImageData() {
         
         let image = headerView.imageHeader
-//        image.image = UIImage(named: "girlimage")
         if let urlToImage = eventDetail?.images {
             image.setImage(url: urlToImage)
         } else {
@@ -499,12 +525,12 @@ extension EventDetailsViewController {
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 244),
-            
+         /*
             bookmark.heightAnchor.constraint(equalToConstant: 20),
             bookmark.widthAnchor.constraint(equalToConstant: 20),
             bookmark.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
             bookmark.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
-          
+          */
         ])
     }
 }

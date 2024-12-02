@@ -11,6 +11,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     
     private var user: UserModel?
     private var aboutMeTextHeightConstraint: NSLayoutConstraint!
+    private let collapsedLines = 3
     private var isExpanded = false
     
     var isGuestUser: Bool {
@@ -24,10 +25,9 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     let titleNavigationBar = "Profile"
     var imageUser = "user"
     var nameUser = "Ashfak Sayem"
-    var aboutMeContext = """
-        Enjoy your favorite dishes and a lovely time with your friends and family. \
-        Food from local food trucks will be available for purchase.
-        """
+    var aboutMeFulltext = """
+Привет, я одинокий разработчик, который пишет код по ночам и после основной работы. Одинокий я не всегда, а только в моменты работы. Ухожу, так сказать, в себя. Ну а в другое время у меня конечно есть семья, мама, папа, жена и дети. А также я добавляю разные события в это приложение, чтобы всем стальным было веселее жить.
+"""
     
     private let scrollView: UIScrollView = {
         let element = UIScrollView()
@@ -80,17 +80,15 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         return textField
     }()
     
-    
-    private lazy var aboutMeTextView: UITextView = {
-        let textField = UITextView()
-        textField.text = aboutMeContext
-        textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.backgroundColor = .clear
-        textField.isEditable = false
-        textField.isScrollEnabled = false
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
+    private lazy var aboutMeText: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = aboutMeFulltext
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        label.isUserInteractionEnabled = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var editButton: UIButton = {
@@ -162,7 +160,6 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         } else {
             element.image = UIImage(named: imageUser)
         }
-//        element.image = UIImage(named: imageUser)
         element.contentMode = .scaleAspectFill
         element.layer.cornerRadius = 48
         element.clipsToBounds = true
@@ -172,24 +169,20 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         return element
     }()
     
-    private lazy var readMoreButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setTitle("Read More", for: .normal)
-            button.setTitleColor(.blue, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-            button.addTarget(self, action: #selector(toggleReadMore), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-    
     //     MARK: - Lifecycle Methods
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateLabelText()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = titleNavigationBar
-        loadProfileData()
+        
         configureUI()
+        updateLabelText()
         
         // check user auth and configure wright button
         
@@ -200,41 +193,70 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         }
     }
     
-    @objc private func toggleReadMore() {
-        aboutMeTextView.layoutIfNeeded()
-        isExpanded.toggle()
+    //     MARK: - Configure Text Label About me
+    
+    private func updateLabelText() {
+        loadProfileData()
         
-        let targetHeight: CGFloat
-            if isExpanded {
-                targetHeight = aboutMeTextView.contentSize.height
-            } else {
-                targetHeight = 50
-            }
-            aboutMeTextHeightConstraint.constant = targetHeight
-        
-        let buttonTitle = isExpanded ? "Read Less" : "Read More"
-        readMoreButton.setTitle(buttonTitle, for: .normal)
-        
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
+        if isExpanded {
+            let attributedText = NSMutableAttributedString(string: aboutMeText.text!, attributes: [
+                .font: UIFont.systemFont(ofSize: 16)
+            ])
+            aboutMeText.attributedText = attributedText
+        } else {
+            let visibleText = truncatedTextWithReadMore(aboutMeText.text!, maxLines: collapsedLines)
+            aboutMeText.attributedText = visibleText
         }
+        aboutMeText.sizeToFit()
+        view.layoutIfNeeded()
+    }
+    
+    private func truncatedTextWithReadMore(_ text: String, maxLines: Int) -> NSMutableAttributedString {
+        let readMoreText = " Read more"
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.numberOfLines = maxLines
+        label.text = text + readMoreText
+        
+        let bounds = CGSize(width: view.frame.width - 32, height: .greatestFiniteMagnitude)
+        var truncatedText = text
+        
+        while label.sizeThatFits(bounds).height > CGFloat(maxLines) * label.font.lineHeight {
+            truncatedText = String(truncatedText.dropLast())
+            label.text = truncatedText + "…" + readMoreText
+        }
+        let attributedText = NSMutableAttributedString(string: truncatedText + "…", attributes: [
+            .font: UIFont.systemFont(ofSize: 16)
+        ])
+        let readMoreAttributed = NSAttributedString(string: readMoreText, attributes: [
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.blue
+        ])
+        attributedText.append(readMoreAttributed)
+        
+        return attributedText
     }
 
+    
+    @objc private func toggleTextExpansion() {
+        isExpanded.toggle()
+        updateLabelText()
+    }
+        
     func loadProfileData() {
         
         if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
            let image = UIImage(data: imageData) {
             pictureUser.image = image
         }
-        
         if let storedName = UserDefaults.standard.string(forKey: "profileName") {
             nameLabel.text = storedName
         }
-        
         if let storedAddress = UserDefaults.standard.string(forKey: "profileAddress") {
-            aboutMeTextView.text = storedAddress
+            aboutMeText.text = storedAddress
         }
     }
+    
     
     //     MARK: - UI Setup
     func configureUI() {
@@ -246,12 +268,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         scrollView.addSubview(aboutMeStackView)
         aboutMeStackView.addArrangedSubview(aboutMeLabel)
         nameStackView.addArrangedSubview(nameLabel)
-        scrollView.addSubview(aboutMeTextView)
-        scrollView.addSubview(readMoreButton)
+        scrollView.addSubview(aboutMeText)
         scrollView.addSubview(signOutButton)
-        
-        aboutMeTextHeightConstraint = aboutMeTextView.heightAnchor.constraint(equalToConstant: 50)
-        aboutMeTextHeightConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -276,18 +294,18 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
             aboutMeStackView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 143),
             aboutMeStackView.heightAnchor.constraint(equalToConstant: 22),
             
-            aboutMeTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
-            aboutMeTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            aboutMeTextView.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
-            
-            readMoreButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            readMoreButton.topAnchor.constraint(equalTo: aboutMeTextView.bottomAnchor, constant: 10),
+            aboutMeText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
+            aboutMeText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -19),
+            aboutMeText.topAnchor.constraint(equalTo: pictureUser.bottomAnchor, constant: 173),
             
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
         ])
         loadProfileData()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleTextExpansion))
+        aboutMeText.addGestureRecognizer(tapGesture)
     }
     
     @objc func signInTapped(_ sender: UIButton) {

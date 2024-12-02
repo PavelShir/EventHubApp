@@ -137,6 +137,15 @@ final class SingInController: UIViewController {
         return button
     }()
     
+    private let orLabel: UILabel = {
+        let label = UILabel()
+        label.text = "OR"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private lazy var googleButton: UIButton = {
         return GoogleAuthManager.shared.createGoogleButton(target: self, action: #selector(googleButtonTapped))
        
@@ -252,6 +261,7 @@ final class SingInController: UIViewController {
             passwordTextField,
             togglePasswordButton,
             signInButton,
+            orLabel,
             googleButton,
             stackView,
             stackViewPass
@@ -368,9 +378,13 @@ final class SingInController: UIViewController {
             signInButton.heightAnchor.constraint(
                 equalToConstant:  Constants.Authorization.heightSignButton
             ),
+            
+            orLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 30),
+            orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             googleButton.topAnchor.constraint(
-                equalTo: signInButton.bottomAnchor,
-                constant: 50
+                equalTo: orLabel.bottomAnchor,
+                constant: 30
             ),
             googleButton.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -398,7 +412,8 @@ final class SingInController: UIViewController {
     }
     
     @objc private func forgotPasswordTapped() {
-        print("Forgot Password tapped")
+        let forgotPasswordVC = ForgotPasswordController()
+        navigationController?.pushViewController(forgotPasswordVC, animated: true)
     }
 }
 

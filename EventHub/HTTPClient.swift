@@ -160,7 +160,7 @@ private func processDates(dates: [DateElement], currentTimestamp: Int) -> (start
     let threeMonthsAgoTimestamp = 1722076800
 
     let validDates = dates.map { date -> DateElement in
-        // Заменяем некорректные даты текущей датой
+        // Заменяем некорректные даты текущей датой ?? исправить
         if let start = date.start, start == -62135433000 {
             return DateElement(start: currentTimestamp, end: date.end ?? currentTimestamp)
         }
@@ -332,3 +332,4 @@ func loadPlaceFast (placeId: Int, completion: @escaping (Place?) -> Void) {
     }
 }
 
+    // MARK: Загрузка Подборок 

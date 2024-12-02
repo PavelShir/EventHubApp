@@ -312,9 +312,15 @@ class FilterViewController: UIViewController {
         switch source {
             
         case .main:
-            let searchVC = SearchViewController()
-            searchVC.events = loadEvents(with: eventFilters)
-            present(searchVC, animated: true)
+            loadEventsSuccess(with: eventFilters) { events in
+                let searchVC = SearchViewController()
+                searchVC.events = events
+                self.delegate?.didApplyFilters(self.eventFilters)
+                
+                DispatchQueue.main.async {
+                    self.present(searchVC, animated: true)
+                }
+            }
             
         case .search:
             print(eventFilters)

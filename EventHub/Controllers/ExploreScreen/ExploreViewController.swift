@@ -24,7 +24,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
             }
         }
         
-        loadEventsSuccess(with: eventFilters) { events in
+        loadEventsSuccess(with: EventFilter(location: .moscow, categories: Category.allCases.randomElement()!, actualSince: String(1733758654))) { events in
             self.eventsNearby = events
             DispatchQueue.main.async {
                 self.eventViewController2.reloadCollectionView()
@@ -285,7 +285,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
-        loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
+        loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(1733758654)), success: loadSuccessUpcoming)
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
         
         eventViewController.parentViewController = self
@@ -508,7 +508,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         let filterVC = FilterViewController()
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
-        
+        filterVC.source = .main
         
         present(filterVC, animated: true)
     }

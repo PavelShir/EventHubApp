@@ -18,7 +18,6 @@
 		31DEECC22CEE824A0098E212 /* TextField + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC12CEE824A0098E212 /* TextField + Ext.swift */; };
 		31DEECC42CEE8DAE0098E212 /* UIImageView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC32CEE8DAE0098E212 /* UIImageView + Ext.swift */; };
 		31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC52CEE8E830098E212 /* UILabel + Ext.swift */; };
-		31DEECC82CEE9DBA0098E212 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */; };
 		31FFE3532CF90A9000A0937E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 31A6E9FD2CF50520006DB793 /* FirebaseAuth */; };
 		31FFE3542CF90A9000A0937E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 31A6E9FF2CF50525006DB793 /* FirebaseFirestore */; };
 		31FFE3552CF90A9000A0937E /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 31A6EA012CF5052B006DB793 /* FirebaseCore */; };
@@ -51,13 +50,12 @@
 		8F8EA6E82CEA3FEE00FC1364 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EA6E72CEA3FEE00FC1364 /* SceneDelegate.swift */; };
 		8F8EA6EF2CEA3FF100FC1364 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */; };
 		F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */; };
-		F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7F42CFB447C00FD6DFB /* PresentationController.swift */; };
-		F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */; };
 		F323F7E62CF9DA1000FD6DFB /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */; };
 		F323F7E82CF9DA2A00FD6DFB /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */; };
 		F323F7EB2CF9E66600FD6DFB /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */; };
 		F323F7ED2CF9E71600FD6DFB /* ListCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */; };
-		F323F7EF2CF9F03E00FD6DFB /* ListsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EE2CF9F03E00FD6DFB /* ListsStackView.swift */; };
+		F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7F42CFB447C00FD6DFB /* PresentationController.swift */; };
+		F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */; };
 		F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659262CF0DC3D00CA3DE7 /* FavCell.swift */; };
 		F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */; };
 		F336592D2CF12F3400CA3DE7 /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */; };
@@ -119,13 +117,12 @@
 		8F8EA6EE2CEA3FF100FC1364 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F8EA6F32CEA3FF100FC1364 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F323F7DE2CF8CA9500FD6DFB /* MapCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionCell.swift; sourceTree = "<group>"; };
-		F323F7F42CFB447C00FD6DFB /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
-		F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionCell.swift; sourceTree = "<group>"; };
-		F323F7EE2CF9F03E00FD6DFB /* ListsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsStackView.swift; sourceTree = "<group>"; };
+		F323F7F42CFB447C00FD6DFB /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
+		F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F33659262CF0DC3D00CA3DE7 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
 		F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentControl.swift; sourceTree = "<group>"; };
@@ -244,7 +241,6 @@
 				79FE3CB32CF72A47001A4367 /* EventCollectionView.swift */,
 				79FE3CB42CF72A47001A4367 /* ExploreViewController.swift */,
 				79FE3CB52CF72A47001A4367 /* HeaderExploreView.swift */,
-				F323F7EE2CF9F03E00FD6DFB /* ListsStackView.swift */,
 			);
 			path = ExploreScreen;
 			sourceTree = "<group>";
@@ -338,17 +334,17 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-                F323F7E92CF9DA2E00FD6DFB /* ListsScreen */ = {
-            isa = PBXGroup;
-            children = (
-                F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */,
-                F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */,
-                F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */,
-                F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */,
-            );
-            path = ListsScreen;
-            sourceTree = "<group>";
-        };
+		F323F7E92CF9DA2E00FD6DFB /* ListsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */,
+				F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */,
+				F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */,
+				F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */,
+			);
+			path = ListsScreen;
+			sourceTree = "<group>";
+		};
 		F33659302CF1428500CA3DE7 /* Search & Filter */ = {
 			isa = PBXGroup;
 			children = (
@@ -481,7 +477,6 @@
 			files = (
 				31CA34F52CFB98C400A2A485 /* GoogleAuthManager.swift in Sources */,
 				F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */,
-				F323F7EF2CF9F03E00FD6DFB /* ListsStackView.swift in Sources */,
 				8F8452EC2CEC76F0000AE3BD /* MyProfileViewController.swift in Sources */,
 				8F8452ED2CEC76F0000AE3BD /* TabBarController.swift in Sources */,
 				79FE3CB72CF72A47001A4367 /* EventCardView.swift in Sources */,
@@ -661,7 +656,6 @@
 		8F8EA6F72CEA3FF100FC1364 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 15.00;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -693,7 +687,6 @@
 		8F8EA6F82CEA3FF100FC1364 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 15.00;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

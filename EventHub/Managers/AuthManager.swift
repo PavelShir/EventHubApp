@@ -6,8 +6,12 @@
 //
 
 import UIKit
-import Foundation
+import Firebase
+import FirebaseFirestore
 import FirebaseAuth
+import FirebaseCore
+import GoogleSignIn
+
 
 final class AuthManager {
 

@@ -13,22 +13,22 @@ enum City: String, Codable, CaseIterable {
     case yekaterinburg = "ekb"
     case nizhnyNovgorod = "nnv"
     case kazan = "kzn"
-    
-    
+ 
+
     var fullName: String {
-        switch self {
-        case .saintPetersburg:
-            return "Saint Petersburg"
-        case .moscow:
-            return "Moscow"
-        case .yekaterinburg:
-            return "Yekaterinburg"
-        case .nizhnyNovgorod:
-            return "Nizhny Novgorod"
-        case .kazan:
-            return "Kazan"
+            switch self {
+            case .saintPetersburg:
+                return "Saint Petersburg"
+            case .moscow:
+                return "Moscow"
+            case .yekaterinburg:
+                return "Yekaterinburg"
+            case .nizhnyNovgorod:
+                return "Nizhny Novgorod"
+            case .kazan:
+                return "Kazan"
+            }
         }
-    }
 }
 func chooseCity(for city: String) -> City {
     switch city {
@@ -42,7 +42,7 @@ func chooseCity(for city: String) -> City {
         return .nizhnyNovgorod
     case "Kazan":
         return .kazan
-    
+
     default:
         return .moscow
     }

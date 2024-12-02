@@ -10,13 +10,50 @@ import MapKit
 
 class MapViewController: UIViewController {
     
+    
     var cityName: String?
     var mapEvents: [Event] = []
     var places: [Place] = []
     var placeCoordinates: [Coords] = []
     var eventFilter: EventFilter!
     let cell = FavCell()
+    private let locationManager = CLLocationManager()
     
+    private let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.placeholder = "Search for places..."
+        search.translatesAutoresizingMaskIntoConstraints = false
+        search.backgroundColor = .clear
+        search.searchTextField.backgroundColor = .white
+        search.layer.cornerRadius = 10
+        search.clipsToBounds = true
+        return search
+    }()
+    
+    private let geoButton: UIButton = {
+        let button = UIButton()
+        
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseForegroundColor = UIColor(named: "primaryBlue")
+        
+        // Устанавливаем иконку
+        configuration.image = UIImage(systemName: "scope")
+        configuration.imagePlacement = .top
+        configuration.imagePadding = 8
+        configuration.baseBackgroundColor = .white
+        button.configuration = configuration
+        
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = false
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        
+        return button
+    }()
+
     private let eventInfoTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -64,6 +101,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupMap()
+        setupLocationManager()
+
         
         mapView.delegate = self
         
@@ -89,6 +128,7 @@ class MapViewController: UIViewController {
             }
         }
 
+        geoButton.addTarget(self, action: #selector(geoButtonTapped), for: .touchUpInside)
         
         
     }
@@ -97,8 +137,13 @@ class MapViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(mapView)
         view.addSubview(eventInfoTableView)
+        view.addSubview(searchBar)
+        view.addSubview(geoButton)
+        view.addSubview(categoryCircleView)
         
-        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        geoButton.translatesAutoresizingMaskIntoConstraints = false
+
         eventInfoTableView.translatesAutoresizingMaskIntoConstraints = false
         categoryCircleView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -109,15 +154,23 @@ class MapViewController: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        view.addSubview(categoryCircleView)
         NSLayoutConstraint.activate([
-            categoryCircleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 1),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 7),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            searchBar.trailingAnchor.constraint(equalTo: geoButton.leadingAnchor, constant: -10),
+
+            
+            geoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            geoButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            geoButton.heightAnchor.constraint(equalToConstant: 50),
+            geoButton.widthAnchor.constraint(equalToConstant: 50),
+            
+            categoryCircleView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: -15),
+            categoryCircleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 7),
             categoryCircleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -1),
-            categoryCircleView.heightAnchor.constraint(equalToConstant: 90)
-        ])
-        
-        NSLayoutConstraint.activate([
+            categoryCircleView.heightAnchor.constraint(equalToConstant: 90),
+
                eventInfoTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                eventInfoTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                eventInfoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
@@ -128,33 +181,40 @@ class MapViewController: UIViewController {
     
     @objc private func addBookmark() {
         
-        if cell.bookmarkIcon.image(for: .normal) == UIImage(systemName: "bookmark") {
-            cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-               
-               var favorites = StorageManager.shared.loadFavorite()
-               
-            if favorites.contains(where: { $0.id == selectedEvent?.id }) {
-                showAlreadyInFavoritesAlert(for: selectedEvent!)
-               } else {
-                   favorites.append(selectedEvent!)
-                   StorageManager.shared.saveFavorites(favorites)
-                   showFavoriteAddedAlert(for: selectedEvent!)
-                   
-                   NotificationCenter.default.post(name: .favoriteEventAdded, object: selectedEvent!)
-               }
-           } else {
-               // Если иконка уже заполненная, это значит событие в избранном, убираем его
-               cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark"), for: .normal)
-               
-               var favorites = StorageManager.shared.loadFavorite()
-               
-               if let index = favorites.firstIndex(where: { $0.id == selectedEvent?.id }) {
-                   favorites.remove(at: index)
-                   StorageManager.shared.saveFavorites(favorites)
-                    
-               }
-           }
-       }
+        print("bookmark")
+
+        var favorites = StorageManager.shared.loadFavorite()
+
+          if !favorites.contains(where: { $0.id == selectedEvent?.id }) {
+              // Если событие не в избранных, добавляем его
+              guard let selectedEvent = selectedEvent else { return }
+              
+              favorites.append(selectedEvent)
+              StorageManager.shared.saveFavorites(favorites)
+
+              // Обновляем иконку на заполненную
+              cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+
+              // Показываем уведомление
+              showFavoriteAddedAlert(for: selectedEvent)
+
+              // Отправляем уведомление, что событие добавлено в избранное
+              NotificationCenter.default.post(name: .favoriteEventAdded, object: selectedEvent)
+          } else {
+              // Если событие уже в избранном, удаляем его
+              showAlreadyInFavoritesAlert(for: selectedEvent!)
+
+              // Обновляем иконку на пустую
+              cell.bookmarkIcon.setImage(UIImage(systemName: "bookmark"), for: .normal)
+
+              // Загружаем избранные, удаляем событие
+              var favorites = StorageManager.shared.loadFavorite()
+              if let index = favorites.firstIndex(where: { $0.id == selectedEvent?.id }) {
+                  favorites.remove(at: index)
+                  StorageManager.shared.saveFavorites(favorites)
+              }
+          }
+      }
     
     private func showFavoriteAddedAlert(for event: Event) {
         let alertController = UIAlertController(
@@ -172,7 +232,7 @@ class MapViewController: UIViewController {
     
     private func showAlreadyInFavoritesAlert(for event: Event) {
         let alertController = UIAlertController(
-            title: "Already in Favorites!",
+            title: "Removed from Favorites!",
             message: "\(event.title)",
             preferredStyle: .alert
         )
@@ -270,6 +330,8 @@ class MapViewController: UIViewController {
             longitudinalMeters: radius
         )
         mapView.setRegion(coordinateRegion, animated: true)
+          mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
     }
     
     
@@ -287,22 +349,52 @@ class MapViewController: UIViewController {
     
     
     
-    //extension MapViewController: CLLocationManagerDelegate {
-    //
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //        if let location = locations.last {
-    //            locationManager.stopUpdatingLocation()
-    //            let lat = location.coordinate.latitude
-    //            let lon = location.coordinate.longitude
-    //
-    //            weatherManager.fetchWeather(latitude: lat, longitude: lon)
-    //        }
-    //    }
-    //
-    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    //        print(error)
-    //    }
-    //}
+    extension MapViewController: CLLocationManagerDelegate {
+    
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            guard let location = locations.last else { return }
+                   let lat = location.coordinate.latitude
+                   let lon = location.coordinate.longitude
+                   
+                   print("Latitude: \(lat), Longitude: \(lon)") // Выводим координаты в консоль
+                   
+               // Обновляем карту с новым местоположением
+               let region = MKCoordinateRegion(
+                   center: location.coordinate,
+                   latitudinalMeters: 500,
+                   longitudinalMeters: 500
+               )
+               mapView.setRegion(region, animated: true)
+               
+               // Останавливаем обновления местоположения, так как оно нам больше не нужно
+               locationManager.stopUpdatingLocation()
+           }
+           
+        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+               print("Failed to find user's location: \(error.localizedDescription)")
+           }
+        
+        private func setupLocationManager() {
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                locationManager.requestWhenInUseAuthorization()
+            
+                locationManager.startUpdatingLocation()
+            }
+        
+        @objc private func geoButtonTapped() {
+               if let location = locationManager.location {
+                   // Если местоположение доступно, перемещаем карту
+                   let region = MKCoordinateRegion(
+                       center: location.coordinate,
+                       latitudinalMeters: 500,
+                       longitudinalMeters: 500
+                   )
+                   mapView.setRegion(region, animated: true)
+               }
+           }
+         
+    }
     
     // MARK: - UICollectionView Delegate & DataSource
     
@@ -446,6 +538,8 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavCell", for: indexPath) as? FavCell,
               let event = selectedEvent else { return UITableViewCell() }
         
+        cell.bookmarkIcon.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+
         cell.configure(with: event)
         return cell
     }
@@ -470,4 +564,4 @@ extension MapViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-//    #Preview {MapViewController(cityName: "kazan") }
+//    #Preview {MapViewController(cityName: "moscow") }

@@ -24,7 +24,7 @@ class EventDetailsViewController: UIViewController {
             let view = UILabel()
         view.numberOfLines = 2
         view.adjustsFontSizeToFitWidth = true
-        view.minimumScaleFactor = 0.2
+        view.minimumScaleFactor = 0.5
             return view
         }()
     
@@ -197,6 +197,8 @@ class EventDetailsViewController: UIViewController {
     private let captionOrganizatorLabel: UILabel = {
             let view = UILabel()
             view.text = "" /*14 Decenber, 2021"*/
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.8
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
@@ -219,9 +221,12 @@ class EventDetailsViewController: UIViewController {
     }()
     
     func configureOrganizatorRow(){
-//        organizatorImage.image = UIImage(named: "organizator")
-//        captionOrganizatorLabel.text = "Ashfak Sayem"
-//        descriptionOrganizatorLabel.text = "Organizer"
+        organizatorImage.image = UIImage(named: "organizator")
+        
+        captionOrganizatorLabel.text = (eventDetail?.participants.isEmpty == false ?
+                                         eventDetail?.participants.first?.agent.title :
+                                         "Нет информации об организаторах")
+        descriptionOrganizatorLabel.text = "Organizer"
     }
     
     private lazy var aboutLabel : UILabel = {
@@ -379,7 +384,7 @@ class EventDetailsViewController: UIViewController {
     
     private func showAlreadyInFavoritesAlert(for event: Event) {
         let alertController = UIAlertController(
-            title: "Already in Favorites!",
+            title: "Removed from Favorites!",
             message: "\(event.title)",
             preferredStyle: .alert
         )

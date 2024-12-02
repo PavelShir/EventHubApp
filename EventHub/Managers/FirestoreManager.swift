@@ -5,6 +5,7 @@
 //  Created by Павел Широкий on 21.11.2024.
 //
 
+import Firebase
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseFirestoreInternal

@@ -228,7 +228,7 @@ class EventsViewController: UIViewController {
                     }.sorted {
                         let firstDate = $0.startDate ?? self.currentDate
                         let secondDate = $1.startDate ?? self.currentDate
-                        return firstDate > secondDate
+                        return firstDate < secondDate
                     
                     }
                 case 1:

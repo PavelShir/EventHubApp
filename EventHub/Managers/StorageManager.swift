@@ -11,8 +11,22 @@ final class StorageManager {
     static let shared = StorageManager()
     
     private let storageKey = "bookmarks"
+    private let cityKey = "selectedCity"
     
     private init() {}
+    
+    func loadSelectedCity() -> City {
+        if let storedCityRawValue = UserDefaults.standard.string(forKey: cityKey),
+           let city = City(rawValue: storedCityRawValue) {
+            return city
+        } else {
+            return .moscow
+        }
+    }
+    
+    func saveSelectedCity(_ city: City) {
+            UserDefaults.standard.set(city.rawValue, forKey: cityKey)
+        }
     
     func loadFavorite() -> [Event] {
         if let favoriteEvents = UserDefaults.standard.data(forKey: storageKey),
@@ -40,5 +54,8 @@ final class StorageManager {
         events.removeAll { $0.id == event.id }
         saveFavorites(events)
     }
+    
+   
+    
 }
 

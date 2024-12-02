@@ -588,9 +588,13 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
         }
-        selectedCity = chooseCity(for: cityChosen)
-        eventFilters.location = selectedCity
+         selectedCity = chooseCity(for: cityChosen)
+
+           // Сохраняем выбранный город в StorageManager
+        StorageManager.shared.saveSelectedCity(selectedCity!)
+
     }
+    
     
 }
 

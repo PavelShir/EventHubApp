@@ -289,6 +289,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         eventViewController.parentViewController = self
                   eventViewController2.parentViewController = self
         
+        
         todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
         filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
         listsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
@@ -296,6 +297,8 @@ class ExploreViewController: UIViewController, FilterDelegate {
         filmsButton.tag = 2
         listsButton.tag = 3
 
+        filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        
         view.bringSubviewToFront(cityPicker)
         
     }
@@ -303,7 +306,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     //скрывает нав бар
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+//        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     private func setupScrollView() {
@@ -463,6 +466,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         // Функции подборок
     @objc private func showList(sender: UIButton) {
         
+    print("tapped")
         let urlString: String
            
            switch sender.tag {

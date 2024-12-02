@@ -42,13 +42,20 @@ class ExploreViewController: UIViewController, FilterDelegate {
         search.placeholder = "Search..."
         search.translatesAutoresizingMaskIntoConstraints = false
         search.backgroundColor = .clear
-        
         search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-        search.searchTextField.backgroundColor = .white
-        search.layer.cornerRadius = 10
+                    
+        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        search.searchTextField.backgroundColor = UIColor(named: "darkBlue")
+        search.searchTextField.textColor = .white // Устанавливаем цвет текста
+        search.searchTextField.tintColor = .white
+        let placeholderAttributes: [NSAttributedString.Key: Any] = [
+               .foregroundColor: UIColor.white
+               ]
+               
+         search.layer.cornerRadius = 10
         search.clipsToBounds = true
         
-        let customImageView = UIImageView(image: UIImage(named: "search"))
+        let customImageView = UIImageView(image: UIImage(named: "searchExplore"))
         customImageView.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
         customImageView.contentMode = .scaleAspectFit
         search.searchTextField.leftView = customImageView
@@ -95,16 +102,41 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return element
     }()
     
+    private lazy var searchFilterRow : UIStackView = {
+        let element = UIStackView()
+        element.axis = .horizontal
+                
+        element.addArrangedSubview(filterButton)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
+
+     lazy var filterButton : UIButton = {
+
+        let element = UIButton(type: .custom)
+         element.backgroundColor = UIColor(named: "darkBlue")
+        let imageFilter = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        element.setTitle("Filters", for: .normal)
+        element.titleLabel?.font = .systemFont(ofSize: 12)
+         
+        element.layer.cornerRadius = 15
+        element.setImage(imageFilter, for: .normal)
+        
+        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+        element.isUserInteractionEnabled = true
+         
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
     
     private lazy  var currentLocationLabelNotInScroll : UILabel = {
         let element = UILabel()
         element.isUserInteractionEnabled = true
-        element.text = "Current Location Not in Scroll"
-        element.textColor = .gray
+        element.text = "Current Location"
+        element.textColor = .white
         
         element.font = .systemFont(ofSize: 12)
-        element.backgroundColor = .red
         let gesture = UITapGestureRecognizer(target: self, action:  #selector(showCityPicker))
         element.addGestureRecognizer(gesture)
         
@@ -139,9 +171,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     var currentLocationButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Current Location", for: .normal)
+        button.setTitle("Moscow", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .clear
         button.titleLabel?.font = UIFont(name: "Arial", size: 14)
         button.setImage(UIImage(named: "Down"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
@@ -213,7 +245,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     override func viewDidLoad()  {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
  
         setView()
         setupScrollView()
@@ -279,7 +311,10 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         contentView.addSubview(currentLocationLabelNotInScroll)
         contentView.addSubview(currentLocationButton)
+        
         contentView.addSubview(searchBar)
+        contentView.addSubview(searchFilterRow)
+        
         contentView.addSubview(categoryCollectionView)
         contentView.addSubview(listStackView)
         contentView.addSubview(upcomingStack)
@@ -291,28 +326,36 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         
         NSLayoutConstraint.activate([
-            headerCustomView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            headerCustomView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -100),
             headerCustomView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             headerCustomView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            headerCustomView.heightAnchor.constraint(equalToConstant: 240),
+            headerCustomView.heightAnchor.constraint(equalToConstant: 340),
             
             // Current Location Label
-            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: 10),
+            currentLocationLabelNotInScroll.topAnchor.constraint(equalTo: headerCustomView.bottomAnchor, constant: -150),
             currentLocationLabelNotInScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
             
             // Current Location Button
-            currentLocationButton.topAnchor.constraint(equalTo: currentLocationLabelNotInScroll.bottomAnchor, constant: 10),
-            currentLocationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            currentLocationButton.topAnchor.constraint(equalTo: currentLocationLabelNotInScroll.bottomAnchor, constant: 1),
+            currentLocationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
             
             // Search Bar
-            searchBar.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 20),
-            searchBar.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            searchBar.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            searchBar.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 5),
+            searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            searchBar.trailingAnchor.constraint(equalTo: searchFilterRow.leadingAnchor, constant: 30),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+
             
+            searchFilterRow.topAnchor.constraint(equalTo: currentLocationButton.bottomAnchor, constant: 20),
+            searchFilterRow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
+            searchFilterRow.widthAnchor.constraint(equalToConstant: 60),
+            searchFilterRow.heightAnchor.constraint(equalToConstant: 50),
+            
+        
             // Category Collection View
             categoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             categoryCollectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            categoryCollectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            categoryCollectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: 0),
             categoryCollectionView.heightAnchor.constraint(equalToConstant: 40),
             
             // List Stack View

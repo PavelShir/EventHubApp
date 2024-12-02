@@ -144,36 +144,7 @@ class HeaderExploreView: UIView {
 //        return element
 //    }()
     
-//    private lazy var searchFilterRow : UIStackView = {
-//        let element = UIStackView()
-//        element.axis = .horizontal
-//        
-//        element.addArrangedSubview(searchBar)
-//        
-//       // element.addArrangedSubview(searchRow)
-//        element.addArrangedSubview(filterButton)
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
-    
-
-//     lazy var filterButton : UIButton = {
-//
-//        let element = UIButton(type: .custom)
-//        element.backgroundColor = UIColor(named: "primaryBlue")
-//        let imageFilter = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-//        element.setTitle("Filters", for: .normal)
-//        element.titleLabel?.font = .systemFont(ofSize: 12)
-//        
-//        element.layer.cornerRadius = 15
-//        element.setImage(imageFilter, for: .normal)
-//        
-//        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
-//        element.isUserInteractionEnabled = true
-//         
-//        element.translatesAutoresizingMaskIntoConstraints = false
-//        return element
-//    }()
+   
   
     
 //    private lazy var headerStack : UIStackView = {

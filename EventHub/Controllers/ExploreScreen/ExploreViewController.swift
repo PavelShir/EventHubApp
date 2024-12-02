@@ -277,6 +277,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         setupUIElements()
         view.backgroundColor = .white
         
+        searchBar.delegate = self
+
+        
         currentLocationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
 
         
@@ -300,6 +303,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         filterButton.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
         
         view.bringSubviewToFront(cityPicker)
+        view.bringSubviewToFront(todayButton)
+        view.bringSubviewToFront(filmsButton)
+        view.bringSubviewToFront(listsButton)
         
     }
     
@@ -464,35 +470,35 @@ class ExploreViewController: UIViewController, FilterDelegate {
     }
     
         // Функции подборок
-    @objc private func showList(sender: UIButton) {
+    @objc  func showList(sender: UIButton) {
         
     print("tapped")
         let urlString: String
-           
-           switch sender.tag {
-           case 1:
-               urlString = ListURL.today.urlString
-           case 2:
-               urlString = ListURL.films.urlString
-               print("в фильмах юрл отсутствует в апи. ссылка ведет на постер")
-           case 3:
-               urlString = ListURL.lists.urlString
-           default:
-               urlString = ListURL.today.urlString // ошибка с кнопкой, загрузка событий за сегодня
-           }
-        
-         let listVC = ListsViewController()
-        
-        loadLists(from: urlString) { events in
-            
-            print("API is \(urlString)" )
-            listVC.itemsList = events
-            
-            DispatchQueue.main.async {
-                self.navigationController?.pushViewController(listVC, animated: true)
+                   
+                   switch sender.tag {
+                   case 1:
+                       urlString = ListURL.today.urlString
+                   case 2:
+                       urlString = ListURL.films.urlString
+                       print("в фильмах юрл отсутствует в апи. ссылка ведет на постер")
+                   case 3:
+                       urlString = ListURL.lists.urlString
+                   default:
+                       urlString = ListURL.today.urlString // ошибка с кнопкой, загрузка событий за сегодня
+                   }
+                
+                 let listVC = ListsViewController()
+                
+                loadLists(from: urlString) { events in
+                    
+                    print("API is \(urlString)" )
+                    listVC.itemsList = events
+                     DispatchQueue.main.async {
+                        self.navigationController?.pushViewController(listVC, animated: true)
+                         
+                    }
+                }
             }
-        }
-    }
     
   
     
@@ -650,7 +656,31 @@ extension ExploreViewController: UISearchBarDelegate {
     
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+        
+        guard let searchText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !searchText.isEmpty else {
+            print("Search text is empty")
+            return
+        }
+        let url = "https://kudago.com/public-api/v1.4/search/?q=\(searchText)&expand=&location=\(City.moscow.rawValue)&ctype=event"
+        let searchVC = SearchViewController()
+        print(url)
+        
+        loadLists(from: url) { [weak self] events in
+            guard let self = self else { return }
+            
+            // Обновляем UI на главном потоке
+            DispatchQueue.main.async {
+                if events.isEmpty {
+                    print("No events found for search text: \(searchText)")
+                } else {
+                    searchVC.events = events
+                    self.navigationController?.pushViewController(searchVC, animated: true)
+                    searchBar.text = ""
+                    
+                }
+            }
+        }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

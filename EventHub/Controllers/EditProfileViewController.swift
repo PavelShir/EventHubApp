@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     private var user: UserModel?
     private var isExpanded = false
@@ -21,7 +21,9 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     let imageEdit = "edit"
     var imageUser = "user"
     var nameUser = "Ashfak Sayem"
-    var aboutMeContext = "dspogjiosgerjkfnjskxnvclksajfioewshdkfndsklxz.,jvcnwkjdsghfjcmwodsljfcndsjkg,mhcmwls.x,fjckdsmfcnmklds,fkdslnfkds,fjcmelwds,fjmcwlds,gnfcjkedsbgvc jdks"
+    var aboutMeContext = """
+        Привет, я одинокий разработчик, который пишет код по ночам и после основной работы. Одинокий я не всегда, а только в моменты работы. Ухожу, так сказать, в себя. Ну а в другое время у меня конечно есть семья, мама, папа, жена и дети. А также я добавляю разные события в это приложение, чтобы всем стальным было веселее жить.
+        """
     
     private let scrollView: UIScrollView = {
         let element = UIScrollView()
@@ -95,17 +97,17 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }()
     
     
-    private lazy var aboutMeText: UITextField = {
-        let textField = UITextField()
-        textField.text = aboutMeContext
-        textField.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
-        textField.font = UIFont(name: "Inter-Regular", size: 14)
-        textField.sizeThatFits(CGSize(width: 120, height: 40))
-        
-        textField.layer.masksToBounds = true
-        textField.isUserInteractionEnabled = true
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
+    private lazy var aboutMeText: UITextView = {
+        let textView = UITextView()
+        textView.text = aboutMeContext
+        textView.textColor = UIColor(red: 124/255, green: 130/255, blue: 161/255, alpha: 1)
+        textView.font = UIFont(name: "Inter-Regular", size: 14)
+        textView.sizeThatFits(CGSize(width: 120, height: 40))
+        textView.layer.masksToBounds = true
+        textView.isEditable = true
+        textView.isScrollEnabled = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
     }()
     
     private lazy var signOutButton: UIButton = {
@@ -173,6 +175,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         setupBackButton(action: #selector(backButtonTapped))
         
         super.viewDidLoad()
+        aboutMeText.delegate = self
+        
         view.backgroundColor = .white
         self.navigationItem.title = titleEditProfile
         configureUI()
@@ -194,6 +198,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
     //     MARK: - UI Setup
     func configureUI() {
         
@@ -242,8 +247,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             
         ])
         
-        //            updateUIForEditMode()
-        
     }
     
     func setupTextFieldDelegates() {
@@ -273,27 +276,32 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         
     }
     
+    @objc func handleEditName() {
+        nameLabel.becomeFirstResponder()
+    }
+
+    @objc func handleEditAboutMe() {
+        aboutMeText.becomeFirstResponder()
+    }
+
     func setupGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleImageTap))
-        pictureUser.addGestureRecognizer(tapGesture)
+        let tapEditNameGesture = UITapGestureRecognizer(target: self, action: #selector(handleEditName))
+        pictureEdit2.addGestureRecognizer(tapEditNameGesture)
         
-        let tapNameLabelGesture = UITapGestureRecognizer(target: self, action: #selector(handleNameLabelTap))
-        nameLabel.addGestureRecognizer(tapNameLabelGesture)
-        let tapaboutMeTextGesture = UITapGestureRecognizer(target: self, action: #selector(handleNameLabelTap))
-        nameLabel.addGestureRecognizer(tapNameLabelGesture)
-        aboutMeText.addGestureRecognizer(tapaboutMeTextGesture)
+        let tapEditAboutMeGesture = UITapGestureRecognizer(target: self, action: #selector(handleEditAboutMe))
+        pictureEdit1.addGestureRecognizer(tapEditAboutMeGesture)
         
         let tapToDismissGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapToDismiss))
         view.addGestureRecognizer(tapToDismissGesture)
         tapToDismissGesture.cancelsTouchesInView = false
     }
-    
+
     @objc func handleTapToDismiss() {
         view.endEditing(true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let editedImage = info[.editedImage] as? UIImage { // Use edited image if available
+        if let editedImage = info[.editedImage] as? UIImage {
             pictureUser.image = editedImage
             UserDefaults.standard.set(editedImage.pngData(), forKey: "profileImage")
         } else if let originalImage = info[.originalImage] as? UIImage {
@@ -317,9 +325,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         if let storedAddress = UserDefaults.standard.string(forKey: "profileAddress") {
             aboutMeText.text = storedAddress
         }
-        
     }
-    
     
     @objc func saveProfileData() {
         if let name = nameLabel.text, let text = aboutMeText.text {
@@ -387,3 +393,13 @@ extension EditProfileViewController {
     }
 }
 
+extension EditProfileViewController {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        saveProfileData()
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        saveProfileData()
+    }
+    
+}

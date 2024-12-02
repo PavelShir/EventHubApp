@@ -10,7 +10,6 @@ import SwiftUI
 
 class ExploreViewController: UIViewController, FilterDelegate {
     
-    
     func didApplyFilters(_ eventFilters: EventFilter) {
         events = []
         filteredEvents = []
@@ -37,7 +36,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     // MARK: - UI
     private let eventCollectionView = EventCollectionView(frame: .zero)
-
+ 
     private let searchBar: UISearchBar = {
         let search = UISearchBar()
         search.placeholder = "Search..."
@@ -278,6 +277,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         view.backgroundColor = .white
         
         searchBar.delegate = self
+        categoryCollectionView.delegate = self
 
         
         currentLocationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
@@ -286,12 +286,12 @@ class ExploreViewController: UIViewController, FilterDelegate {
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
         loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
-        
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
         
         eventViewController.parentViewController = self
-                  eventViewController2.parentViewController = self
+        eventViewController2.parentViewController = self
         
+      
         
         todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
         filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)

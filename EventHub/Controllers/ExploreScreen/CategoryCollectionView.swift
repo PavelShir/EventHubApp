@@ -1,7 +1,11 @@
 import UIKit
 import SwiftUI
 
+
 class CategoryCollectionView: UIView{
+    
+    weak var delegate: FilterDelegate?
+     private var selectedCategoryIndex: IndexPath?
     
     let categoryList = [
         CategoryModel(label: "Sports", imageName: "basketball.fill", color: UIColor(named: "primaryRed")!),
@@ -75,7 +79,25 @@ extension CategoryCollectionView: UICollectionViewDelegate, UICollectionViewData
         return CGSize(width: size, height: 39.06)
     }
    
-}
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+           let selectedCategory = categoryList[indexPath.row]
+           print("Selected category: \(selectedCategory.label)")
+           
+           let categoryFilter = chooseCategory(for: selectedCategory.label)
+           
+  
+        let filter = EventFilter(location: .moscow, categories: categoryFilter, actualSince: String(Date().timeIntervalSince1970))
+           
+        let exploreVC = ExploreViewController()
+        exploreVC.selectedCategory = categoryFilter
+        
+        
+        delegate?.didApplyFilters(filter)
+
+    }
+           }
+       
+
 
 class CategoryCollectionViewCell: UICollectionViewCell {
     static let identifier = "CategoryCollectionViewCell"
@@ -108,18 +130,13 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     }()
     
     
-    private lazy var button : UIButton = {
-        let element = UIButton(type: .system)
-        element.backgroundColor = .red
-        element.layer.cornerRadius = 20
-        
-        element.translatesAutoresizingMaskIntoConstraints = false
-        element.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
-//            self.addTarget(button, action: #selector(buttonTouchedDown), for: .touchDown)
-        
-        element.addSubview(stackView)
-        return element
-    }()
+        private lazy var button: UIView = {
+                let view = UIView()
+                view.backgroundColor = .clear
+            view.layer.cornerRadius = 20
+                view.translatesAutoresizingMaskIntoConstraints = false
+                return view
+            }()
     
 
     
@@ -135,7 +152,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc func notificationButtonPressed(){
-        print("click")
+        print("clifhfhck")
     }
     
     // Configure the cell with the image name
@@ -143,37 +160,32 @@ class CategoryCollectionViewCell: UICollectionViewCell {
  
         button.backgroundColor = buttonColor
         titleLabel.text = label
-//        button.setImage(UIImage(systemName: imageName)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
-//        
-//        
-//        button.layer.cornerRadius = 20
-//        button.titleLabel?.font = .systemFont(ofSize: 15)
-//        button.configuration?.imagePadding = 7
+ 
         imageView.image = UIImage(systemName: imageName)?.withTintColor(.white, renderingMode: .alwaysOriginal)
     }
    
     private func setupView() {
-       
-        
         contentView.addSubview(button)
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: contentView.topAnchor),
-            button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 17.73),
-            imageView.widthAnchor.constraint(equalToConstant: 17.73),
-            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+               button.addSubview(stackView)
+               
+               // Контрейнты для button, чтобы он занимал всю ячейку
+               NSLayoutConstraint.activate([
+                   button.topAnchor.constraint(equalTo: contentView.topAnchor),
+                   button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                   button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                   button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                   
+                   // Контрейнты для stackView
+                   stackView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+                   stackView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+                   
+                   // Размеры для imageView
+                   imageView.heightAnchor.constraint(equalToConstant: 17.73),
+                   imageView.widthAnchor.constraint(equalToConstant: 17.73)
         ])
     }
 }
 
-//struct ViewControllerProvider: PreviewProvider {
-//    static var previews: some View {
-//        ViewController().showPreview()
-//    }
-//}
 
 // MARK: - CategoryModel
 struct CategoryModel {

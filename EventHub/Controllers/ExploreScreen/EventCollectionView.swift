@@ -162,7 +162,7 @@ class EventCollectionViewCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc func notificationButtonPressed(){
-        print("click")
+        print("click notification")
     }
     
     // Configure the cell with the image name

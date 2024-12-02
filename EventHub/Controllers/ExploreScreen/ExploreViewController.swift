@@ -10,7 +10,6 @@ import SwiftUI
 
 class ExploreViewController: UIViewController, FilterDelegate {
     
-    
     func didApplyFilters(_ eventFilters: EventFilter) {
         events = []
         filteredEvents = []
@@ -25,7 +24,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
             }
         }
         
-        loadEventsSuccess(with: eventFilters) { events in
+        loadEventsSuccess(with: EventFilter(location: .moscow, categories: Category.allCases.randomElement()!, actualSince: String(1733758654))) { events in
             self.eventsNearby = events
             DispatchQueue.main.async {
                 self.eventViewController2.reloadCollectionView()
@@ -37,7 +36,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     // MARK: - UI
     private let eventCollectionView = EventCollectionView(frame: .zero)
-
+ 
     private let searchBar: UISearchBar = {
         let search = UISearchBar()
         search.placeholder = "Search..."
@@ -65,7 +64,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         return search
     }()
     
-    let listStackView = createHorizontalStackViewWithButtons()
+//    let listStackView = createHorizontalStackViewWithButtons()
     let todayButton = createRoundedButton(title: "TODAY")
     let filmsButton = createRoundedButton(title: "FILMS")
     let listsButton = createRoundedButton(title: "LISTS")
@@ -278,6 +277,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         view.backgroundColor = .white
         
         searchBar.delegate = self
+        categoryCollectionView.delegate = self
 
         
         currentLocationButton.addTarget(self, action: #selector(showCityPicker), for: .touchUpInside)
@@ -285,13 +285,13 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         filter = EventFilter(location: userCity, actualSince: String(1722076800) )  //3 мес назад
         
-        loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
-        
+        loadEventsSuccess(with: EventFilter(location: .moscow, actualSince: String(1733758654)), success: loadSuccessUpcoming)
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
         
         eventViewController.parentViewController = self
-                  eventViewController2.parentViewController = self
+        eventViewController2.parentViewController = self
         
+      
         
         todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
         filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
@@ -360,7 +360,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         contentView.addSubview(searchFilterRow)
         
         contentView.addSubview(categoryCollectionView)
-        contentView.addSubview(listStackView)
+        contentView.addSubview(todayButton)
+        contentView.addSubview(filmsButton)
+        contentView.addSubview(listsButton)
         contentView.addSubview(upcomingStack)
         
         contentView.addSubview(eventViewController)
@@ -405,12 +407,25 @@ class ExploreViewController: UIViewController, FilterDelegate {
 
             
             // List Stack View
-            listStackView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
-            listStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            listStackView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            todayButton.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
+                todayButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+                todayButton.widthAnchor.constraint(equalToConstant: 100), // Ширина кнопки
+                todayButton.heightAnchor.constraint(equalToConstant: 40), // Высота кнопки
+                
+                // Films Button
+                filmsButton.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
+                filmsButton.leadingAnchor.constraint(equalTo: todayButton.trailingAnchor, constant: 20), // Отступ от предыдущей кнопки
+                filmsButton.widthAnchor.constraint(equalToConstant: 100), // Ширина кнопки
+                filmsButton.heightAnchor.constraint(equalToConstant: 40), // Высота кнопки
+                
+                // Lists Button
+                listsButton.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 20),
+                listsButton.leadingAnchor.constraint(equalTo: filmsButton.trailingAnchor, constant: 20), // Отступ от предыдущей кнопки
+                listsButton.widthAnchor.constraint(equalToConstant: 100), // Ширина кнопки
+                listsButton.heightAnchor.constraint(equalToConstant: 40),
             
             // Upcoming Stack
-            upcomingStack.topAnchor.constraint(equalTo: listStackView.bottomAnchor, constant: 20),
+            upcomingStack.topAnchor.constraint(equalTo: todayButton.bottomAnchor, constant: 20),
             upcomingStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             upcomingStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
             
@@ -508,7 +523,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         let filterVC = FilterViewController()
         filterVC.delegate = self
         filterVC.modalPresentationStyle = .popover
-        
+        filterVC.source = .main
         
         present(filterVC, animated: true)
     }
@@ -588,9 +603,13 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.cityPicker.isHidden = true
         }
-        selectedCity = chooseCity(for: cityChosen)
-        eventFilters.location = selectedCity
+         selectedCity = chooseCity(for: cityChosen)
+
+           // Сохраняем выбранный город в StorageManager
+        StorageManager.shared.saveSelectedCity(selectedCity!)
+
     }
+    
     
 }
 

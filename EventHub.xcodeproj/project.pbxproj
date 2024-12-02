@@ -54,7 +54,6 @@
 		F323F7E62CF9DA1000FD6DFB /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */; };
 		F323F7E82CF9DA2A00FD6DFB /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */; };
 		F323F7EB2CF9E66600FD6DFB /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */; };
-		F323F7ED2CF9E71600FD6DFB /* ListCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */; };
 		F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7F42CFB447C00FD6DFB /* PresentationController.swift */; };
 		F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */; };
 		F323F7FC2CFDB0A300FD6DFB /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */; };
@@ -125,7 +124,6 @@
 		F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionCell.swift; sourceTree = "<group>"; };
 		F323F7F42CFB447C00FD6DFB /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
 		F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F33659262CF0DC3D00CA3DE7 /* FavCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavCell.swift; sourceTree = "<group>"; };
@@ -354,7 +352,6 @@
 				F323F7E52CF9DA1000FD6DFB /* ListsViewController.swift */,
 				F323F7E72CF9DA2A00FD6DFB /* ListCell.swift */,
 				F323F7EA2CF9E66600FD6DFB /* WebViewController.swift */,
-				F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */,
 			);
 			path = ListsScreen;
 			sourceTree = "<group>";
@@ -505,7 +502,6 @@
 				8F8452EA2CEC76F0000AE3BD /* LaunchScreenViewController.swift in Sources */,
 				F33659412CF6791E00CA3DE7 /* StorageManager.swift in Sources */,
 				F336593F2CF5F39100CA3DE7 /* ShimmerView.swift in Sources */,
-				F323F7ED2CF9E71600FD6DFB /* ListCollectionCell.swift in Sources */,
 				31DEECC62CEE8E830098E212 /* UILabel + Ext.swift in Sources */,
 				F33659392CF51F5600CA3DE7 /* EventFilter.swift in Sources */,
 				F323F7DF2CF8CA9500FD6DFB /* MapCollectionCell.swift in Sources */,

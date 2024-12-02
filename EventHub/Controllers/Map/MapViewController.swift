@@ -128,6 +128,7 @@ class MapViewController: UIViewController {
             }
         }
 
+        geoButton.addTarget(self, action: #selector(geoButtonTapped), for: .touchUpInside)
         
         
     }
@@ -154,13 +155,13 @@ class MapViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 7),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             searchBar.trailingAnchor.constraint(equalTo: geoButton.leadingAnchor, constant: -10),
 
             
-            geoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            geoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             geoButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             geoButton.heightAnchor.constraint(equalToConstant: 50),
             geoButton.widthAnchor.constraint(equalToConstant: 50),
@@ -329,6 +330,8 @@ class MapViewController: UIViewController {
             longitudinalMeters: radius
         )
         mapView.setRegion(coordinateRegion, animated: true)
+          mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
     }
     
     
@@ -348,16 +351,49 @@ class MapViewController: UIViewController {
     
     extension MapViewController: CLLocationManagerDelegate {
     
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            guard let location = locations.last else { return }
+                   let lat = location.coordinate.latitude
+                   let lon = location.coordinate.longitude
+                   
+                   print("Latitude: \(lat), Longitude: \(lon)") // Выводим координаты в консоль
+                   
+               // Обновляем карту с новым местоположением
+               let region = MKCoordinateRegion(
+                   center: location.coordinate,
+                   latitudinalMeters: 500,
+                   longitudinalMeters: 500
+               )
+               mapView.setRegion(region, animated: true)
+               
+               // Останавливаем обновления местоположения, так как оно нам больше не нужно
+               locationManager.stopUpdatingLocation()
+           }
+           
+        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+               print("Failed to find user's location: \(error.localizedDescription)")
+           }
+        
         private func setupLocationManager() {
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
                 locationManager.requestWhenInUseAuthorization()
+            
                 locationManager.startUpdatingLocation()
             }
-    
-        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-            print(error)
-        }
+        
+        @objc private func geoButtonTapped() {
+               if let location = locationManager.location {
+                   // Если местоположение доступно, перемещаем карту
+                   let region = MKCoordinateRegion(
+                       center: location.coordinate,
+                       latitudinalMeters: 500,
+                       longitudinalMeters: 500
+                   )
+                   mapView.setRegion(region, animated: true)
+               }
+           }
+         
     }
     
     // MARK: - UICollectionView Delegate & DataSource

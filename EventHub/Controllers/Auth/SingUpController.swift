@@ -168,7 +168,7 @@ final class SingUpController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupBackButton(action: #selector(backButtonTapped))
+        setupBackButton(color: .black,action: #selector(backButtonTapped))
         
         self.title = "Sing up"
         let textAttributes: [NSAttributedString.Key: Any] = [

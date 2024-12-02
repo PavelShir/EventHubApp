@@ -19,17 +19,6 @@ class EventDetailHeader: UIView {
         return element
     }()
     
-    private lazy var bookmarkView : UIView = {
-        let element = UIView()
-//        element.addSubview(bookmark)
-        element.backgroundColor = .white.withAlphaComponent(0.3)
-        element.layer.cornerRadius = 10
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
-    
-  
-    
     private lazy var shareView : UIView = {
         let element = UIView()
         element.addSubview(shareButton)
@@ -65,7 +54,6 @@ class EventDetailHeader: UIView {
     private func setView(){
         
         addSubview(imageHeader)
-        addSubview(bookmarkView)
         addSubview(shareView)
     }
     
@@ -85,14 +73,6 @@ class EventDetailHeader: UIView {
             shareButton.widthAnchor.constraint(equalToConstant: 24),
             shareButton.centerXAnchor.constraint(equalTo: shareView.centerXAnchor),
             shareButton.centerYAnchor.constraint(equalTo: shareView.centerYAnchor),
-            
-            
-            bookmarkView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
-            bookmarkView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-            bookmarkView.heightAnchor.constraint(equalToConstant: 36),
-            bookmarkView.widthAnchor.constraint(equalToConstant: 36),
-            
-            
           
         ])
     }

@@ -18,25 +18,46 @@ struct ResponseEvent: Decodable {
 // MARK: - Result
 struct Results: Codable {
     let id: Int
-    let dates: [DateElement]
+    let dates: [DateElement]?
     let title, slug: String?
     let place: Place?
     let description, bodyText: String?
-    let location: Location
-    let categories: [String]
-    let price: String?
-    let images: [Image]
+    let location: Location?
+    let categories: [String]?
+    let images: [Image]?
     let favoritesCount: Int?
     let siteUrl: String?
+    let participants: [Participant]?
 
     
     enum CodingKeys: String, CodingKey {
         case id, dates, title, slug, place, description
         case bodyText = "body_text"
-        case location, categories, price, images
+        case location, categories, images
         case favoritesCount = "favorites_count"
         case siteUrl = "site_url"
+        case participants
     }
+    
+    //обработка если проблема с полями при декодировании (отсутствуют)
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.dates = try container.decodeIfPresent([DateElement].self, forKey: .dates) ?? []
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.slug = try container.decodeIfPresent(String.self, forKey: .slug)
+        self.place = try container.decodeIfPresent(Place.self, forKey: .place)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.bodyText = try container.decodeIfPresent(String.self, forKey: .bodyText)
+        self.location = try container.decodeIfPresent(Location.self, forKey: .location)
+        self.categories = try container.decodeIfPresent([String].self, forKey: .categories) ?? []
+        self.images = try container.decodeIfPresent([Image].self, forKey: .images) ?? []
+        self.favoritesCount = try container.decodeIfPresent(Int.self, forKey: .favoritesCount)
+        self.siteUrl = try container.decodeIfPresent(String.self, forKey: .siteUrl)
+        self.participants = try container.decodeIfPresent([Participant].self, forKey: .participants) ?? []
+    }
+    
 }
 
 // MARK: - DateElement
@@ -96,6 +117,7 @@ struct Location: Codable {
     let slug: Slug?
     let name: String?
     let coords: Coords?
+    
 }
 
 enum Slug: String, Codable {
@@ -113,6 +135,7 @@ enum Slug: String, Codable {
     case krasnoyarsk = "Красноярск"
     case kev = "Киев"
     case newYork = "Нью-Йорк"
+    case unknown = "Неизвестно"
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -135,7 +158,8 @@ enum Slug: String, Codable {
         case "kyiv", "kev": self = .kev
         case "newYork", "ny": self = .newYork
         default:
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unknown value: \(value)")
+                    // Если значение неизвестно, используем .unknown
+                    self = .unknown
         }
     }
 }
@@ -153,4 +177,13 @@ struct Place: Codable {
 struct Coords: Codable {
     let lat: Double?
     let lon: Double?
+}
+
+    //Agent
+struct Participant: Codable, Equatable {
+    let agent: Agent
+}
+
+struct Agent: Codable,Equatable {
+    let title: String
 }

@@ -20,7 +20,7 @@ class WebViewController: UIViewController {
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webView)
         
-        if let url = URL(string: "https://www.example.com") {
+        if let url = url {
             let request = URLRequest(url: url)
             webView.load(request)
         }

@@ -10,11 +10,7 @@ import WebKit
 
 class ListsViewController: UIViewController {
     
-    var itemsList: [ItemList] = [
-        ItemList(title: "kjdsjdsj", siteUrl: "ncxbcs"),
-        ItemList(title: "kjdsjdsj", siteUrl: "ncxbcs"),
-        ItemList(title: "kjdsjdsj", siteUrl: "ncxbcs")
-    ]
+    var itemsList: [Event] = []
     
     private var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -22,10 +18,29 @@ class ListsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.title = "Lists"
+        setupUI()
+        tableView.register(ListCell.self, forCellReuseIdentifier: "ListCell")
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func setupUI() {
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .clear
+        view.addSubview(tableView)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
-        
-        
+        NSLayoutConstraint.activate([
+            
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            tableView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+            
+        ])
         
     }
 }
@@ -52,21 +67,19 @@ class ListsViewController: UIViewController {
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             
-            // переход на Ивент + передать данные об ивенте
-            // Web View
-            
+            let item = itemsList[indexPath.row]
+            print(item.siteUrl)
             let webViewController = WebViewController()
-            webViewController.url = URL(string: "https://www.example.com") // передаем URL
+            webViewController.url = URL(string: item.siteUrl ?? "https://kudago.com/404")
             navigationController?.pushViewController(webViewController, animated: true)
             
+            tableView.deselectRow(at: indexPath, animated: true)
         }
+        
+        
     }
 
 
 //#Preview { ListsViewController() }
 
 
-struct ItemList: Codable {
-    let title: String
-    let siteUrl: String
-    }

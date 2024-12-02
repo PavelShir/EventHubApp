@@ -454,13 +454,39 @@ class ExploreViewController: UIViewController, FilterDelegate {
     
     
     @objc func notificationButtonPressed(){
-        
     }
     
+        // Функции подборок
     @objc private func showList(sender: UIButton) {
         
-       
+        let urlString: String
+           
+           switch sender.tag {
+           case 1:
+               urlString = ListURL.today.urlString
+           case 2:
+               urlString = ListURL.films.urlString
+               print("в фильмах юрл отсутствует в апи. ссылка ведет на постер")
+           case 3:
+               urlString = ListURL.lists.urlString
+           default:
+               urlString = ListURL.today.urlString // ошибка с кнопкой, загрузка событий за сегодня
+           }
+        
+         let listVC = ListsViewController()
+        
+        loadLists(from: urlString) { events in
+            
+            print("API is \(urlString)" )
+            listVC.itemsList = events
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(listVC, animated: true)
+            }
+        }
     }
+    
+  
     
     @objc func filterPressed() {
         

@@ -286,6 +286,14 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
         
+        todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+              filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+              listsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+              todayButton.tag = 1
+              filmsButton.tag = 2
+              listsButton.tag = 3
+
+        view.bringSubviewToFront(cityPicker)
         
     }
     
@@ -449,6 +457,10 @@ class ExploreViewController: UIViewController, FilterDelegate {
         
     }
     
+    @objc private func showList(sender: UIButton) {
+        
+       
+    }
     
     @objc func filterPressed() {
         
@@ -502,9 +514,9 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         NSLayoutConstraint.activate([
             cityPicker.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cityPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            cityPicker.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            cityPicker.heightAnchor.constraint(equalToConstant: 250)
+                   cityPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                   cityPicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                   cityPicker.heightAnchor.constraint(equalToConstant: 250)
         ])
     }
     

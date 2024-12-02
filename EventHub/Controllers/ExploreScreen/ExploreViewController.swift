@@ -72,7 +72,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
     private var scrollView: UIScrollView!
     private var contentView: UIView!
     
-    private var buttonStack = createHorizontalStackViewWithButtons()
+//    private var buttonStack = createHorizontalStackViewWithButtons()
     
     private var cityPicker: UIPickerView!
     
@@ -123,7 +123,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         element.layer.cornerRadius = 15
         element.setImage(imageFilter, for: .normal)
         
-        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
+//        element.addTarget(self, action: #selector(filterPressed), for: .touchUpInside)
         element.isUserInteractionEnabled = true
          
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -286,11 +286,11 @@ class ExploreViewController: UIViewController, FilterDelegate {
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
         
         todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
-              filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
-              listsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
-              todayButton.tag = 1
-              filmsButton.tag = 2
-              listsButton.tag = 3
+        filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+        listsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
+        todayButton.tag = 1
+        filmsButton.tag = 2
+        listsButton.tag = 3
 
         view.bringSubviewToFront(cityPicker)
         
@@ -438,6 +438,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
         headerCustomView.delegate = self
         
         setupCityPicker()
+    }
     
     
     // MARK: - Actions
@@ -497,6 +498,7 @@ class ExploreViewController: UIViewController, FilterDelegate {
 }
 
 
+
 // MARK: City UIPicker
 
 extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -517,9 +519,9 @@ extension ExploreViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                    cityPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                    cityPicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
                    cityPicker.heightAnchor.constraint(equalToConstant: 250)
+            ])
     }
     
-    @objc func showCityPicker() {
     @objc func showCityPicker() {
         print("tapped")
         cityPicker.isHidden = false
@@ -627,163 +629,6 @@ extension ExploreViewController: UISearchBarDelegate {
     
 }
 
-struct ViewControllerProvider: PreviewProvider {
-    static var previews: some View {
-        ExploreViewController().showPreview()
-    }
-}
+//#Preview { ExploreViewController() }
 
-
-extension UIViewController {
-    private struct Preview : UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-    
-    func showPreview() -> some View {
-        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-    }
-    
-}
-
-        print("tapped")
-        cityPicker.isHidden = false
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return City.allCases.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return City.allCases[row].fullName
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // выбираем город и устанавливаем в фильтр
-        
-        let cityChosen = City.allCases[row].fullName
-        currentLocationButton.setTitle(cityChosen, for: .normal)
-        //  headerCustomView.locationLabel.text = cityChosen
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.cityPicker.isHidden = true
-        }
-        selectedCity = chooseCity(for: cityChosen)
-        eventFilters.location = selectedCity
-    }
-    
-}
-
-func createHorizontalStackViewWithButtons() -> UIStackView {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.spacing = 16
-    stackView.alignment = .center
-    stackView.distribution = .fillEqually
-    
-    stackView.addArrangedSubview(createRoundedButton(title: "TODAY"))
-    stackView.addArrangedSubview(createRoundedButton(title: "FILMS"))
-    stackView.addArrangedSubview(createRoundedButton(title: "LISTS"))
-    
-    stackView.translatesAutoresizingMaskIntoConstraints = false
-    
-    return stackView
-}
-
-func createRoundedButton(title: String) -> UIButton {
-    let button = UIButton(type: .system)
-    button.setTitle(title, for: .normal)
-    button.titleLabel?.font = UIFont(name: "AirbnbCerealApp", size: 18)
-    button.setTitleColor(.white, for: .normal)
-    button.backgroundColor = UIColor(named: "primaryBlue")
-    button.layer.cornerRadius = 20
-    button.translatesAutoresizingMaskIntoConstraints = false
-    button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-    return button
-}
-
-
-// MARK: SearchBar Delegate methods
-extension ExploreViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Если строка поиска пуста, показываем все события
-        if searchText.trimmingCharacters(in: .whitespaces).isEmpty {
-            isSearching = false
-            filteredEvents = events
-            
-            return
-        }
-        
-        filteredEvents.removeAll()
-        
-        guard searchText != "" || searchText != " " else {
-            print("empty search")
-            return
-        }
-        
-        
-        let lowercasedSearchText = searchText.lowercased()
-        filteredEvents = events.filter { event in
-            event.title.lowercased().contains(lowercasedSearchText) ||
-            convertDate(date: String(event.startDate ?? 0)).lowercased().contains(lowercasedSearchText)
-        }
-        
-        isSearching = true
-        // updateUI()
-    }
-    
-    
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearching = false
-        searchBar.text = ""
-        filteredEvents = events
-        searchBar.resignFirstResponder()
-        // updateUI()
-    }
-    
-}
-
-struct ViewControllerProvider: PreviewProvider {
-    static var previews: some View {
-        ExploreViewController().showPreview()
-    }
-}
-
-
-extension UIViewController {
-    private struct Preview : UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-    
-    func showPreview() -> some View {
-        Preview(viewController: self).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-    }
-    
-}
 

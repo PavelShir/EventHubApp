@@ -57,6 +57,7 @@
 		F323F7ED2CF9E71600FD6DFB /* ListCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7EC2CF9E71600FD6DFB /* ListCollectionCell.swift */; };
 		F323F7F52CFB447C00FD6DFB /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7F42CFB447C00FD6DFB /* PresentationController.swift */; };
 		F323F7FB2CFB453300FD6DFB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F323F7FA2CFB453300FD6DFB /* ShareViewController.swift */; };
+		F323F7FC2CFDB0A300FD6DFB /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEECC72CEE9DBA0098E212 /* FirestoreManager.swift */; };
 		F33659272CF0DC3D00CA3DE7 /* FavCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33659262CF0DC3D00CA3DE7 /* FavCell.swift */; };
 		F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592A2CF0EAD300CA3DE7 /* SearchViewController.swift */; };
 		F336592D2CF12F3400CA3DE7 /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F336592C2CF12F3400CA3DE7 /* CustomSegmentControl.swift */; };
@@ -515,6 +516,7 @@
 				F336592B2CF0EAD300CA3DE7 /* SearchViewController.swift in Sources */,
 				31A6E9E02CEFEBA9006DB793 /* UIButton + Ext.swift in Sources */,
 				F3C91D9E2CED24AB008E4707 /* OnboardingItemCell.swift in Sources */,
+				F323F7FC2CFDB0A300FD6DFB /* FirestoreManager.swift in Sources */,
 				31FFE3652CF9261C00A0937E /* BarBackButton + Ext.swift in Sources */,
 				8F8452E52CEC76F0000AE3BD /* FavoritesViewController.swift in Sources */,
 				31DEECB92CEE77490098E212 /* AuthManager.swift in Sources */,

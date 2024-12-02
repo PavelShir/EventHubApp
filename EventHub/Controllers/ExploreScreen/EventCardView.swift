@@ -11,6 +11,8 @@ class EventCardView: UIView {
     
 //    var event: EventModel?
    
+    var bookmarkAction: (() -> Void)?
+
     
     private lazy var eventImage : UIImageView = {
 //        let element = UIImageView(frame: CGRect(x: 9, y: 10, width: 218, height: 131))
@@ -32,7 +34,8 @@ class EventCardView: UIView {
         monthLabel.text = mmm.uppercased()
         
         titleLabel.text = event.title.capitalized
-        
+        userCount.text = String(event.favoritesCount) + " Going"
+
         
         guard let placeId = event.placeId else {
             address.text = event.locationSlug
@@ -121,13 +124,13 @@ return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from:
         return element
     }()
     
-    private lazy var bookmarkImage : UIImageView = {
-//        let element = UIImageView(frame: CGRect(x: 195, y: 25, width: 14.1, height: 14))
-        let element = UIImageView()
-        element.image = UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10))
-        element.tintColor = UIColor(named: "primaryRed")
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+        var bookmarkImage: UIButton = {
+                let button = UIButton(type: .custom)  // Создаем кастомную кнопку
+                button.frame = CGRect(x: 195, y: 25, width: 14.1, height: 14)  // Устанавливаем фрейм
+                button.setImage(UIImage(systemName: "bookmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10)), for: .normal)  // Устанавливаем изображение для нормального состояния
+                button.tintColor = UIColor(named: "primaryRed")  // Устанавливаем цвет
+
+                return button
     }()
     
     private lazy var titleLabel : UILabel = {
@@ -215,14 +218,22 @@ return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from:
         //layer.cornerRadius = 10
        // clipsToBounds = true
         setupView()
+        
+        bookmarkImage.addTarget(self, action: #selector(bookmarkTapped), for: .touchUpInside)
+
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc private func bookmarkTapped() {
+            bookmarkAction?()
+        }
+    
     private func setupView() {
         
+
         addSubview(eventImage)
         addSubview(dateView)
         addSubview(bookmarkView)
@@ -235,6 +246,7 @@ return (dateFormatterMMM.string(from: dateObject), dateFormatterDay.string(from:
         addSubview(mapPinImage)
         addSubview(address)
         
+
         NSLayoutConstraint.activate([
             eventImage.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             eventImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 9),

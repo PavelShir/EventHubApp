@@ -3,19 +3,13 @@ import SwiftUI
 
 class EventCollectionView: UIView {
     
-    
+    weak var parentViewController: UIViewController?
+
     private var events: [Event] = []
-    
+    var selectedEvent: Event!
+
     private var goToDetail: ((Event)->Void)?
     
-        //            EventModel(date: "1698764400", title: "Jo Malone London's Mother's", place: "39 Santa Cruz, CA", imageName: "hands"),
-//            EventModel(date: "1732027600", title: "International Kids Safe Parents Night Out", place: "Oakland, CA", imageName: "foots"),
-//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-//            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
-//            EventModel(date: "1732017600", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands"),
-//            EventModel(date: "1698850800", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "foots"),
-//            EventModel(date: "1698764400", title: "Jo Malone London's Mother's International Kids", place: "Santa Cruz, CA", imageName: "hands")
  
     private lazy var mainCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -70,9 +64,47 @@ class EventCollectionView: UIView {
             mainCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
+    private func toggleFavorite(for event: Event) {
+            print("bookmark")
+               var favorites = StorageManager.shared.loadFavorite()
+
+               if !favorites.contains(where: { $0.id == event.id }) {
+                   // Добавление в избранное
+                   favorites.append(event)
+                   StorageManager.shared.saveFavorites(favorites)
+                   showFavoriteAddedAlert(for: event)
+
+                   NotificationCenter.default.post(name: .favoriteEventAdded, object: event)
+               } else {
+                   // Удаление из избранного
+                   favorites.removeAll(where: { $0.id == event.id })
+                   StorageManager.shared.saveFavorites(favorites)
+                   showAlreadyInFavoritesAlert(for: event)
+               }
+           }
+    private func showFavoriteAddedAlert(for event: Event) {
+          guard let parentVC = parentViewController else { return }
+          let alertController = UIAlertController(
+              title: "Added to Favorites",
+              message: "\(event.title)",
+              preferredStyle: .alert
+          )
+          alertController.addAction(UIAlertAction(title: "OK", style: .default))
+          parentVC.present(alertController, animated: true)
+      }
+
+        private func showAlreadyInFavoritesAlert(for event: Event) {
+               guard let parentVC = parentViewController else { return }
+               let alertController = UIAlertController(
+                   title: "Removed from Favorites",
+                   message: "\(event.title)",
+                   preferredStyle: .alert
+               )
+               alertController.addAction(UIAlertAction(title: "OK", style: .default))
+               parentVC.present(alertController, animated: true)
+           }
+       }
     
-    
-}
 
 extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
    
@@ -82,12 +114,22 @@ extension EventCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventCollectionViewCell.identifier, for: indexPath) as! EventCollectionViewCell
-        let event = events[indexPath.row]
-        
-        cell.configure(event: event)
-        return cell
-    }
+        guard let cell = collectionView.dequeueReusableCell(
+                          withReuseIdentifier: EventCollectionViewCell.identifier,
+                          for: indexPath
+                      ) as? EventCollectionViewCell else {
+                          return UICollectionViewCell()
+                      }
+
+                      let event = events[indexPath.row]
+
+                      cell.configure(event: event) { [weak self] in
+                          self?.toggleFavorite(for: event)
+                      }
+
+                      return cell
+                  }
+    
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -124,17 +166,19 @@ class EventCollectionViewCell: UICollectionViewCell {
     }
     
     // Configure the cell with the image name
-    func configure(event: Event) {
- 
+    func configure(event: Event, bookmarkAction: @escaping () -> Void) {
+        
         backgroundColor = .white
         layer.cornerRadius = 10
         eventCardView.configure(with: event)
+        eventCardView.bookmarkAction = bookmarkAction
     }
     
     
    
     private func setupView() {
-        
+        eventCardView.translatesAutoresizingMaskIntoConstraints = false
+
         contentView.addSubview(eventCardView)
         NSLayoutConstraint.activate([
             eventCardView.topAnchor.constraint(equalTo: contentView.topAnchor),

@@ -36,7 +36,8 @@ class ExploreViewController: UIViewController, FilterDelegate {
     }
     
     // MARK: - UI
-    
+    private let eventCollectionView = EventCollectionView(frame: .zero)
+
     private let searchBar: UISearchBar = {
         let search = UISearchBar()
         search.placeholder = "Search..."
@@ -284,6 +285,9 @@ class ExploreViewController: UIViewController, FilterDelegate {
         loadEventsSuccess(with: EventFilter(location: .saintPetersburg, actualSince: String(Date().timeIntervalSince1970)), success: loadSuccessUpcoming)
         
         loadEventsSuccess(with: filter, success: loadSuccessNearby)
+        
+        eventViewController.parentViewController = self
+                  eventViewController2.parentViewController = self
         
         todayButton.addTarget(self, action: #selector(showList), for: .touchUpInside)
         filmsButton.addTarget(self, action: #selector(showList), for: .touchUpInside)

@@ -384,7 +384,7 @@ class EventDetailsViewController: UIViewController {
     
     private func showAlreadyInFavoritesAlert(for event: Event) {
         let alertController = UIAlertController(
-            title: "Already in Favorites!",
+            title: "Removed from Favorites!",
             message: "\(event.title)",
             preferredStyle: .alert
         )
